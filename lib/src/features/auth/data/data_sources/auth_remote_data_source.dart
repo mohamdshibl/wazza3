@@ -11,6 +11,9 @@ abstract interface class AuthRemoteDataSource {
 
   /// Requests an OTP to be sent to [phoneNumber] (full E.164 form).
   Future<void> requestOtp(String phoneNumber);
+
+  /// Verifies [code] for [phoneNumber]; returns the authenticated user.
+  Future<AuthUser> verifyOtp({required String phoneNumber, required String code});
 }
 
 /// In-memory fake used until the real API is wired. Demonstrates the
@@ -40,6 +43,25 @@ class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
     if (phoneNumber.endsWith('0000')) {
       throw const ServerFailure('Could not send OTP. Try again.');
     }
+  }
+
+  @override
+  Future<AuthUser> verifyOtp({
+    required String phoneNumber,
+    required String code,
+  }) async {
+    await Future<void>.delayed(const Duration(milliseconds: 1200));
+
+    // Demo rule: code "0000" simulates wrong OTP.
+    if (code == '0000') {
+      throw const AuthFailure('Invalid OTP. Please try again.');
+    }
+
+    return AuthUser(
+      id: 'usr_001',
+      name: 'Driver',
+      token: 'demo-token-otp',
+    );
   }
 }
 

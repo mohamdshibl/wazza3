@@ -38,6 +38,7 @@ class OtpError extends OtpResult {
 abstract interface class AuthRepository {
   Future<AuthResult> signIn(LoginParams params);
   Future<OtpResult> requestOtp(String phoneNumber);
+  Future<AuthResult> verifyOtp({required String phoneNumber, required String code});
 }
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -66,6 +67,18 @@ class AuthRepositoryImpl implements AuthRepository {
       return OtpError(f);
     } catch (_) {
       return const OtpError(UnknownFailure());
+    }
+  }
+
+  @override
+  Future<AuthResult> verifyOtp({required String phoneNumber, required String code}) async {
+    try {
+      final user = await _remote.verifyOtp(phoneNumber: phoneNumber, code: code);
+      return AuthSuccess(user);
+    } on Failure catch (f) {
+      return AuthError(f);
+    } catch (_) {
+      return const AuthError(UnknownFailure());
     }
   }
 }

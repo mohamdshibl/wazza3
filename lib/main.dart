@@ -19,7 +19,7 @@ class Wazza3App extends StatelessWidget {
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      initialRoute: AppRoutes.signIn,
+      initialRoute: AppRoutes.dashboard,
       onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }

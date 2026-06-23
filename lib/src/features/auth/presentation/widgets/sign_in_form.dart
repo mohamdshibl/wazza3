@@ -9,6 +9,7 @@ import '../../../../core/style/app_text_styles.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/primary_button.dart';
+import '../../../../core/routing/app_routes.dart';
 import '../../data/models/auth_method.dart';
 import '../../logic/controllers/sign_in_controller.dart';
 import '../../logic/controllers/sign_in_state.dart';
@@ -76,7 +77,17 @@ class _SignInFormState extends ConsumerState<SignInForm> {
           content: Text(isOtp ? 'OTP sent to your number' : 'Signed in successfully'),
         ),
       );
-      // TODO: navigate to the OTP screen (phone) or dashboard (email).
+      if (isOtp) {
+        Navigator.of(context).pushNamed(
+          AppRoutes.otpVerification,
+          arguments: _phoneController.text,
+        );
+      } else {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          AppRoutes.dashboard,
+          (route) => false,
+        );
+      }
     }
   }
 
