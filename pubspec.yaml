@@ -70,9 +70,24 @@ flutter:
   fonts:
     - family: Catamaran
       fonts:
-        # Variable font (wght axis: Thin 100 → Black 900). Flutter maps
-        # each TextStyle.fontWeight onto the axis.
         - asset: assets/fonts/Catamaran-Variable.ttf
+          weight: 100
+        - asset: assets/fonts/Catamaran-Variable.ttf
+          weight: 200
+        - asset: assets/fonts/Catamaran-Variable.ttf
+          weight: 300
+        - asset: assets/fonts/Catamaran-Variable.ttf
+          weight: 400
+        - asset: assets/fonts/Catamaran-Variable.ttf
+          weight: 500
+        - asset: assets/fonts/Catamaran-Variable.ttf
+          weight: 600
+        - asset: assets/fonts/Catamaran-Variable.ttf
+          weight: 700
+        - asset: assets/fonts/Catamaran-Variable.ttf
+          weight: 800
+        - asset: assets/fonts/Catamaran-Variable.ttf
+          weight: 900
 
   # To add assets to your application, add an assets section, like this:
   # assets:
