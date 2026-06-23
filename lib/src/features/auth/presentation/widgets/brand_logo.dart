@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+
+import '../../../../core/constants/app_strings.dart';
+import '../../../../core/style/app_spacing.dart';
+import '../../../../core/style/app_text_styles.dart';
+import 'brand_logo_mark.dart';
+
+/// Foreground brand block: vector mark + wordmark + tagline.
+///
+/// Pure presentation, no state — kept separate from the header so it can be
+/// reused (splash, drawer, about screen…).
+class BrandLogo extends StatelessWidget {
+  const BrandLogo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const BrandLogoMark(),
+        const SizedBox(height: AppSpacing.lg), // mb-4
+        Text(AppStrings.appName, style: AppTextStyles.wordmark),
+        const SizedBox(height: AppSpacing.xs), // mt-1
+        Text(AppStrings.tagline, style: AppTextStyles.tagline),
+      ],
+    );
+  }
+}
