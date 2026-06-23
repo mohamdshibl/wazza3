@@ -13,10 +13,11 @@ import '../../data/models/auth_method.dart';
 import '../../logic/controllers/sign_in_controller.dart';
 import '../../logic/controllers/sign_in_state.dart';
 import 'auth_method_toggle.dart';
+import 'phone_number_field.dart';
 
 /// The interactive sign-in form. Holds the text controllers and form key
 /// (transient view state); all business logic is delegated to
-/// [SignInController].
+/// [SignInController]. Renders the Email or Phone variant by [AuthMethod].
 class SignInForm extends ConsumerStatefulWidget {
   const SignInForm({super.key});
 
@@ -26,23 +27,33 @@ class SignInForm extends ConsumerStatefulWidget {
 
 class _SignInFormState extends ConsumerState<SignInForm> {
   final _formKey = GlobalKey<FormState>();
-  final _identifierController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _phoneController = TextEditingController();
 
   @override
   void dispose() {
-    _identifierController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
   void _submit() {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
-    ref.read(signInControllerProvider.notifier).signIn(
-          identifier: _identifierController.text,
-          password: _passwordController.text,
-        );
+
+    final controller = ref.read(signInControllerProvider.notifier);
+    final method = ref.read(signInControllerProvider).method;
+
+    if (method == AuthMethod.email) {
+      controller.signIn(
+        identifier: _emailController.text,
+        password: _passwordController.text,
+      );
+    } else {
+      controller.requestOtp(number: _phoneController.text);
+    }
   }
 
   void _handleStatusChange(SignInState? prev, SignInState next) {
@@ -58,13 +69,14 @@ class _SignInFormState extends ConsumerState<SignInForm> {
       );
       ref.read(signInControllerProvider.notifier).acknowledgeError();
     } else if (next.status.isSuccess) {
+      final isOtp = next.method == AuthMethod.phone;
       messenger.showSnackBar(
-        const SnackBar(
+        SnackBar(
           backgroundColor: AppColors.success,
-          content: Text('Signed in successfully'),
+          content: Text(isOtp ? 'OTP sent to your number' : 'Signed in successfully'),
         ),
       );
-      // TODO: navigate to the home/dashboard route once it exists.
+      // TODO: navigate to the OTP screen (phone) or dashboard (email).
     }
   }
 
@@ -72,8 +84,12 @@ class _SignInFormState extends ConsumerState<SignInForm> {
   Widget build(BuildContext context) {
     ref.listen(signInControllerProvider, _handleStatusChange);
 
-    final state = ref.watch(signInControllerProvider);
-    final isEmail = state.method == AuthMethod.email;
+    final isEmail = ref.watch(
+      signInControllerProvider.select((s) => s.method == AuthMethod.email),
+    );
+    final isLoading = ref.watch(
+      signInControllerProvider.select((s) => s.status.isLoading),
+    );
 
     return Form(
       key: _formKey,
@@ -82,64 +98,75 @@ class _SignInFormState extends ConsumerState<SignInForm> {
         children: [
           const AuthMethodToggle(),
           const SizedBox(height: AppSpacing.xxl),
-          AppTextField(
-            controller: _identifierController,
-            label: isEmail ? AppStrings.emailLabel : AppStrings.phoneLabel,
-            hint: isEmail ? AppStrings.emailHint : AppStrings.phoneHint,
-            prefixIcon: isEmail ? Icons.mail_outline : Icons.phone_outlined,
-            keyboardType:
-                isEmail ? TextInputType.emailAddress : TextInputType.phone,
-            textInputAction: TextInputAction.next,
-            validator: isEmail ? Validators.email : Validators.phone,
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          AppTextField(
-            controller: _passwordController,
-            label: AppStrings.passwordLabel,
-            hint: AppStrings.passwordHint,
-            prefixIcon: Icons.lock_outline,
-            obscureText: state.obscurePassword,
-            validator: Validators.password,
-            textInputAction: TextInputAction.done,
-            onSubmitted: (_) => _submit(),
-            suffix: IconButton(
-              onPressed: ref
-                  .read(signInControllerProvider.notifier)
-                  .togglePasswordVisibility,
-              icon: Icon(
-                state.obscurePassword
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
-                color: AppColors.iconMuted,
-                size: 20,
-              ),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {/* TODO: forgot-password flow */},
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: const Text(
-                AppStrings.forgotPassword,
-                style: AppTextStyles.link,
-              ),
-            ),
-          ),
+          if (isEmail) ..._emailFields() else _phoneField(),
           const SizedBox(height: AppSpacing.xxxl),
           PrimaryButton(
-            label: AppStrings.signInCta,
+            label: isEmail ? AppStrings.signInCta : AppStrings.sendOtpCta,
             trailingIcon: Icons.arrow_forward,
-            isLoading: state.status.isLoading,
+            isLoading: isLoading,
             onPressed: _submit,
           ),
         ],
       ),
+    );
+  }
+
+  List<Widget> _emailFields() {
+    final obscure = ref.watch(
+      signInControllerProvider.select((s) => s.obscurePassword),
+    );
+
+    return [
+      AppTextField(
+        controller: _emailController,
+        label: AppStrings.emailLabel,
+        hint: AppStrings.emailHint,
+        prefixIcon: Icons.mail_outline,
+        keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        validator: Validators.email,
+      ),
+      const SizedBox(height: AppSpacing.xl),
+      AppTextField(
+        controller: _passwordController,
+        label: AppStrings.passwordLabel,
+        hint: AppStrings.passwordHint,
+        prefixIcon: Icons.lock_outline,
+        obscureText: obscure,
+        validator: Validators.password,
+        textInputAction: TextInputAction.done,
+        onSubmitted: (_) => _submit(),
+        suffix: IconButton(
+          onPressed: ref
+              .read(signInControllerProvider.notifier)
+              .togglePasswordVisibility,
+          icon: Icon(
+            obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+            color: AppColors.iconMuted,
+            size: 20,
+          ),
+        ),
+      ),
+      const SizedBox(height: AppSpacing.md),
+      Align(
+        alignment: Alignment.centerRight,
+        child: TextButton(
+          onPressed: () {/* TODO: forgot-password flow */},
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+            minimumSize: Size.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          child: const Text(AppStrings.forgotPassword, style: AppTextStyles.link),
+        ),
+      ),
+    ];
+  }
+
+  Widget _phoneField() {
+    return PhoneNumberField(
+      controller: _phoneController,
+      onSubmitted: (_) => _submit(),
     );
   }
 }
