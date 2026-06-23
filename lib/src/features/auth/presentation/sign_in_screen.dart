@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_strings.dart';
 import '../../../core/style/app_spacing.dart';
 import '../../../core/style/app_text_styles.dart';
+import '../logic/controllers/sign_in_cubit.dart';
 import 'widgets/sign_in_form.dart';
 import 'widgets/sign_in_header.dart';
 import 'widgets/terms_footer.dart';
 
 /// Sign-in screen. Composes the header + scrollable form body.
-///
-/// Layout mirrors the design's `min-h-dvh flex flex-col`: a fixed-aspect
-/// gradient header followed by a flexible body that scrolls when the
-/// keyboard appears or on small screens. Content is centered and width-
-/// capped on tablets for a clean responsive result.
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
@@ -32,7 +29,10 @@ class SignInScreen extends StatelessWidget {
                   child: ConstrainedBox(
                     constraints:
                         const BoxConstraints(maxWidth: _maxContentWidth),
-                    child: const _SignInContent(),
+                    child: BlocProvider(
+                      create: (_) => SignInCubit(),
+                      child: const _SignInContent(),
+                    ),
                   ),
                 ),
               ),

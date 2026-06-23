@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../../core/errors/failure.dart';
 import '../models/auth_user.dart';
 import '../models/login_params.dart';
@@ -64,9 +62,3 @@ class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
     );
   }
 }
-
-/// DI: exposes the data source. Override in `ProviderScope` to swap the
-/// real implementation in production / tests.
-final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>(
-  (ref) => FakeAuthRemoteDataSource(),
-);

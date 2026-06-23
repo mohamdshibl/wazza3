@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 
 import '../../../../core/errors/failure.dart';
 import '../data_sources/auth_remote_data_source.dart';
@@ -84,6 +84,6 @@ class AuthRepositoryImpl implements AuthRepository {
 }
 
 /// DI: repository wired to its data source.
-final authRepositoryProvider = Provider<AuthRepository>(
-  (ref) => AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider)),
-);
+final AuthRepository authRepository = AuthRepositoryImpl(FakeAuthRemoteDataSource()); //
+
+

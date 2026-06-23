@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/routing/app_routes.dart';
 
-import '../../auth/logic/controllers/auth_controller.dart';
+import '../../auth/logic/controllers/auth_cubit.dart';
+
+const String _truckSvg = '''
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M15 18H9"></path><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path><circle cx="17" cy="18" r="2"></circle><circle cx="7" cy="18" r="2"></circle></svg>
+''';
+
+const String _walletSvg = '''
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+''';
+
+const String _routeSvg = '''
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-route"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path><circle cx="18" cy="5" r="3"></circle></svg>
+''';
 
 // ─── Color tokens from HTML ────────────────────────────────────────────────
 const _bgPage = Color(0xFFF9FAEC);
@@ -19,20 +32,20 @@ const _cardBg = Color(0xFFFFFFFF);
 const _doneBadgeBg = Color(0xFFA9D7CD);
 const _doneBadgeFg = Color(0xFF0B4A38);
 
-class DriverDashboardScreen extends ConsumerStatefulWidget {
+class DriverDashboardScreen extends StatefulWidget {
   const DriverDashboardScreen({super.key});
 
   @override
-  ConsumerState<DriverDashboardScreen> createState() => _DriverDashboardScreenState();
+  State<DriverDashboardScreen> createState() => _DriverDashboardScreenState();
 }
 
-class _DriverDashboardScreenState extends ConsumerState<DriverDashboardScreen> {
+class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
   int _navIndex = 0;
   int _routeTab = 0; // 0=Upcoming 1=Map 2=Completed
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserProvider);
+    final user = context.watch<AuthCubit>().state;
     final driverName = user?.name ?? 'Driver';
     final bottomPad = MediaQuery.of(context).padding.bottom;
 
@@ -76,7 +89,7 @@ class _DriverDashboardScreenState extends ConsumerState<DriverDashboardScreen> {
   }
 
   void _logout() {
-    ref.read(currentUserProvider.notifier).state = null;
+    context.read<AuthCubit>().clear();
     Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (_) => false);
   }
 }
@@ -229,6 +242,7 @@ class _StatsRow extends StatelessWidget {
             dot1Label: '0 done',
             dot2Label: '753 left',
             progress: 0.0,
+            bgSvgString: _truckSvg,
           ),
         ),
         const SizedBox(width: 8),
@@ -241,6 +255,7 @@ class _StatsRow extends StatelessWidget {
             dot1Label: '\$1,915 cash',
             dot2Label: '\$0 chk',
             progress: 0.0,
+            bgSvgString: _walletSvg,
           ),
         ),
         const SizedBox(width: 8),
@@ -254,6 +269,7 @@ class _StatsRow extends StatelessWidget {
             dot1Label: '0 done',
             dot2Label: '4 left',
             progress: 0.0,
+            bgSvgString: _routeSvg,
           ),
         ),
       ],
@@ -271,6 +287,7 @@ class _StatCard extends StatelessWidget {
     required this.dot1Label,
     required this.dot2Label,
     required this.progress,
+    required this.bgSvgString,
   });
 
   final IconData icon;
@@ -281,66 +298,91 @@ class _StatCard extends StatelessWidget {
   final String dot1Label;
   final String dot2Label;
   final double progress;
+  final String bgSvgString;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: _tealLight,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: _tealBorder, width: 1),
         boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 4, offset: const Offset(0, 1))],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // icon + title
-          Row(
-            children: [
-              Container(
-                width: 24, height: 24,
-                decoration: BoxDecoration(
-                  color: _teal.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(6),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          children: [
+            // Background SVG icon (Opacity 0.10)
+            Positioned(
+              bottom: -8,
+              right: -8,
+              child: Opacity(
+                opacity: 0.10,
+                child: SvgPicture.string(
+                  bgSvgString,
+                  width: 80,
+                  height: 80,
+                  colorFilter: const ColorFilter.mode(_teal, BlendMode.srcIn),
                 ),
-                child: Icon(icon, color: _teal, size: 13),
               ),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(title, style: const TextStyle(color: _tealMid, fontSize: 11, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis),
+            ),
+            // Card Content
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // icon + title
+                  Row(
+                    children: [
+                      Container(
+                        width: 24, height: 24,
+                        decoration: BoxDecoration(
+                          color: _teal.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Icon(icon, color: _teal, size: 13),
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(title, style: const TextStyle(color: _tealMid, fontSize: 11, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  // value
+                  RichText(
+                    text: TextSpan(
+                      text: value,
+                      style: const TextStyle(color: _tealDark, fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
+                      children: valueSuffix != null
+                          ? [TextSpan(text: valueSuffix, style: const TextStyle(color: Color(0xFF6B7280), fontSize: 13, fontWeight: FontWeight.w500))]
+                          : [],
+                    ),
+                  ),
+                  Text(sub, style: const TextStyle(color: _teal, fontSize: 10), overflow: TextOverflow.ellipsis),
+                  const SizedBox(height: 6),
+                  // dots
+                  _DotRow(color: _teal, label: dot1Label),
+                  const SizedBox(height: 2),
+                  _DotRow(color: Colors.white.withValues(alpha: 0.6), label: dot2Label, labelColor: const Color(0xFF6B7280)),
+                  const SizedBox(height: 6),
+                  // progress bar
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: LinearProgressIndicator(
+                      value: progress,
+                      minHeight: 6,
+                      backgroundColor: _tealProgress,
+                      valueColor: const AlwaysStoppedAnimation<Color>(_brandRed),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          // value
-          RichText(
-            text: TextSpan(
-              text: value,
-              style: const TextStyle(color: _tealDark, fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
-              children: valueSuffix != null
-                  ? [TextSpan(text: valueSuffix, style: const TextStyle(color: Color(0xFF6B7280), fontSize: 13, fontWeight: FontWeight.w500))]
-                  : [],
             ),
-          ),
-          Text(sub, style: const TextStyle(color: _teal, fontSize: 10), overflow: TextOverflow.ellipsis),
-          const SizedBox(height: 6),
-          // dots
-          _DotRow(color: _teal, label: dot1Label),
-          const SizedBox(height: 2),
-          _DotRow(color: Colors.white.withValues(alpha: 0.6), label: dot2Label, labelColor: const Color(0xFF6B7280)),
-          const SizedBox(height: 6),
-          // progress bar
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(
-              value: progress,
-              minHeight: 6,
-              backgroundColor: _tealProgress,
-              valueColor: const AlwaysStoppedAnimation<Color>(_brandRed),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

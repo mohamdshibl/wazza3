@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_strings.dart';
 import '../../../core/enums/request_status.dart';
@@ -9,11 +9,12 @@ import '../../../core/style/app_colors.dart';
 import '../../../core/style/app_spacing.dart';
 import '../../../core/style/app_text_styles.dart';
 import '../../../core/widgets/primary_button.dart';
-import '../logic/controllers/otp_verification_controller.dart';
+import '../logic/controllers/auth_cubit.dart';
+import '../logic/controllers/otp_verification_cubit.dart';
 import '../logic/controllers/otp_verification_state.dart';
 import 'widgets/sign_in_header.dart';
 
-class OtpVerificationScreen extends ConsumerStatefulWidget {
+class OtpVerificationScreen extends StatefulWidget {
   const OtpVerificationScreen({
     super.key,
     required this.phoneNumber,
@@ -24,10 +25,10 @@ class OtpVerificationScreen extends ConsumerStatefulWidget {
   static const double _maxContentWidth = 480;
 
   @override
-  ConsumerState<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
+  State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
 }
 
-class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
+class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final TextEditingController _pinController = TextEditingController();
   final FocusNode _pinFocusNode = FocusNode();
 
@@ -47,37 +48,39 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
     super.dispose();
   }
 
-  void _submitCode(String code) async {
+  void _submitCode(BuildContext context, String code) async {
     if (code.length < 4) return;
     
-    final controller = ref.read(otpVerificationControllerProvider(widget.phoneNumber).notifier);
-    final success = await controller.verifyOtp(code);
+    final cubit = context.read<OtpVerificationCubit>();
+    final user = await cubit.verifyOtp(code);
     
-    if (mounted && success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: AppColors.success,
-          content: Text('Phone number verified successfully!'),
-        ),
-      );
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.dashboard,
-        (route) => false,
-      );
+    if (mounted && user != null) {
+      if (context.mounted) {
+        context.read<AuthCubit>().setUser(user);
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: AppColors.success,
+            content: Text('Phone number verified successfully!'),
+          ),
+        );
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          AppRoutes.dashboard,
+          (route) => false,
+        );
+      }
     }
   }
 
-  void _handleStatusChange(OtpVerificationState? prev, OtpVerificationState next) {
-    if (prev?.status == next.status) return;
-
-    if (next.status.isFailure) {
+  void _handleStatusChange(BuildContext context, OtpVerificationState state) {
+    if (state.status.isFailure) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColors.error,
-          content: Text(next.errorMessage ?? AppStrings.genericError),
+          content: Text(state.errorMessage ?? AppStrings.genericError),
         ),
       );
-      ref.read(otpVerificationControllerProvider(widget.phoneNumber).notifier).acknowledgeError();
+      context.read<OtpVerificationCubit>().acknowledgeError();
       // Clear pins on failure to let the user re-type
       _pinController.clear();
       _pinFocusNode.requestFocus();
@@ -86,131 +89,138 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<OtpVerificationState>(
-      otpVerificationControllerProvider(widget.phoneNumber),
-      _handleStatusChange,
-    );
+    return BlocProvider(
+      create: (_) => OtpVerificationCubit(phoneNumber: widget.phoneNumber),
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            backgroundColor: AppColors.background,
+            body: SafeArea(
+              top: false,
+              child: Stack(
+                children: [
+                  // Scrollable Content
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: OtpVerificationScreen._maxContentWidth),
+                              child: BlocListener<OtpVerificationCubit, OtpVerificationState>(
+                                listenWhen: (prev, curr) => prev.status != curr.status,
+                                listener: _handleStatusChange,
+                                child: BlocBuilder<OtpVerificationCubit, OtpVerificationState>(
+                                  builder: (context, state) {
+                                    final isLoading = state.status.isLoading;
 
-    final state = ref.watch(otpVerificationControllerProvider(widget.phoneNumber));
-    final isLoading = state.status.isLoading;
-
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        top: false,
-        child: Stack(
-          children: [
-            // Scrollable Content
-            LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: OtpVerificationScreen._maxContentWidth),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            const SignInHeader(),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                AppSpacing.xxl,
-                                AppSpacing.xxxl,
-                                AppSpacing.xxl,
-                                AppSpacing.giant,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Verification',
-                                    style: AppTextStyles.heading,
-                                  ),
-                                  const SizedBox(height: AppSpacing.xs),
-                                  Text(
-                                    'We sent a 4-digit code to ${widget.phoneNumber}',
-                                    style: AppTextStyles.subtitle,
-                                  ),
-                                  const SizedBox(height: AppSpacing.xxxl),
-                                  
-                                  // PIN code field
-                                  _OtpPinInput(
-                                    controller: _pinController,
-                                    focusNode: _pinFocusNode,
-                                    enabled: !isLoading,
-                                    onChanged: (code) {
-                                      if (code.length == 4) {
-                                        _submitCode(code);
-                                      }
-                                    },
-                                  ),
-                                  
-                                  const SizedBox(height: AppSpacing.xxxl),
-                                  
-                                  // Resend section
-                                  _ResendTimerSection(
-                                    countdown: state.countdown,
-                                    canResend: state.canResend && !isLoading,
-                                    onResend: () {
-                                      _pinController.clear();
-                                      _pinFocusNode.requestFocus();
-                                      ref
-                                          .read(otpVerificationControllerProvider(widget.phoneNumber).notifier)
-                                          .resendOtp();
-                                    },
-                                  ),
-                                  
-                                  const SizedBox(height: AppSpacing.xxxl),
-                                  
-                                  // Submit button
-                                  PrimaryButton(
-                                    label: 'Verify & Proceed',
-                                    trailingIcon: Icons.check_circle_outline,
-                                    isLoading: isLoading,
-                                    onPressed: _pinController.text.length == 4
-                                        ? () => _submitCode(_pinController.text)
-                                        : null,
-                                  ),
-                                ],
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        const SignInHeader(),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                            AppSpacing.xxl,
+                                            AppSpacing.xxxl,
+                                            AppSpacing.xxl,
+                                            AppSpacing.giant,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                'Verification',
+                                                style: AppTextStyles.heading,
+                                              ),
+                                              const SizedBox(height: AppSpacing.xs),
+                                              Text(
+                                                'We sent a 4-digit code to ${widget.phoneNumber}',
+                                                style: AppTextStyles.subtitle,
+                                              ),
+                                              const SizedBox(height: AppSpacing.xxxl),
+                                              
+                                              // PIN code field
+                                              _OtpPinInput(
+                                                controller: _pinController,
+                                                focusNode: _pinFocusNode,
+                                                enabled: !isLoading,
+                                                onChanged: (code) {
+                                                  if (code.length == 4) {
+                                                    _submitCode(context, code);
+                                                  }
+                                                },
+                                              ),
+                                              
+                                              const SizedBox(height: AppSpacing.xxxl),
+                                              
+                                              // Resend section
+                                              _ResendTimerSection(
+                                                countdown: state.countdown,
+                                                canResend: state.canResend && !isLoading,
+                                                onResend: () {
+                                                  _pinController.clear();
+                                                  _pinFocusNode.requestFocus();
+                                                  context.read<OtpVerificationCubit>().resendOtp();
+                                                },
+                                              ),
+                                              
+                                              const SizedBox(height: AppSpacing.xxxl),
+                                              
+                                              // Submit button
+                                              PrimaryButton(
+                                                label: 'Verify & Proceed',
+                                                trailingIcon: Icons.check_circle_outline,
+                                                isLoading: isLoading,
+                                                onPressed: _pinController.text.length == 4
+                                                    ? () => _submitCode(context, _pinController.text)
+                                                    : null,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  
+                  // Glassmorphic floating Back Button
+                  Positioned(
+                    top: MediaQuery.of(context).padding.top + AppSpacing.md,
+                    left: AppSpacing.lg,
+                    child: ClipOval(
+                      child: Material(
+                        color: AppColors.onBrand.withValues(alpha: 0.15),
+                        child: InkWell(
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                            Navigator.of(context).pop();
+                          },
+                          child: SizedBox(
+                            width: 44,
+                            height: 44,
+                            child: Icon(
+                              Icons.arrow_back_ios_new,
+                              size: 18,
+                              color: AppColors.onBrand,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                );
-              },
-            ),
-            
-            // Glassmorphic floating Back Button
-            Positioned(
-              top: MediaQuery.of(context).padding.top + AppSpacing.md,
-              left: AppSpacing.lg,
-              child: ClipOval(
-                child: Material(
-                  color: AppColors.onBrand.withValues(alpha: 0.15),
-                  child: InkWell(
-                    onTap: () {
-                      FocusScope.of(context).unfocus();
-                      Navigator.of(context).pop();
-                    },
-                    child: SizedBox(
-                      width: 44,
-                      height: 44,
-                      child: Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 18,
-                        color: AppColors.onBrand,
-                      ),
-                    ),
-                  ),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
+          );
+        }
       ),
     );
   }

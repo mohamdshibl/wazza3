@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/style/app_radii.dart';
@@ -8,12 +8,12 @@ import '../../../../core/style/app_text_styles.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../data/models/country.dart';
-import '../../logic/controllers/sign_in_controller.dart';
+import '../../logic/controllers/sign_in_cubit.dart';
 import 'country_code_prefix.dart';
 
 /// Mobile-number field with a country-code selector prefix and OTP helper
-/// text. Reads/writes the selected [Country] through the controller.
-class PhoneNumberField extends ConsumerWidget {
+/// text. Reads/writes the selected Country through the Cubit.
+class PhoneNumberField extends StatelessWidget {
   const PhoneNumberField({
     super.key,
     required this.controller,
@@ -24,10 +24,8 @@ class PhoneNumberField extends ConsumerWidget {
   final ValueChanged<String>? onSubmitted;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final country = ref.watch(
-      signInControllerProvider.select((s) => s.country),
-    );
+  Widget build(BuildContext context) {
+    final country = context.watch<SignInCubit>().state.country;
 
     return AppTextField(
       controller: controller,
@@ -40,12 +38,12 @@ class PhoneNumberField extends ConsumerWidget {
       onSubmitted: onSubmitted,
       customPrefix: CountryCodePrefix(
         country: country,
-        onTap: () => _pickCountry(context, ref),
+        onTap: () => _pickCountry(context),
       ),
     );
   }
 
-  Future<void> _pickCountry(BuildContext context, WidgetRef ref) async {
+  Future<void> _pickCountry(BuildContext context) async {
     final selected = await showModalBottomSheet<Country>(
       context: context,
       shape: RoundedRectangleBorder(borderRadius: AppRadii.field),
@@ -65,8 +63,8 @@ class PhoneNumberField extends ConsumerWidget {
       ),
     );
 
-    if (selected != null) {
-      ref.read(signInControllerProvider.notifier).selectCountry(selected);
+    if (selected != null && context.mounted) {
+      context.read<SignInCubit>().selectCountry(selected);
     }
   }
 }

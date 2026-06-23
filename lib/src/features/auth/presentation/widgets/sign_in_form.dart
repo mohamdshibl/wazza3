@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/enums/request_status.dart';
@@ -11,22 +11,20 @@ import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/routing/app_routes.dart';
 import '../../data/models/auth_method.dart';
-import '../../logic/controllers/sign_in_controller.dart';
+import '../../logic/controllers/sign_in_cubit.dart';
 import '../../logic/controllers/sign_in_state.dart';
 import 'auth_method_toggle.dart';
 import 'phone_number_field.dart';
 
-/// The interactive sign-in form. Holds the text controllers and form key
-/// (transient view state); all business logic is delegated to
-/// [SignInController]. Renders the Email or Phone variant by [AuthMethod].
-class SignInForm extends ConsumerStatefulWidget {
+/// The interactive sign-in form. Holds the text controllers and form key.
+class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
 
   @override
-  ConsumerState<SignInForm> createState() => _SignInFormState();
+  State<SignInForm> createState() => _SignInFormState();
 }
 
-class _SignInFormState extends ConsumerState<SignInForm> {
+class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -44,33 +42,32 @@ class _SignInFormState extends ConsumerState<SignInForm> {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
 
-    final controller = ref.read(signInControllerProvider.notifier);
-    final method = ref.read(signInControllerProvider).method;
+    final cubit = context.read<SignInCubit>();
+    final method = cubit.state.method;
 
     if (method == AuthMethod.email) {
-      controller.signIn(
+      cubit.signIn(
         identifier: _emailController.text,
         password: _passwordController.text,
       );
     } else {
-      controller.requestOtp(number: _phoneController.text);
+      cubit.requestOtp(number: _phoneController.text);
     }
   }
 
-  void _handleStatusChange(SignInState? prev, SignInState next) {
-    if (prev?.status == next.status) return;
+  void _handleStatusChange(BuildContext context, SignInState state) {
     final messenger = ScaffoldMessenger.of(context);
 
-    if (next.status.isFailure) {
+    if (state.status.isFailure) {
       messenger.showSnackBar(
         SnackBar(
           backgroundColor: AppColors.error,
-          content: Text(next.errorMessage ?? AppStrings.genericError),
+          content: Text(state.errorMessage ?? AppStrings.genericError),
         ),
       );
-      ref.read(signInControllerProvider.notifier).acknowledgeError();
-    } else if (next.status.isSuccess) {
-      final isOtp = next.method == AuthMethod.phone;
+      context.read<SignInCubit>().acknowledgeError();
+    } else if (state.status.isSuccess) {
+      final isOtp = state.method == AuthMethod.phone;
       messenger.showSnackBar(
         SnackBar(
           backgroundColor: AppColors.success,
@@ -93,40 +90,38 @@ class _SignInFormState extends ConsumerState<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(signInControllerProvider, _handleStatusChange);
+    return BlocListener<SignInCubit, SignInState>(
+      listenWhen: (prev, curr) => prev.status != curr.status,
+      listener: _handleStatusChange,
+      child: BlocBuilder<SignInCubit, SignInState>(
+        builder: (context, state) {
+          final isEmail = state.method == AuthMethod.email;
+          final isLoading = state.status.isLoading;
 
-    final isEmail = ref.watch(
-      signInControllerProvider.select((s) => s.method == AuthMethod.email),
-    );
-    final isLoading = ref.watch(
-      signInControllerProvider.select((s) => s.status.isLoading),
-    );
-
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const AuthMethodToggle(),
-          const SizedBox(height: AppSpacing.xxl),
-          if (isEmail) ..._emailFields() else _phoneField(),
-          const SizedBox(height: AppSpacing.xxxl),
-          PrimaryButton(
-            label: isEmail ? AppStrings.signInCta : AppStrings.sendOtpCta,
-            trailingIcon: Icons.arrow_forward,
-            isLoading: isLoading,
-            onPressed: _submit,
-          ),
-        ],
+          return Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const AuthMethodToggle(),
+                const SizedBox(height: AppSpacing.xxl),
+                if (isEmail) ..._emailFields(state.obscurePassword) else _phoneField(),
+                const SizedBox(height: AppSpacing.xxxl),
+                PrimaryButton(
+                  label: isEmail ? AppStrings.signInCta : AppStrings.sendOtpCta,
+                  trailingIcon: Icons.arrow_forward,
+                  isLoading: isLoading,
+                  onPressed: _submit,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 
-  List<Widget> _emailFields() {
-    final obscure = ref.watch(
-      signInControllerProvider.select((s) => s.obscurePassword),
-    );
-
+  List<Widget> _emailFields(bool obscure) {
     return [
       AppTextField(
         controller: _emailController,
@@ -148,9 +143,7 @@ class _SignInFormState extends ConsumerState<SignInForm> {
         textInputAction: TextInputAction.done,
         onSubmitted: (_) => _submit(),
         suffix: IconButton(
-          onPressed: ref
-              .read(signInControllerProvider.notifier)
-              .togglePasswordVisibility,
+          onPressed: () => context.read<SignInCubit>().togglePasswordVisibility(),
           icon: Icon(
             obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
             color: AppColors.iconMuted,
