@@ -67,6 +67,13 @@ flutter:
     - assets/cars.png
     - assets/logo.svg
 
+  fonts:
+    - family: Catamaran
+      fonts:
+        # Variable font (wght axis: Thin 100 → Black 900). Flutter maps
+        # each TextStyle.fontWeight onto the axis.
+        - asset: assets/fonts/Catamaran-Variable.ttf
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
