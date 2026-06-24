@@ -5,4 +5,6 @@ class AppRoutes {
   static const String signIn = '/sign-in';
   static const String otpVerification = '/otp-verification';
   static const String dashboard = '/dashboard';
+  static const String newOrderDraft = '/new-order-draft';
+  static const String addCustomer = '/add-customer';
 }

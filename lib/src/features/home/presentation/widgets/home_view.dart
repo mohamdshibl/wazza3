@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../core/routing/app_routes.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
 
 const String _truckSvg = '''
@@ -154,9 +155,25 @@ class _Header extends StatelessWidget {
                 // action buttons
                 Row(
                   children: [
-                    Expanded(child: _HeaderButton(icon: Icons.shopping_cart_outlined, label: 'New Order', onTap: () {})),
+                    Expanded(
+                      child: _HeaderButton(
+                        icon: Icons.shopping_cart_outlined,
+                        label: 'New Order',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.newOrderDraft);
+                        },
+                      ),
+                    ),
                     const SizedBox(width: 8),
-                    Expanded(child: _HeaderButton(icon: Icons.person_add_outlined, label: 'New Customer', onTap: () {})),
+                    Expanded(
+                      child: _HeaderButton(
+                        icon: Icons.person_add_outlined,
+                        label: 'New Customer',
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.addCustomer);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ],
