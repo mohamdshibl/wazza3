@@ -1,3 +1,4 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../customers/data/repos/customer_repository.dart';
@@ -74,7 +75,7 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
             return AlertDialog(
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              title: const Text('Add New Customer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              title: Text(AppLocalizations.of(context)!.addNewCustomer, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -109,7 +110,7 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Type:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                        Text(AppLocalizations.of(context)!.typeLabel, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                         DropdownButton<String>(
                           value: type,
                           onChanged: (val) {
@@ -117,10 +118,10 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                               setDialogState(() => type = val);
                             }
                           },
-                          items: const [
-                            DropdownMenuItem(value: 'Retail', child: Text('Retail')),
-                            DropdownMenuItem(value: 'Horeca', child: Text('Horeca')),
-                            DropdownMenuItem(value: 'Wholesale', child: Text('Wholesale')),
+                          items: [
+                            DropdownMenuItem(value: 'Retail', child: Text(AppLocalizations.of(context)!.retail)),
+                            DropdownMenuItem(value: 'Horeca', child: Text(AppLocalizations.of(context)!.horeca)),
+                            DropdownMenuItem(value: 'Wholesale', child: Text(AppLocalizations.of(context)!.wholesale)),
                           ],
                         ),
                       ],
@@ -131,7 +132,7 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+                  child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: Colors.grey)),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE52B13)),
@@ -151,7 +152,7 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                       Navigator.pop(context);
                     }
                   },
-                  child: const Text('Save', style: TextStyle(color: Colors.white)),
+                  child: Text(AppLocalizations.of(context)!.save, style: TextStyle(color: Colors.white)),
                 ),
               ],
             );

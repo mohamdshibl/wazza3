@@ -1,3 +1,4 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../../core/routing/app_routes.dart';
@@ -47,9 +48,9 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
       _isLoaded = true;
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         backgroundColor: Color(0xFF0B6B54),
-        content: Text('Quantities loaded successfully!'),
+        content: Text(AppLocalizations.of(context)!.quantitiesLoaded),
       ),
     );
   }

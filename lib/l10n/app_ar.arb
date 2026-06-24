@@ -1,0 +1,77 @@
+{
+  "@@locale": "ar",
+  "appName": "وزع",
+  "tagline": "مندوب مبيعات التوزيع",
+  "signInTitle": "تسجيل الدخول",
+  "signInSubtitle": "مرحباً بك مجدداً في وزع",
+  "email": "البريد الإلكتروني",
+  "phone": "رقم الهاتف",
+  "emailLabel": "عنوان البريد الإلكتروني",
+  "phoneLabel": "رقم الهاتف",
+  "emailHint": "you@example.com",
+  "phoneHint": "+20 100 000 0000",
+  "passwordLabel": "كلمة المرور",
+  "passwordHint": "••••••••",
+  "forgotPassword": "هل نسيت كلمة المرور؟",
+  "signInCta": "تسجيل الدخول",
+  "mobileNumberLabel": "رقم الجوال",
+  "mobileNumberHint": "5X XXX XXXX",
+  "otpHelper": "سيتم إرسال رمز تحقق لتأكيد رقمك",
+  "sendOtpCta": "إرسال رمز التحقق",
+  "termsSignIn": "بتسجيل الدخول، أنت توافق على شروط الخدمة",
+  "termsContinue": "بالمتابعة، أنت توافق على شروط الخدمة",
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "emailInvalid": "أدخل بريد إلكتروني صحيح",
+  "phoneRequired": "رقم الهاتف مطلوب",
+  "phoneInvalid": "أدخل رقم هاتف صحيح",
+  "passwordRequired": "كلمة المرور مطلوبة",
+  "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+  "genericError": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+  "addNewCustomer": "إضافة عميل جديد",
+  "typeLabel": "النوع:",
+  "retail": "تجزئة",
+  "horeca": "هوريكا",
+  "wholesale": "جملة",
+  "cancel": "إلغاء",
+  "save": "حفظ",
+  "todaysRoute": "مسار اليوم",
+  "viewAll": "عرض الكل",
+  "viewAllUpcomingStops": "عرض جميع المحطات القادمة ({count}) →",
+  "@viewAllUpcomingStops": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "units": "{count} وحدة",
+  "@units": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "amountDue": "{amount} مستحقة",
+  "@amountDue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "previousOrders": "الطلبات السابقة",
+  "viewMore": "عرض المزيد",
+  "done": "تم",
+  "quantitiesLoaded": "تم تحميل الكميات بنجاح!",
+  "phoneVerified": "تم التحقق من رقم الهاتف بنجاح!",
+  "enterValidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+  "resetLinkSent": "تم إرسال رابط إعادة التعيين إلى {email}",
+  "@resetLinkSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  }
+}

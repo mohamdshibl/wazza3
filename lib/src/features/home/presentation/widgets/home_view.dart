@@ -1,4 +1,7 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/locale/locale_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../core/routing/app_routes.dart';
@@ -133,6 +136,12 @@ class _Header extends StatelessWidget {
                           ),
                         ],
                       ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.language, color: Colors.white, size: 20),
+                      onPressed: () {
+                        context.read<LocaleCubit>().toggleLocale();
+                      },
                     ),
                     IconButton(
                       icon: const Icon(Icons.logout, color: Colors.white, size: 20),
@@ -403,13 +412,13 @@ class _RouteSection extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Text('Today\'s Route', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1F2937))),
+            Text(AppLocalizations.of(context)!.todaysRoute, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1F2937))),
             const Spacer(),
             GestureDetector(
               onTap: () {},
-              child: const Row(children: [
-                Text('View All', style: TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
-                Icon(Icons.chevron_right, color: _brandRed, size: 14),
+              child: Row(children: [
+                Text(AppLocalizations.of(context)!.viewAll, style: const TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
+                const Icon(Icons.chevron_right, color: _brandRed, size: 14),
               ]),
             ),
           ],
@@ -431,10 +440,10 @@ class _RouteSection extends StatelessWidget {
           ...(_stops.map((s) => Padding(padding: const EdgeInsets.only(bottom: 8), child: _StopCard(data: s)))),
           GestureDetector(
             onTap: () {},
-            child: const Center(
+            child: Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 4),
-                child: Text('View all 4 upcoming stops →', style: TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Text(AppLocalizations.of(context)!.viewAllUpcomingStops(4), style: const TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
               ),
             ),
           ),
@@ -876,13 +885,13 @@ class _StopCard extends StatelessWidget {
               children: [
                 const Icon(Icons.inventory_2_outlined, size: 11, color: Color(0xFF9CA3AF)),
                 const SizedBox(width: 4),
-                Text('${data.units} units', style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+                Text(AppLocalizations.of(context)!.units(data.units.toString()), style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
                 const SizedBox(width: 12),
                 const Icon(Icons.access_time, size: 11, color: Color(0xFF9CA3AF)),
                 const SizedBox(width: 4),
                 Text(data.time, style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
                 const Spacer(),
-                Text('${data.amount} due', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _brandRed)),
+                Text(AppLocalizations.of(context)!.amountDue(data.amount.toString()), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _brandRed)),
               ],
             ),
           ],
@@ -909,13 +918,13 @@ class _PreviousOrdersSection extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Text('Previous Orders', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1F2937))),
+            Text(AppLocalizations.of(context)!.previousOrders, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1F2937))),
             const Spacer(),
             GestureDetector(
               onTap: () {},
-              child: const Row(children: [
-                Text('View more ', style: TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
-                Icon(Icons.chevron_right, color: _brandRed, size: 14),
+              child: Row(children: [
+                Text(AppLocalizations.of(context)!.viewMore, style: const TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
+                const Icon(Icons.chevron_right, color: _brandRed, size: 14),
               ]),
             ),
           ],
@@ -966,7 +975,7 @@ class _OrderCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(color: _doneBadgeBg, borderRadius: BorderRadius.circular(99)),
-                      child: const Text('Done', style: TextStyle(color: _doneBadgeFg, fontSize: 10, fontWeight: FontWeight.w600)),
+                      child: Text(AppLocalizations.of(context)!.done, style: TextStyle(color: _doneBadgeFg, fontSize: 10, fontWeight: FontWeight.w600)),
                     ),
                   ],
                 ),

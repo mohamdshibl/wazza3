@@ -1,0 +1,77 @@
+{
+  "@@locale": "en",
+  "appName": "Wazza3",
+  "tagline": "Distribution Sales Rep",
+  "signInTitle": "Sign in",
+  "signInSubtitle": "Welcome back to Wazza3",
+  "email": "Email",
+  "phone": "Phone",
+  "emailLabel": "EMAIL ADDRESS",
+  "phoneLabel": "PHONE NUMBER",
+  "emailHint": "you@example.com",
+  "phoneHint": "+20 100 000 0000",
+  "passwordLabel": "PASSWORD",
+  "passwordHint": "••••••••",
+  "forgotPassword": "Forgot password?",
+  "signInCta": "Sign In",
+  "mobileNumberLabel": "MOBILE NUMBER",
+  "mobileNumberHint": "5X XXX XXXX",
+  "otpHelper": "An OTP will be sent to verify your number",
+  "sendOtpCta": "Send OTP",
+  "termsSignIn": "By signing in you agree to the Terms of Service",
+  "termsContinue": "By continuing you agree to the Terms of Service",
+  "emailRequired": "Email is required",
+  "emailInvalid": "Enter a valid email address",
+  "phoneRequired": "Phone number is required",
+  "phoneInvalid": "Enter a valid phone number",
+  "passwordRequired": "Password is required",
+  "passwordTooShort": "Password must be at least 6 characters",
+  "genericError": "Something went wrong. Please try again.",
+  "addNewCustomer": "Add New Customer",
+  "typeLabel": "Type:",
+  "retail": "Retail",
+  "horeca": "Horeca",
+  "wholesale": "Wholesale",
+  "cancel": "Cancel",
+  "save": "Save",
+  "todaysRoute": "Today's Route",
+  "viewAll": "View All",
+  "viewAllUpcomingStops": "View all {count} upcoming stops →",
+  "@viewAllUpcomingStops": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "units": "{count} units",
+  "@units": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "amountDue": "{amount} due",
+  "@amountDue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "previousOrders": "Previous Orders",
+  "viewMore": "View more",
+  "done": "Done",
+  "quantitiesLoaded": "Quantities loaded successfully!",
+  "phoneVerified": "Phone number verified successfully!",
+  "enterValidEmail": "Please enter a valid email address",
+  "resetLinkSent": "Reset link sent to {email}",
+  "@resetLinkSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  }
+}

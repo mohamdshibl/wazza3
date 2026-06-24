@@ -1,7 +1,7 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/widgets/segmented_toggle.dart';
 import '../../data/models/auth_method.dart';
 import '../../logic/controllers/sign_in_cubit.dart';
@@ -18,9 +18,9 @@ class AuthMethodToggle extends StatelessWidget {
     return SegmentedToggle<AuthMethod>(
       selected: method,
       onChanged: (val) => context.read<SignInCubit>().selectMethod(val),
-      items: const [
-        SegmentedItem(value: AuthMethod.email, label: AppStrings.email),
-        SegmentedItem(value: AuthMethod.phone, label: AppStrings.phone),
+      items: [
+        SegmentedItem(value: AuthMethod.email, label: AppLocalizations.of(context)!.email),
+        SegmentedItem(value: AuthMethod.phone, label: AppLocalizations.of(context)!.phone),
       ],
     );
   }

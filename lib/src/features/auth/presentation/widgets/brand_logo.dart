@@ -1,6 +1,6 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/style/app_spacing.dart';
 import '../../../../core/style/app_text_styles.dart';
 import 'brand_logo_mark.dart';
@@ -19,9 +19,9 @@ class BrandLogo extends StatelessWidget {
       children: [
         const BrandLogoMark(),
         const SizedBox(height: AppSpacing.lg), // mb-4
-        Text(AppStrings.appName, style: AppTextStyles.wordmark),
+        Text(AppLocalizations.of(context)!.appName, style: AppTextStyles.wordmark),
         const SizedBox(height: AppSpacing.xs), // mt-1
-        Text(AppStrings.tagline, style: AppTextStyles.tagline),
+        Text(AppLocalizations.of(context)!.tagline, style: AppTextStyles.tagline),
       ],
     );
   }

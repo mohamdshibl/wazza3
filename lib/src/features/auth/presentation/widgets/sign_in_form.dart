@@ -1,7 +1,7 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/enums/request_status.dart';
 import '../../../../core/style/app_colors.dart';
 import '../../../../core/style/app_spacing.dart';
@@ -62,7 +62,7 @@ class _SignInFormState extends State<SignInForm> {
       messenger.showSnackBar(
         SnackBar(
           backgroundColor: AppColors.error,
-          content: Text(state.errorMessage ?? AppStrings.genericError),
+          content: Text(state.errorMessage ?? AppLocalizations.of(context)!.genericError),
         ),
       );
       context.read<SignInCubit>().acknowledgeError();
@@ -101,7 +101,7 @@ class _SignInFormState extends State<SignInForm> {
                 if (isEmail) ..._emailFields(state.obscurePassword) else _phoneField(),
                 const SizedBox(height: AppSpacing.xxxl),
                 PrimaryButton(
-                  label: isEmail ? AppStrings.signInCta : AppStrings.sendOtpCta,
+                  label: isEmail ? AppLocalizations.of(context)!.signInCta : AppLocalizations.of(context)!.sendOtpCta,
                   trailingIcon: Icons.arrow_forward,
                   isLoading: isLoading,
                   onPressed: _submit,
@@ -118,8 +118,8 @@ class _SignInFormState extends State<SignInForm> {
     return [
       AppTextField(
         controller: _emailController,
-        label: AppStrings.emailLabel,
-        hint: AppStrings.emailHint,
+        label: AppLocalizations.of(context)!.emailLabel,
+        hint: AppLocalizations.of(context)!.emailHint,
         prefixIcon: Icons.mail_outline,
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
@@ -127,8 +127,8 @@ class _SignInFormState extends State<SignInForm> {
       const SizedBox(height: AppSpacing.xl),
       AppTextField(
         controller: _passwordController,
-        label: AppStrings.passwordLabel,
-        hint: AppStrings.passwordHint,
+        label: AppLocalizations.of(context)!.passwordLabel,
+        hint: AppLocalizations.of(context)!.passwordHint,
         prefixIcon: Icons.lock_outline,
         obscureText: obscure,
         textInputAction: TextInputAction.done,
@@ -153,7 +153,7 @@ class _SignInFormState extends State<SignInForm> {
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          child: const Text(AppStrings.forgotPassword, style: AppTextStyles.link),
+          child: Text(AppLocalizations.of(context)!.forgotPassword, style: AppTextStyles.link),
         ),
       ),
     ];

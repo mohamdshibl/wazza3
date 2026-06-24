@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/style/app_colors.dart';
 import '../../../../core/style/app_spacing.dart';
 import '../../../../core/widgets/glow_overlay.dart';
+import '../../../../core/locale/locale_cubit.dart';
 import 'brand_logo.dart';
 
 /// Brand hero header.
@@ -45,16 +47,28 @@ class SignInHeader extends StatelessWidget {
           ),
 
           // ── Layer 3: foreground content ──
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
+          const Padding(
+            padding: EdgeInsets.fromLTRB(
               AppSpacing.xxxl, // px-8
               AppSpacing.giant, // pt-12
               AppSpacing.xxxl,
               AppSpacing.huge, // pb-10
             ),
-            child: const Align(
+            child: Align(
               alignment: Alignment.bottomCenter,
               child: BrandLogo(),
+            ),
+          ),
+          
+          // ── Layer 4: language toggle ──
+          Positioned(
+            top: 40,
+            right: 16,
+            child: IconButton(
+              icon: const Icon(Icons.language, color: Colors.white),
+              onPressed: () {
+                context.read<LocaleCubit>().toggleLocale();
+              },
             ),
           ),
         ],

@@ -1,7 +1,7 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/style/app_radii.dart';
 import '../../../../core/style/app_spacing.dart';
 import '../../../../core/style/app_text_styles.dart';
@@ -28,9 +28,9 @@ class PhoneNumberField extends StatelessWidget {
 
     return AppTextField(
       controller: controller,
-      label: AppStrings.mobileNumberLabel,
-      hint: AppStrings.mobileNumberHint,
-      helperText: AppStrings.otpHelper,
+      label: AppLocalizations.of(context)!.mobileNumberLabel,
+      hint: AppLocalizations.of(context)!.mobileNumberHint,
+      helperText: AppLocalizations.of(context)!.otpHelper,
       keyboardType: TextInputType.phone,
       textInputAction: TextInputAction.done,
       onSubmitted: onSubmitted,

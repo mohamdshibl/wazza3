@@ -1,8 +1,8 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_strings.dart';
 import '../../../core/enums/request_status.dart';
 import '../../../core/routing/app_routes.dart';
 import '../../../core/style/app_colors.dart';
@@ -59,9 +59,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         context.read<AuthCubit>().setUser(user);
         
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            backgroundColor: AppColors.success,
-            content: Text('Phone number verified successfully!'),
+          SnackBar(backgroundColor: AppColors.success,
+            content: Text(AppLocalizations.of(context)!.phoneVerified),
           ),
         );
         Navigator.of(context).pushNamedAndRemoveUntil(
@@ -77,7 +76,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: AppColors.error,
-          content: Text(state.errorMessage ?? AppStrings.genericError),
+          content: Text(state.errorMessage ?? AppLocalizations.of(context)!.genericError),
         ),
       );
       context.read<OtpVerificationCubit>().acknowledgeError();

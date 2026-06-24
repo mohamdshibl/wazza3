@@ -1,7 +1,7 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_strings.dart';
 import '../../../core/style/app_spacing.dart';
 import '../../../core/style/app_text_styles.dart';
 import '../logic/controllers/sign_in_cubit.dart';
@@ -63,9 +63,9 @@ class _SignInContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppStrings.signInTitle, style: AppTextStyles.heading),
+              Text(AppLocalizations.of(context)!.signInTitle, style: AppTextStyles.heading),
               const SizedBox(height: AppSpacing.xs),
-              Text(AppStrings.signInSubtitle, style: AppTextStyles.subtitle),
+              Text(AppLocalizations.of(context)!.signInSubtitle, style: AppTextStyles.subtitle),
               const SizedBox(height: AppSpacing.xxxl),
               const SignInForm(),
               const SizedBox(height: AppSpacing.xxl),

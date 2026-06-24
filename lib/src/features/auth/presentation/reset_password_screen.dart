@@ -1,3 +1,4 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_icons.dart';
@@ -27,9 +28,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
     if (!emailRegex.hasMatch(email)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           backgroundColor: Color(0xFFE52B13),
-          content: Text('Please enter a valid email address'),
+          content: Text(AppLocalizations.of(context)!.enterValidEmail),
         ),
       );
       return;
@@ -38,7 +39,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: const Color(0xFF0B6B54),
-        content: Text('Reset link sent to $email'),
+        content: Text(AppLocalizations.of(context)!.resetLinkSent(email)),
       ),
     );
 

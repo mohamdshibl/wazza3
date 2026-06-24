@@ -1,7 +1,7 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/app_strings.dart';
 import '../../../../core/style/app_text_styles.dart';
 import '../../data/models/auth_method.dart';
 import '../../logic/controllers/sign_in_cubit.dart';
@@ -16,7 +16,7 @@ class TermsFooter extends StatelessWidget {
     final isEmail = context.watch<SignInCubit>().state.method == AuthMethod.email;
 
     return Text(
-      isEmail ? AppStrings.termsSignIn : AppStrings.termsContinue,
+      isEmail ? AppLocalizations.of(context)!.termsSignIn : AppLocalizations.of(context)!.termsContinue,
       textAlign: TextAlign.center,
       style: AppTextStyles.caption,
     );
