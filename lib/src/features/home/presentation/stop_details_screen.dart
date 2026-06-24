@@ -136,7 +136,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(24),
                           border: Border.all(color: const Color(0xFFF3F4F6)),
                           boxShadow: [
                             BoxShadow(
@@ -257,7 +257,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(24),
                             border: Border.all(color: const Color(0xFFF3F4F6)),
                             boxShadow: [
                               BoxShadow(
@@ -271,7 +271,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                             children: [
                               // Map Grid Area
                               ClipRRect(
-                                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
                                 child: Container(
                                   height: 220,
                                   color: const Color(0xFFDFE9C2),
@@ -350,9 +350,9 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                     ElevatedButton.icon(
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color(0xFFE52B13),
-                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(99),
                                         ),
                                         elevation: 0,
                                         minimumSize: Size.zero,
@@ -368,8 +368,8 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                       },
                                       icon: AppIcons.asset(
                                         AppIcons.navigation,
-                                        width: 12,
-                                        height: 12,
+                                        width: 10,
+                                        height: 10,
                                         color: Colors.white,
                                       ),
                                       label: const Text(
@@ -377,7 +377,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 12,
+                                          fontSize: 11,
                                         ),
                                       ),
                                     ),
@@ -396,7 +396,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: const Color(0xFFFFFBEB),
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(24),
                             border: Border.all(color: const Color(0xFFFEF3C7)),
                           ),
                           child: const Row(
@@ -451,7 +451,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(24),
                             border: Border.all(color: const Color(0xFFE5E7EB)),
                             boxShadow: [
                               BoxShadow(
@@ -587,7 +587,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                             Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(24),
                                 border: Border.all(color: const Color(0xFFF3F4F6)),
                                 boxShadow: [
                                   BoxShadow(
@@ -750,7 +750,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(24),
                                 border: Border.all(color: const Color(0xFFF3F4F6)),
                                 boxShadow: [
                                   BoxShadow(
@@ -913,7 +913,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: const Color(0xFFE5E7EB)),
         boxShadow: [
           BoxShadow(
@@ -962,9 +962,9 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFE52B13),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(99),
               ),
               elevation: 0,
               minimumSize: Size.zero,
@@ -979,14 +979,14 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: 11,
                   ),
                 ),
                 SizedBox(width: 4),
                 Icon(
                   Icons.keyboard_arrow_down,
                   color: Colors.white,
-                  size: 14,
+                  size: 12,
                 ),
               ],
             ),
