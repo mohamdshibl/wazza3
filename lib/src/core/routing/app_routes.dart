@@ -7,4 +7,6 @@ class AppRoutes {
   static const String dashboard = '/dashboard';
   static const String newOrderDraft = '/new-order-draft';
   static const String addCustomer = '/add-customer';
+  static const String stopDetails = '/stop-details';
+  static const String salesOrderDetails = '/sales-order-details';
 }

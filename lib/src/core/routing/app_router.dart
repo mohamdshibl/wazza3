@@ -5,6 +5,9 @@ import '../../features/auth/presentation/sign_in_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/orders/presentation/new_order_draft_screen.dart';
 import '../../features/customers/presentation/add_customer_screen.dart';
+import '../../features/home/presentation/stop_details_screen.dart';
+import '../../features/home/presentation/sales_order_details_screen.dart';
+import '../../features/home/presentation/widgets/home_view.dart';
 import 'app_routes.dart';
 
 /// Centralized route generation. Swap for go_router as the app grows.
@@ -37,6 +40,18 @@ class AppRouter {
       case AppRoutes.addCustomer:
         return MaterialPageRoute(
           builder: (_) => const AddCustomerScreen(),
+          settings: settings,
+        );
+      case AppRoutes.stopDetails:
+        final stopData = settings.arguments as StopData;
+        return MaterialPageRoute(
+          builder: (_) => StopDetailsScreen(stopData: stopData),
+          settings: settings,
+        );
+      case AppRoutes.salesOrderDetails:
+        final stopData = settings.arguments as StopData;
+        return MaterialPageRoute(
+          builder: (_) => SalesOrderDetailsScreen(stopData: stopData),
           settings: settings,
         );
       default:

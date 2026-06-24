@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/routing/app_routes.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
 
@@ -13,6 +14,14 @@ const String _walletSvg = '''
 
 const String _routeSvg = '''
 <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-route"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path><circle cx="18" cy="5" r="3"></circle></svg>
+''';
+
+const String _listChecksSvg = '''
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>
+''';
+
+const String _navigationSvg = '''
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
 ''';
 
 // Color tokens
@@ -402,9 +411,9 @@ class _RouteSection extends StatelessWidget {
   final ValueChanged<int> onTabChanged;
 
   static const _stops = [
-    _StopData(num: 1, name: 'Downtown Mart', address: '123 Main St, Downtown', units: 116, time: '08:30', amount: '\$374.00'),
-    _StopData(num: 2, name: 'Uptown Groceries', address: '456 High St, Uptown', units: 220, time: '09:15', amount: '\$480.00'),
-    _StopData(num: 3, name: 'City Cafe & Diner', address: '78 Park Ave, Midtown', units: 210, time: '10:00', amount: '\$560.00'),
+    StopData(num: 1, name: 'Downtown Mart', address: '123 Main St, Downtown', units: 116, time: '08:30', amount: '\$374.00'),
+    StopData(num: 2, name: 'Uptown Groceries', address: '456 High St, Uptown', units: 220, time: '09:15', amount: '\$480.00'),
+    StopData(num: 3, name: 'City Cafe & Diner', address: '78 Park Ave, Midtown', units: 210, time: '10:00', amount: '\$560.00'),
   ];
 
   @override
@@ -428,7 +437,7 @@ class _RouteSection extends StatelessWidget {
         const SizedBox(height: 12),
         Container(
           padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(color: _navBg, borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(color: _navBg, borderRadius: BorderRadius.circular(99)),
           child: Row(
             children: [
               _TabBtn(label: 'Upcoming', icon: Icons.checklist, active: tabIndex == 0, onTap: () => onTabChanged(0)),
@@ -438,17 +447,351 @@ class _RouteSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        ...(_stops.map((s) => Padding(padding: const EdgeInsets.only(bottom: 8), child: _StopCard(data: s)))),
-        GestureDetector(
-          onTap: () {},
-          child: const Center(
+        if (tabIndex == 0) ...[
+          ...(_stops.map((s) => Padding(padding: const EdgeInsets.only(bottom: 8), child: _StopCard(data: s)))),
+          GestureDetector(
+            onTap: () {},
+            child: const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 4),
+                child: Text('View all 4 upcoming stops →', style: TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
+              ),
+            ),
+          ),
+        ] else if (tabIndex == 1) ...[
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                // Map Area
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  child: Container(
+                    height: 220,
+                    color: const Color(0xFFDFE9C2),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final w = constraints.maxWidth;
+                        final h = constraints.maxHeight;
+                        return Stack(
+                          children: [
+                            Positioned.fill(
+                              child: CustomPaint(
+                                painter: _MapBackgroundPainter(),
+                              ),
+                            ),
+                            Positioned(
+                              left: w * 0.18,
+                              top: h * 0.20,
+                              child: const _MapPin(number: '1'),
+                            ),
+                            Positioned(
+                              left: w * 0.66,
+                              top: h * 0.08,
+                              child: const _MapPin(number: '3'),
+                            ),
+                            Positioned(
+                              left: w * 0.58,
+                              top: h * 0.38,
+                              child: const _MapPin(number: '2'),
+                            ),
+                            Positioned(
+                              left: w * 0.28,
+                              top: h * 0.48,
+                              child: const _MapPin(number: '4'),
+                            ),
+                            Positioned(
+                              left: w * 0.47 - 20,
+                              top: h * 0.50 - 20,
+                              child: const _CurrentLocationIndicator(),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Footer
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Row(
+                    children: [
+                      const Text(
+                        '4 upcoming stops',
+                        style: TextStyle(
+                          color: Color(0xFF4B5563),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                      const Spacer(),
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFE52B13),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: () async {
+                          final Uri url = Uri.parse(
+                            'https://maps.google.com/maps/dir/123%20Main%20St%2C%20Downtown/456%20High%20St%2C%20Uptown/78%20Park%20Ave%2C%20Midtown/900%20Industrial%20Blvd%2C%20Northside'
+                          );
+                          try {
+                            if (await canLaunchUrl(url)) {
+                              await launchUrl(url, mode: LaunchMode.externalApplication);
+                            }
+                          } catch (_) {}
+                        },
+                        icon: SvgPicture.string(
+                          _navigationSvg,
+                          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                        ),
+                        label: const Text(
+                          'Full Route',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ] else ...[
+          Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: Text('View all 4 upcoming stops →', style: TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
+              padding: const EdgeInsets.symmetric(vertical: 48),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.string(
+                    _listChecksSvg,
+                    width: 32,
+                    height: 32,
+                    colorFilter: const ColorFilter.mode(Color(0xFF9CA3AF), BlendMode.srcIn),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'No stops completed yet',
+                    style: TextStyle(
+                      color: Color(0xFF9CA3AF),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+// ─── Custom Painter for Map Grid and Roads ──────────────────────────────────
+class _MapBackgroundPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    // 1. Grid
+    final gridPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.45)
+      ..strokeWidth = 1.0;
+    
+    for (double x = 0; x < size.width; x += 28) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), gridPaint);
+    }
+    for (double y = 0; y < size.height; y += 28) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+    }
+
+    // 2. Roads
+    // Vertical thick road (at 1/4 width)
+    final verticalThickPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.60)
+      ..strokeWidth = 8.0
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(Offset(size.width * 0.25, 0), Offset(size.width * 0.25, size.height), verticalThickPaint);
+
+    // Vertical thin road (at 2/3 width)
+    final verticalThinPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.40)
+      ..strokeWidth = 4.0
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(Offset(size.width * 0.66, 0), Offset(size.width * 0.66, size.height), verticalThinPaint);
+
+    // Horizontal thick road (at 2/5 height)
+    final horizontalThickPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.60)
+      ..strokeWidth = 8.0
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(Offset(0, size.height * 0.4), Offset(size.width, size.height * 0.4), horizontalThickPaint);
+
+    // Horizontal thin road (at 2/3 height)
+    final horizontalThinPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.40)
+      ..strokeWidth = 4.0
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(Offset(0, size.height * 0.66), Offset(size.width, size.height * 0.66), horizontalThinPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// ─── Map Pin Marker ─────────────────────────────────────────────────────────
+class _MapPin extends StatelessWidget {
+  const _MapPin({required this.number});
+  final String number;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            color: const Color(0xFFE52B13),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.25),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            number,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
             ),
           ),
         ),
+        Container(
+          width: 2,
+          height: 6,
+          color: const Color(0xFF7F1D1D),
+        ),
       ],
+    );
+  }
+}
+
+// ─── Current Location Indicator ─────────────────────────────────────────────
+class _CurrentLocationIndicator extends StatefulWidget {
+  const _CurrentLocationIndicator();
+
+  @override
+  State<_CurrentLocationIndicator> createState() => _CurrentLocationIndicatorState();
+}
+
+class _CurrentLocationIndicatorState extends State<_CurrentLocationIndicator> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
+
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 2.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    _opacityAnimation = Tween<double>(begin: 0.6, end: 0.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 40,
+      height: 40,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Outer Ping circle (w-10 h-10, background: rgb(37, 99, 235), opacity: 0.20, animate-ping)
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return Transform.scale(
+                scale: _scaleAnimation.value,
+                child: Opacity(
+                  opacity: _opacityAnimation.value,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF2563EB),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          // Inner dot (w-5 h-5, border-2 border-white shadow-lg, bg: rgb(59, 130, 246))
+          Container(
+            width: 20,
+            height: 20,
+            decoration: BoxDecoration(
+              color: const Color(0xFF3B82F6),
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            alignment: Alignment.center,
+            // SVG circle-dot icon of size 10 inside (lucide-circle-dot)
+            child: const Icon(
+              Icons.radio_button_checked,
+              size: 10,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -470,7 +813,7 @@ class _TabBtn extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: active ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(99),
             boxShadow: active ? [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 4, offset: const Offset(0, 1))] : null,
           ),
           child: Row(
@@ -487,8 +830,8 @@ class _TabBtn extends StatelessWidget {
   }
 }
 
-class _StopData {
-  const _StopData({required this.num, required this.name, required this.address, required this.units, required this.time, required this.amount});
+class StopData {
+  const StopData({required this.num, required this.name, required this.address, required this.units, required this.time, required this.amount});
   final int num;
   final String name;
   final String address;
@@ -499,60 +842,69 @@ class _StopData {
 
 class _StopCard extends StatelessWidget {
   const _StopCard({required this.data});
-  final _StopData data;
+  final StopData data;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: _cardBg,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 4, offset: const Offset(0, 1))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 24, height: 24,
-                decoration: const BoxDecoration(color: _navBg, shape: BoxShape.circle),
-                alignment: Alignment.center,
-                child: Text('${data.num}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF4B5563))),
-              ),
-              const SizedBox(width: 8),
-              Expanded(child: Text(data.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1F2937)))),
-              Text(data.amount, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Icon(Icons.location_on_outlined, size: 11, color: _teal),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Text(data.address,
-                    style: const TextStyle(color: _teal, fontSize: 11, decoration: TextDecoration.underline, decorationColor: _teal)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Icon(Icons.inventory_2_outlined, size: 11, color: Color(0xFF9CA3AF)),
-              const SizedBox(width: 4),
-              Text('${data.units} units', style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
-              const SizedBox(width: 12),
-              const Icon(Icons.access_time, size: 11, color: Color(0xFF9CA3AF)),
-              const SizedBox(width: 4),
-              Text(data.time, style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
-              const Spacer(),
-              Text('${data.amount} due', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _brandRed)),
-            ],
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          AppRoutes.stopDetails,
+          arguments: data,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: _cardBg,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE5E7EB)),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 4, offset: const Offset(0, 1))],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 24, height: 24,
+                  decoration: const BoxDecoration(color: _navBg, shape: BoxShape.circle),
+                  alignment: Alignment.center,
+                  child: Text('${data.num}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF4B5563))),
+                ),
+                const SizedBox(width: 8),
+                Expanded(child: Text(data.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1F2937)))),
+                Text(data.amount, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF111827))),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                const Icon(Icons.location_on_outlined, size: 11, color: _teal),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(data.address,
+                      style: const TextStyle(color: _teal, fontSize: 11, decoration: TextDecoration.underline, decorationColor: _teal)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                const Icon(Icons.inventory_2_outlined, size: 11, color: Color(0xFF9CA3AF)),
+                const SizedBox(width: 4),
+                Text('${data.units} units', style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+                const SizedBox(width: 12),
+                const Icon(Icons.access_time, size: 11, color: Color(0xFF9CA3AF)),
+                const SizedBox(width: 4),
+                Text(data.time, style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280))),
+                const Spacer(),
+                Text('${data.amount} due', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: _brandRed)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
