@@ -8,6 +8,7 @@ import '../../features/customers/presentation/add_customer_screen.dart';
 import '../../features/home/presentation/stop_details_screen.dart';
 import '../../features/home/presentation/sales_order_details_screen.dart';
 import '../../features/home/presentation/session_start_screen.dart';
+import '../../features/home/presentation/do_details_screen.dart';
 import '../../features/home/presentation/widgets/home_view.dart';
 import 'app_routes.dart';
 
@@ -58,6 +59,11 @@ class AppRouter {
       case AppRoutes.sessionStart:
         return MaterialPageRoute(
           builder: (_) => const SessionStartScreen(),
+          settings: settings,
+        );
+      case AppRoutes.doDetails:
+        return MaterialPageRoute(
+          builder: (_) => const DoDetailsScreen(),
           settings: settings,
         );
       default:

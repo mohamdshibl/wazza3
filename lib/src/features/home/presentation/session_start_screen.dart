@@ -217,6 +217,8 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                                     alignment: Alignment.center,
                                     child: SvgPicture.string(
                                       _routeSvg,
+                                      width: 15,
+                                      height: 15,
                                       colorFilter: const ColorFilter.mode(Color(0xFFE52B13), BlendMode.srcIn),
                                     ),
                                   ),
@@ -312,7 +314,9 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                               ),
                               const Spacer(),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(context, AppRoutes.doDetails);
+                                },
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                   minimumSize: Size.zero,
@@ -650,6 +654,8 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
           children: [
             SvgPicture.string(
               svgString,
+              width: 12,
+              height: 12,
               colorFilter: const ColorFilter.mode(Color(0xFFE52B13), BlendMode.srcIn),
             ),
             const SizedBox(height: 2),
