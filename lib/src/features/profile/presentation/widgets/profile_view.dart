@@ -1,3 +1,4 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
 
@@ -97,12 +98,12 @@ class ProfileView extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       // Badges
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _Badge(label: 'Sales Rep'),
-                          SizedBox(width: 8),
-                          _Badge(label: 'ID: REP-042'),
+                          _Badge(label: AppLocalizations.of(context)!.salesRep),
+                          const SizedBox(width: 8),
+                          _Badge(label: AppLocalizations.of(context)!.idRep042),
                         ],
                       ),
                     ],
@@ -132,30 +133,30 @@ class ProfileView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Column(
+                  child: Column(
                     children: [
                       _ProfileRow(
                         icon: Icons.local_shipping_outlined,
-                        title: 'Assigned Truck',
-                        value: 'Truck A-101',
+                        title: AppLocalizations.of(context)!.assignedTruck,
+                        value: AppLocalizations.of(context)!.truckA101,
                         isLast: false,
                       ),
                       _ProfileRow(
                         icon: Icons.location_on_outlined,
-                        title: 'Territory',
-                        value: 'North District',
+                        title: AppLocalizations.of(context)!.territory,
+                        value: AppLocalizations.of(context)!.northDistrict,
                         isLast: false,
                       ),
                       _ProfileRow(
                         icon: Icons.phone_outlined,
-                        title: 'Phone',
+                        title: AppLocalizations.of(context)!.phone,
                         value: '+1 555-0042',
                         isLast: false,
                       ),
                       _ProfileRow(
                         icon: Icons.shield_outlined,
-                        title: 'Role',
-                        value: 'Sales Rep',
+                        title: AppLocalizations.of(context)!.role,
+                        value: AppLocalizations.of(context)!.salesRep,
                         isLast: true,
                       ),
                     ],
@@ -182,7 +183,7 @@ class ProfileView extends StatelessWidget {
                       // App Settings
                       _ActionRow(
                         icon: Icons.settings_outlined,
-                        title: 'App Settings',
+                        title: AppLocalizations.of(context)!.appSettings,
                         iconBg: const Color(0xFFF4F4EE),
                         iconColor: const Color(0xFF6B7280),
                         textColor: const Color(0xFF374151),
@@ -193,7 +194,7 @@ class ProfileView extends StatelessWidget {
                       // End Session & Logout
                       _ActionRow(
                         icon: Icons.logout,
-                        title: 'End Session & Logout',
+                        title: AppLocalizations.of(context)!.endSessionLogout,
                         iconBg: const Color(0xFFFFE8E6),
                         iconColor: _brandRed,
                         textColor: _brandRed,
@@ -207,9 +208,8 @@ class ProfileView extends StatelessWidget {
                 
                 const SizedBox(height: 16),
                 // Footer brand text
-                const Center(
-                  child: Text(
-                    'WAZZA3 · v1.0',
+                Center(
+                  child: Text(AppLocalizations.of(context)!.wazza3V10,
                     style: TextStyle(
                       fontSize: 10,
                       color: Color(0xFF9CA3AF),

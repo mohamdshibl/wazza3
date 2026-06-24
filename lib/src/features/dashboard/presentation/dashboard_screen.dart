@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wazza3/l10n/app_localizations.dart';
 
 import '../../../core/routing/app_routes.dart';
 import '../../auth/logic/controllers/auth_cubit.dart';
@@ -66,15 +67,19 @@ class _BottomNav extends StatelessWidget {
   final ValueChanged<int> onTap;
   final double bottomPad;
 
-  static const _items = [
-    _NavItem(icon: Icons.home_outlined, label: 'Home'),
-    _NavItem(icon: Icons.inventory_2_outlined, label: 'Inventory'),
-    _NavItem(icon: Icons.account_balance_wallet_outlined, label: 'Wallet'),
-    _NavItem(icon: Icons.person_outline, label: 'Profile'),
-  ];
+  List<_NavItem> _getItems(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [
+      _NavItem(icon: Icons.home_outlined, label: l10n.homeTab),
+      _NavItem(icon: Icons.inventory_2_outlined, label: l10n.inventoryTab),
+      _NavItem(icon: Icons.account_balance_wallet_outlined, label: l10n.walletTab),
+      _NavItem(icon: Icons.person_outline, label: l10n.profileTab),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final items = _getItems(context);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -83,7 +88,7 @@ class _BottomNav extends StatelessWidget {
         boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 12, offset: const Offset(0, -1))],
       ),
       child: Row(
-        children: List.generate(_items.length, (i) {
+        children: List.generate(items.length, (i) {
           final active = i == index;
           return Expanded(
             child: GestureDetector(
@@ -112,11 +117,11 @@ class _BottomNav extends StatelessWidget {
                         color: active ? _brandRed.withValues(alpha: 0.08) : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Icon(_items[i].icon, size: 21, color: active ? _brandRed : const Color(0xFF9CA3AF)),
+                      child: Icon(items[i].icon, size: 21, color: active ? _brandRed : const Color(0xFF9CA3AF)),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      _items[i].label,
+                      items[i].label,
                       style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: active ? _brandRed : const Color(0xFF9CA3AF), letterSpacing: 0.2),
                     ),
                   ],

@@ -373,6 +373,666 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reset link sent to {email}'**
   String resetLinkSent(String email);
+
+  /// No description provided for @homeTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get homeTab;
+
+  /// No description provided for @inventoryTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Inventory'**
+  String get inventoryTab;
+
+  /// No description provided for @walletTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get walletTab;
+
+  /// No description provided for @profileTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTab;
+
+  /// No description provided for @addAnotherProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Another Product'**
+  String get addAnotherProduct;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address *'**
+  String get address;
+
+  /// No description provided for @areaZone.
+  ///
+  /// In en, this message translates to:
+  /// **'Area / Zone'**
+  String get areaZone;
+
+  /// No description provided for @askForBackEntranceParkOnSideStreet.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for back entrance. Park on side street.'**
+  String get askForBackEntranceParkOnSideStreet;
+
+  /// No description provided for @awaitingApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting Approval'**
+  String get awaitingApproval;
+
+  /// No description provided for @awaitingDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting delivery'**
+  String get awaitingDelivery;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @businessName.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Name *'**
+  String get businessName;
+
+  /// No description provided for @customer.
+  ///
+  /// In en, this message translates to:
+  /// **'CUSTOMER'**
+  String get customer;
+
+  /// No description provided for @customerType.
+  ///
+  /// In en, this message translates to:
+  /// **'CUSTOMER TYPE'**
+  String get customerType;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Photo'**
+  String get changePhoto;
+
+  /// No description provided for @collected.
+  ///
+  /// In en, this message translates to:
+  /// **'Collected'**
+  String get collected;
+
+  /// No description provided for @collectionProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection progress'**
+  String get collectionProgress;
+
+  /// No description provided for @collectionsWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Collections & Wallet'**
+  String get collectionsWallet;
+
+  /// No description provided for @completeLocationVerificationAndPhotoToUnlockTheRemainingFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete location verification and photo to unlock the remaining fields.'**
+  String get completeLocationVerificationAndPhotoToUnlockTheRemainingFields;
+
+  /// No description provided for @completeTheChecklistToStartYourSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete the checklist to start your session'**
+  String get completeTheChecklistToStartYourSession;
+
+  /// No description provided for @confirmQuantitiesLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Quantities Loaded'**
+  String get confirmQuantitiesLoaded;
+
+  /// No description provided for @createSalesOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Sales Order'**
+  String get createSalesOrder;
+
+  /// No description provided for @customerAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Added!'**
+  String get customerAdded;
+
+  /// No description provided for @doLinesStops.
+  ///
+  /// In en, this message translates to:
+  /// **'DO Lines / Stops'**
+  String get doLinesStops;
+
+  /// No description provided for @downtown.
+  ///
+  /// In en, this message translates to:
+  /// **'Downtown'**
+  String get downtown;
+
+  /// No description provided for @driver.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver'**
+  String get driver;
+
+  /// No description provided for @due.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get due;
+
+  /// No description provided for @financialSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'FINANCIAL SUMMARY'**
+  String get financialSummary;
+
+  /// No description provided for @finance.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get finance;
+
+  /// No description provided for @financialCustodyInvoices.
+  ///
+  /// In en, this message translates to:
+  /// **'Financial custody & invoices'**
+  String get financialCustodyInvoices;
+
+  /// No description provided for @fullRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Route'**
+  String get fullRoute;
+
+  /// No description provided for @goodEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Evening 👋'**
+  String get goodEvening;
+
+  /// No description provided for @goodEvening2.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Evening,'**
+  String get goodEvening2;
+
+  /// No description provided for @goodsLoadedOnYourTruck.
+  ///
+  /// In en, this message translates to:
+  /// **'Goods loaded on your truck'**
+  String get goodsLoadedOnYourTruck;
+
+  /// No description provided for @goodsToDeliver.
+  ///
+  /// In en, this message translates to:
+  /// **'Goods to Deliver'**
+  String get goodsToDeliver;
+
+  /// No description provided for @handleJuiceCartonsCarefullyFragileColdChainMaintained.
+  ///
+  /// In en, this message translates to:
+  /// **'Handle juice cartons carefully – fragile. Cold chain maintained.'**
+  String get handleJuiceCartonsCarefullyFragileColdChainMaintained;
+
+  /// No description provided for @invoices.
+  ///
+  /// In en, this message translates to:
+  /// **'INVOICES'**
+  String get invoices;
+
+  /// No description provided for @invoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice'**
+  String get invoice;
+
+  /// No description provided for @invoiceTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice Total'**
+  String get invoiceTotal;
+
+  /// No description provided for @loadingInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading in progress…'**
+  String get loadingInProgress;
+
+  /// No description provided for @navigate.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate'**
+  String get navigate;
+
+  /// No description provided for @navigateToTheStopToBegin.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to the stop to begin'**
+  String get navigateToTheStopToBegin;
+
+  /// No description provided for @newOrderDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'New Order Draft'**
+  String get newOrderDraft;
+
+  /// No description provided for @noDetailsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No details available'**
+  String get noDetailsAvailable;
+
+  /// No description provided for @noStopsCompletedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No stops completed yet'**
+  String get noStopsCompletedYet;
+
+  /// No description provided for @orderSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'ORDER SUMMARY'**
+  String get orderSummary;
+
+  /// No description provided for @offload.
+  ///
+  /// In en, this message translates to:
+  /// **'Offload'**
+  String get offload;
+
+  /// No description provided for @orderCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Created!'**
+  String get orderCreated;
+
+  /// No description provided for @outstanding.
+  ///
+  /// In en, this message translates to:
+  /// **'Outstanding'**
+  String get outstanding;
+
+  /// No description provided for @physicalCustody.
+  ///
+  /// In en, this message translates to:
+  /// **'PHYSICAL CUSTODY'**
+  String get physicalCustody;
+
+  /// No description provided for @products.
+  ///
+  /// In en, this message translates to:
+  /// **'PRODUCTS'**
+  String get products;
+
+  /// No description provided for @paid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get paid;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// No description provided for @preRouteChecklist.
+  ///
+  /// In en, this message translates to:
+  /// **'Pre-Route Checklist'**
+  String get preRouteChecklist;
+
+  /// No description provided for @resendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Code'**
+  String get resendCode;
+
+  /// No description provided for @resetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get resetPassword;
+
+  /// No description provided for @salesOrderDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'SALES ORDER DETAILS'**
+  String get salesOrderDetails;
+
+  /// No description provided for @skusQuantities.
+  ///
+  /// In en, this message translates to:
+  /// **'SKUS & QUANTITIES'**
+  String get skusQuantities;
+
+  /// No description provided for @step1VerifyLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'STEP 1 — VERIFY LOCATION'**
+  String get step1VerifyLocation;
+
+  /// No description provided for @step2ShopPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'STEP 2 — SHOP PHOTO'**
+  String get step2ShopPhoto;
+
+  /// No description provided for @saveCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Customer'**
+  String get saveCustomer;
+
+  /// No description provided for @selectProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Select product...'**
+  String get selectProduct;
+
+  /// No description provided for @sendResetLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Reset Link'**
+  String get sendResetLink;
+
+  /// No description provided for @startDaySession.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Day Session'**
+  String get startDaySession;
+
+  /// No description provided for @totalCollected.
+  ///
+  /// In en, this message translates to:
+  /// **'TOTAL COLLECTED'**
+  String get totalCollected;
+
+  /// No description provided for @takeAPhotoOfTheShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of the shop'**
+  String get takeAPhotoOfTheShop;
+
+  /// No description provided for @tapToCaptureCurrentLocationPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to capture current location photo'**
+  String get tapToCaptureCurrentLocationPhoto;
+
+  /// No description provided for @tapToSelectACustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select a customer'**
+  String get tapToSelectACustomer;
+
+  /// No description provided for @total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get total;
+
+  /// No description provided for @totalCustody.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Custody'**
+  String get totalCustody;
+
+  /// No description provided for @totalInvoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Invoice'**
+  String get totalInvoice;
+
+  /// No description provided for @totalInvoiced.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Invoiced'**
+  String get totalInvoiced;
+
+  /// No description provided for @truckLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Truck Load'**
+  String get truckLoad;
+
+  /// No description provided for @verification.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification'**
+  String get verification;
+
+  /// No description provided for @verificationStepsCompletedYouCanNowFillInTheStoreDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification steps completed! You can now fill in the store details.'**
+  String get verificationStepsCompletedYouCanNowFillInTheStoreDetails;
+
+  /// No description provided for @verifyCustomerLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Customer Location'**
+  String get verifyCustomerLocation;
+
+  /// No description provided for @viewDo.
+  ///
+  /// In en, this message translates to:
+  /// **'View DO'**
+  String get viewDo;
+
+  /// No description provided for @viewSalesOrderDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View Sales Order Details'**
+  String get viewSalesOrderDetails;
+
+  /// No description provided for @virtualWarehouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Virtual Warehouse'**
+  String get virtualWarehouse;
+
+  /// No description provided for @wazza3Distribution.
+  ///
+  /// In en, this message translates to:
+  /// **'WAZZA3 DISTRIBUTION'**
+  String get wazza3Distribution;
+
+  /// No description provided for @wazza3V10.
+  ///
+  /// In en, this message translates to:
+  /// **'WAZZA3 · v1.0'**
+  String get wazza3V10;
+
+  /// No description provided for @warehouseIsLoadingYourTruckConfirmWhenDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Warehouse is loading your truck. Confirm when done.'**
+  String get warehouseIsLoadingYourTruckConfirmWhenDone;
+
+  /// No description provided for @goodEvening3.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Evening'**
+  String get goodEvening3;
+
+  /// No description provided for @num0OfRouteCollected.
+  ///
+  /// In en, this message translates to:
+  /// **'0% of route collected'**
+  String get num0OfRouteCollected;
+
+  /// No description provided for @num2Lines116Units.
+  ///
+  /// In en, this message translates to:
+  /// **'2 lines · 116 units'**
+  String get num2Lines116Units;
+
+  /// No description provided for @num4UpcomingStops.
+  ///
+  /// In en, this message translates to:
+  /// **'4 upcoming stops'**
+  String get num4UpcomingStops;
+
+  /// No description provided for @num5Skus.
+  ///
+  /// In en, this message translates to:
+  /// **'5 SKUs'**
+  String get num5Skus;
+
+  /// No description provided for @salesRep.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales Rep'**
+  String get salesRep;
+
+  /// No description provided for @idRep042.
+  ///
+  /// In en, this message translates to:
+  /// **'ID: REP-042'**
+  String get idRep042;
+
+  /// No description provided for @assignedTruck.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned Truck'**
+  String get assignedTruck;
+
+  /// No description provided for @truckA101.
+  ///
+  /// In en, this message translates to:
+  /// **'Truck A-101'**
+  String get truckA101;
+
+  /// No description provided for @territory.
+  ///
+  /// In en, this message translates to:
+  /// **'Territory'**
+  String get territory;
+
+  /// No description provided for @northDistrict.
+  ///
+  /// In en, this message translates to:
+  /// **'North District'**
+  String get northDistrict;
+
+  /// No description provided for @role.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get role;
+
+  /// No description provided for @appSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'App Settings'**
+  String get appSettings;
+
+  /// No description provided for @endSessionLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'End Session & Logout'**
+  String get endSessionLogout;
+
+  /// No description provided for @newOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'New Order'**
+  String get newOrder;
+
+  /// No description provided for @newCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'New Customer'**
+  String get newCustomer;
+
+  /// No description provided for @custody.
+  ///
+  /// In en, this message translates to:
+  /// **'Custody'**
+  String get custody;
+
+  /// No description provided for @itemsOnTruck.
+  ///
+  /// In en, this message translates to:
+  /// **'items on truck'**
+  String get itemsOnTruck;
+
+  /// No description provided for @stops.
+  ///
+  /// In en, this message translates to:
+  /// **'Stops'**
+  String get stops;
+
+  /// No description provided for @doneCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} done'**
+  String doneCount(String count);
+
+  /// No description provided for @leftCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} left'**
+  String leftCount(String count);
+
+  /// No description provided for @ofAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'of {amount}'**
+  String ofAmount(String amount);
+
+  /// No description provided for @cashAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} cash'**
+  String cashAmount(String amount);
+
+  /// No description provided for @chkAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} chk'**
+  String chkAmount(String amount);
+
+  /// No description provided for @ofStopsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'of {count} stops'**
+  String ofStopsCount(String count);
+
+  /// No description provided for @upcomingTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get upcomingTab;
+
+  /// No description provided for @mapTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get mapTab;
+
+  /// No description provided for @completedTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completedTab;
 }
 
 class _AppLocalizationsDelegate

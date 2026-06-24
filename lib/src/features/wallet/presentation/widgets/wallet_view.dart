@@ -1,3 +1,4 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
 
@@ -71,11 +72,10 @@ class WalletView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Column(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Collections & Wallet',
+                              Text(AppLocalizations.of(context)!.collectionsWallet,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -83,8 +83,7 @@ class WalletView extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: 2),
-                              Text(
-                                'Financial custody & invoices',
+                              Text(AppLocalizations.of(context)!.financialCustodyInvoices,
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: 14,
@@ -113,11 +112,10 @@ class WalletView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          const Column(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'TOTAL COLLECTED',
+                              Text(AppLocalizations.of(context)!.totalCollected,
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: 11,
@@ -170,8 +168,7 @@ class WalletView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      const Text(
-                        '0% of route collected',
+                      Text(AppLocalizations.of(context)!.num0OfRouteCollected,
                         style: TextStyle(
                           color: Colors.white60,
                           fontSize: 11,
@@ -192,10 +189,9 @@ class WalletView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Physical Custody Label
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                  child: Text(
-                    'PHYSICAL CUSTODY',
+                  child: Text(AppLocalizations.of(context)!.physicalCustody,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -248,11 +244,10 @@ class WalletView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Total Custody',
+                      Text(AppLocalizations.of(context)!.totalCustody,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -273,10 +268,9 @@ class WalletView extends StatelessWidget {
                 const SizedBox(height: 24),
                 
                 // Invoices Section
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                  child: Text(
-                    'INVOICES',
+                  child: Text(AppLocalizations.of(context)!.invoices,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,

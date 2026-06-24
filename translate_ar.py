@@ -1,83 +1,6 @@
-{
-  "@@locale": "ar",
-  "appName": "وزع",
-  "tagline": "مندوب مبيعات التوزيع",
-  "signInTitle": "تسجيل الدخول",
-  "signInSubtitle": "مرحباً بك مجدداً في وزع",
-  "email": "البريد الإلكتروني",
-  "phone": "رقم الهاتف",
-  "emailLabel": "عنوان البريد الإلكتروني",
-  "phoneLabel": "رقم الهاتف",
-  "emailHint": "you@example.com",
-  "phoneHint": "+20 100 000 0000",
-  "passwordLabel": "كلمة المرور",
-  "passwordHint": "••••••••",
-  "forgotPassword": "هل نسيت كلمة المرور؟",
-  "signInCta": "تسجيل الدخول",
-  "mobileNumberLabel": "رقم الجوال",
-  "mobileNumberHint": "5X XXX XXXX",
-  "otpHelper": "سيتم إرسال رمز تحقق لتأكيد رقمك",
-  "sendOtpCta": "إرسال رمز التحقق",
-  "termsSignIn": "بتسجيل الدخول، أنت توافق على شروط الخدمة",
-  "termsContinue": "بالمتابعة، أنت توافق على شروط الخدمة",
-  "emailRequired": "البريد الإلكتروني مطلوب",
-  "emailInvalid": "أدخل بريد إلكتروني صحيح",
-  "phoneRequired": "رقم الهاتف مطلوب",
-  "phoneInvalid": "أدخل رقم هاتف صحيح",
-  "passwordRequired": "كلمة المرور مطلوبة",
-  "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
-  "genericError": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
-  "addNewCustomer": "إضافة عميل جديد",
-  "typeLabel": "النوع:",
-  "retail": "تجزئة",
-  "horeca": "هوريكا",
-  "wholesale": "جملة",
-  "cancel": "إلغاء",
-  "save": "حفظ",
-  "todaysRoute": "مسار اليوم",
-  "viewAll": "عرض الكل",
-  "viewAllUpcomingStops": "عرض جميع المحطات القادمة ({count}) →",
-  "@viewAllUpcomingStops": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "units": "{count} وحدة",
-  "@units": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "amountDue": "{amount} مستحقة",
-  "@amountDue": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "previousOrders": "الطلبات السابقة",
-  "viewMore": "عرض المزيد",
-  "done": "تم",
-  "quantitiesLoaded": "تم تحميل الكميات بنجاح!",
-  "phoneVerified": "تم التحقق من رقم الهاتف بنجاح!",
-  "enterValidEmail": "يرجى إدخال بريد إلكتروني صحيح",
-  "resetLinkSent": "تم إرسال رابط إعادة التعيين إلى {email}",
-  "@resetLinkSent": {
-    "placeholders": {
-      "email": {
-        "type": "String"
-      }
-    }
-  },
-  "homeTab": "الرئيسية",
-  "inventoryTab": "المخزون",
-  "walletTab": "المحفظة",
-  "profileTab": "الملف الشخصي",
+import json
+
+translations = {
   "addAnotherProduct": "إضافة منتج آخر",
   "address": "العنوان *",
   "areaZone": "المنطقة / النطاق",
@@ -160,70 +83,15 @@
   "num0OfRouteCollected": "0% من المسار تم تحصيله",
   "num2Lines116Units": "2 خطوط · 116 وحدة",
   "num4UpcomingStops": "4 محطات قادمة",
-  "num5Skus": "5 منتجات",
-  "salesRep": "مندوب مبيعات",
-  "idRep042": "المعرف: REP-042",
-  "assignedTruck": "الشاحنة المعينة",
-  "truckA101": "شاحنة A-101",
-  "territory": "المنطقة",
-  "northDistrict": "المنطقة الشمالية",
-  "role": "الدور",
-  "appSettings": "إعدادات التطبيق",
-  "endSessionLogout": "إنهاء الجلسة وتسجيل الخروج",
-  "newOrder": "طلب جديد",
-  "newCustomer": "عميل جديد",
-  "custody": "العهدة",
-  "itemsOnTruck": "عنصر على الشاحنة",
-  "stops": "المحطات",
-  "doneCount": "{count} منجزة",
-  "@doneCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "leftCount": "{count} متبقية",
-  "@leftCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "ofAmount": "من {amount}",
-  "@ofAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "cashAmount": "{amount} نقداً",
-  "@cashAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "chkAmount": "{amount} شيك",
-  "@chkAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "ofStopsCount": "من {count} محطات",
-  "@ofStopsCount": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "upcomingTab": "القادمة",
-  "mapTab": "الخريطة",
-  "completedTab": "المكتملة"
+  "num5Skus": "5 منتجات"
 }
+
+with open('lib/l10n/app_ar.arb', 'r', encoding='utf-8') as f:
+    app_ar = json.load(f)
+
+for k, v in translations.items():
+    if k in app_ar:
+        app_ar[k] = v
+
+with open('lib/l10n/app_ar.arb', 'w', encoding='utf-8') as f:
+    json.dump(app_ar, f, indent=2, ensure_ascii=False)

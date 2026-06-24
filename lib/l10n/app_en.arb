@@ -73,5 +73,157 @@
         "type": "String"
       }
     }
-  }
+  },
+  "homeTab": "Home",
+  "inventoryTab": "Inventory",
+  "walletTab": "Wallet",
+  "profileTab": "Profile",
+  "addAnotherProduct": "Add Another Product",
+  "address": "Address *",
+  "areaZone": "Area / Zone",
+  "askForBackEntranceParkOnSideStreet": "Ask for back entrance. Park on side street.",
+  "awaitingApproval": "Awaiting Approval",
+  "awaitingDelivery": "Awaiting delivery",
+  "back": "Back",
+  "businessName": "Business Name *",
+  "customer": "CUSTOMER",
+  "customerType": "CUSTOMER TYPE",
+  "changePhoto": "Change Photo",
+  "collected": "Collected",
+  "collectionProgress": "Collection progress",
+  "collectionsWallet": "Collections & Wallet",
+  "completeLocationVerificationAndPhotoToUnlockTheRemainingFields": "Complete location verification and photo to unlock the remaining fields.",
+  "completeTheChecklistToStartYourSession": "Complete the checklist to start your session",
+  "confirmQuantitiesLoaded": "Confirm Quantities Loaded",
+  "createSalesOrder": "Create Sales Order",
+  "customerAdded": "Customer Added!",
+  "doLinesStops": "DO Lines / Stops",
+  "downtown": "Downtown",
+  "driver": "Driver",
+  "due": "Due",
+  "financialSummary": "FINANCIAL SUMMARY",
+  "finance": "Finance",
+  "financialCustodyInvoices": "Financial custody & invoices",
+  "fullRoute": "Full Route",
+  "goodEvening": "Good Evening 👋",
+  "goodEvening2": "Good Evening,",
+  "goodsLoadedOnYourTruck": "Goods loaded on your truck",
+  "goodsToDeliver": "Goods to Deliver",
+  "handleJuiceCartonsCarefullyFragileColdChainMaintained": "Handle juice cartons carefully – fragile. Cold chain maintained.",
+  "invoices": "INVOICES",
+  "invoice": "Invoice",
+  "invoiceTotal": "Invoice Total",
+  "loadingInProgress": "Loading in progress…",
+  "navigate": "Navigate",
+  "navigateToTheStopToBegin": "Navigate to the stop to begin",
+  "newOrderDraft": "New Order Draft",
+  "noDetailsAvailable": "No details available",
+  "noStopsCompletedYet": "No stops completed yet",
+  "orderSummary": "ORDER SUMMARY",
+  "offload": "Offload",
+  "orderCreated": "Order Created!",
+  "outstanding": "Outstanding",
+  "physicalCustody": "PHYSICAL CUSTODY",
+  "products": "PRODUCTS",
+  "paid": "Paid",
+  "pending": "Pending",
+  "preRouteChecklist": "Pre-Route Checklist",
+  "resendCode": "Resend Code",
+  "resetPassword": "Reset Password",
+  "salesOrderDetails": "SALES ORDER DETAILS",
+  "skusQuantities": "SKUS & QUANTITIES",
+  "step1VerifyLocation": "STEP 1 — VERIFY LOCATION",
+  "step2ShopPhoto": "STEP 2 — SHOP PHOTO",
+  "saveCustomer": "Save Customer",
+  "selectProduct": "Select product...",
+  "sendResetLink": "Send Reset Link",
+  "startDaySession": "Start Day Session",
+  "totalCollected": "TOTAL COLLECTED",
+  "takeAPhotoOfTheShop": "Take a photo of the shop",
+  "tapToCaptureCurrentLocationPhoto": "Tap to capture current location photo",
+  "tapToSelectACustomer": "Tap to select a customer",
+  "total": "Total",
+  "totalCustody": "Total Custody",
+  "totalInvoice": "Total Invoice",
+  "totalInvoiced": "Total Invoiced",
+  "truckLoad": "Truck Load",
+  "verification": "Verification",
+  "verificationStepsCompletedYouCanNowFillInTheStoreDetails": "Verification steps completed! You can now fill in the store details.",
+  "verifyCustomerLocation": "Verify Customer Location",
+  "viewDo": "View DO",
+  "viewSalesOrderDetails": "View Sales Order Details",
+  "virtualWarehouse": "Virtual Warehouse",
+  "wazza3Distribution": "WAZZA3 DISTRIBUTION",
+  "wazza3V10": "WAZZA3 · v1.0",
+  "warehouseIsLoadingYourTruckConfirmWhenDone": "Warehouse is loading your truck. Confirm when done.",
+  "goodEvening3": "Good Evening",
+  "num0OfRouteCollected": "0% of route collected",
+  "num2Lines116Units": "2 lines · 116 units",
+  "num4UpcomingStops": "4 upcoming stops",
+  "num5Skus": "5 SKUs",
+  "salesRep": "Sales Rep",
+  "idRep042": "ID: REP-042",
+  "assignedTruck": "Assigned Truck",
+  "truckA101": "Truck A-101",
+  "territory": "Territory",
+  "northDistrict": "North District",
+  "role": "Role",
+  "appSettings": "App Settings",
+  "endSessionLogout": "End Session & Logout",
+  "newOrder": "New Order",
+  "newCustomer": "New Customer",
+  "custody": "Custody",
+  "itemsOnTruck": "items on truck",
+  "stops": "Stops",
+  "doneCount": "{count} done",
+  "@doneCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "leftCount": "{count} left",
+  "@leftCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "ofAmount": "of {amount}",
+  "@ofAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "cashAmount": "{amount} cash",
+  "@cashAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "chkAmount": "{amount} chk",
+  "@chkAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "ofStopsCount": "of {count} stops",
+  "@ofStopsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "upcomingTab": "Upcoming",
+  "mapTab": "Map",
+  "completedTab": "Completed"
 }

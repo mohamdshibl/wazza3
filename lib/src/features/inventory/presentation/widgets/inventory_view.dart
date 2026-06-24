@@ -1,3 +1,4 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
 
@@ -152,8 +153,7 @@ class _InventoryViewState extends State<InventoryView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Titles
-                      const Text(
-                        'Virtual Warehouse',
+                      Text(AppLocalizations.of(context)!.virtualWarehouse,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -161,8 +161,7 @@ class _InventoryViewState extends State<InventoryView> {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      const Text(
-                        'Goods loaded on your truck',
+                      Text(AppLocalizations.of(context)!.goodsLoadedOnYourTruck,
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 14,

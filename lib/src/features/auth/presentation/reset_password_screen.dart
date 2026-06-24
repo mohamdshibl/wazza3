@@ -91,8 +91,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             height: 16,
                           ),
                           const SizedBox(width: 4),
-                          const Text(
-                            'Back',
+                          Text(AppLocalizations.of(context)!.back,
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 14,
@@ -104,8 +103,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Reset Password',
+                  Text(AppLocalizations.of(context)!.resetPassword,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -198,8 +196,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                               vertical: 16,
                                             ),
                                           ),
-                                          child: const Text(
-                                            'Send Reset Link',
+                                          child: Text(AppLocalizations.of(context)!.sendResetLink,
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,

@@ -128,8 +128,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              const Text(
-                                                'Verification',
+                                              Text(AppLocalizations.of(context)!.verification,
                                                 style: AppTextStyles.heading,
                                               ),
                                               const SizedBox(height: AppSpacing.xs),
@@ -390,8 +389,7 @@ class _ResendTimerSection extends StatelessWidget {
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            child: const Text(
-              'Resend Code',
+            child: Text(AppLocalizations.of(context)!.resendCode,
               style: AppTextStyles.link,
             ),
           ),

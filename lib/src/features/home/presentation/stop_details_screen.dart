@@ -1,3 +1,4 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_icons.dart';
@@ -100,7 +101,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                       color: const Color(0xFFEAEAE4),
                       borderRadius: BorderRadius.circular(99),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
@@ -109,8 +110,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                           size: 13,
                         ),
                         SizedBox(width: 4),
-                        Text(
-                          'Pending',
+                        Text(AppLocalizations.of(context)!.pending,
                           style: TextStyle(
                             color: Color(0xFF6B6B6B),
                             fontSize: 11,
@@ -374,8 +374,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                         height: 10,
                                         color: Colors.white,
                                       ),
-                                      label: const Text(
-                                        'Navigate',
+                                      label: Text(AppLocalizations.of(context)!.navigate,
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -401,7 +400,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                             borderRadius: BorderRadius.circular(24),
                             border: Border.all(color: const Color(0xFFFEF3C7)),
                           ),
-                          child: const Row(
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Icon(
@@ -411,8 +410,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                               ),
                               SizedBox(width: 8),
                               Expanded(
-                                child: Text(
-                                  'Ask for back entrance. Park on side street.',
+                                child: Text(AppLocalizations.of(context)!.askForBackEntranceParkOnSideStreet,
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: Color(0xFF92400E),
@@ -430,8 +428,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Goods to Deliver',
+                            Text(AppLocalizations.of(context)!.goodsToDeliver,
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
@@ -505,8 +502,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                             ],
                                           ),
                                           const SizedBox(height: 2),
-                                          const Text(
-                                            '2 lines · 116 units',
+                                          Text(AppLocalizations.of(context)!.num2Lines116Units,
                                             style: TextStyle(
                                               fontSize: 11,
                                               color: Color(0xFF9CA3AF),
@@ -555,10 +551,9 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                   ),
                                   const SizedBox(height: 12),
                                   // Bottom link
-                                  const Row(
+                                  Row(
                                     children: [
-                                      Text(
-                                        'View Sales Order Details',
+                                      Text(AppLocalizations.of(context)!.viewSalesOrderDetails,
                                         style: TextStyle(
                                           color: Color(0xFF0B6B54),
                                           fontSize: 12,
@@ -610,8 +605,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
-                                          'Total Invoice',
+                                        Text(AppLocalizations.of(context)!.totalInvoice,
                                           style: TextStyle(fontSize: 13, color: Color(0xFF4B5563)),
                                         ),
                                         Text(
@@ -643,8 +637,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                               color: const Color(0xFF0B6B54),
                                             ),
                                             const SizedBox(width: 6),
-                                            const Text(
-                                              'Collected',
+                                            Text(AppLocalizations.of(context)!.collected,
                                               style: TextStyle(
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w500,
@@ -673,7 +666,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Row(
+                                        Row(
                                           children: [
                                             Icon(
                                               Icons.access_time,
@@ -681,8 +674,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                               color: Color(0xFFE52B13),
                                             ),
                                             SizedBox(width: 6),
-                                            Text(
-                                              'Outstanding',
+                                            Text(AppLocalizations.of(context)!.outstanding,
                                               style: TextStyle(
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w500,
@@ -708,11 +700,10 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Row(
+                                        Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              'Collection progress',
+                                            Text(AppLocalizations.of(context)!.collectionProgress,
                                               style: TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
                                             ),
                                             Text(
@@ -797,11 +788,10 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                     ],
                                   ),
                                   const SizedBox(height: 8),
-                                  const Row(
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        'Paid',
+                                      Text(AppLocalizations.of(context)!.paid,
                                         style: TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
                                       ),
                                       Text(
@@ -825,8 +815,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 60),
-                          child: Text(
-                            'No details available',
+                          child: Text(AppLocalizations.of(context)!.noDetailsAvailable,
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.grey[500],
@@ -862,8 +851,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                 ],
               ),
               alignment: Alignment.center,
-              child: const Text(
-                'Navigate to the stop to begin',
+              child: Text(AppLocalizations.of(context)!.navigateToTheStopToBegin,
                 style: TextStyle(
                   color: Color(0xFF9CA3AF),
                   fontSize: 13,
@@ -973,11 +961,10 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             onPressed: () {},
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  'Offload',
+                Text(AppLocalizations.of(context)!.offload,
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

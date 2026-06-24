@@ -1,3 +1,4 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_icons.dart';
 import 'widgets/home_view.dart'; // To access the StopData class
@@ -106,8 +107,7 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                       color: const Color(0xFFFFF0EE),
                       borderRadius: BorderRadius.circular(99),
                     ),
-                    child: const Text(
-                      'Pending',
+                    child: Text(AppLocalizations.of(context)!.pending,
                       style: TextStyle(
                         color: Color(0xFFAF2409),
                         fontSize: 11,
@@ -152,8 +152,7 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Invoice Total',
+                                  Text(AppLocalizations.of(context)!.invoiceTotal,
                                     style: TextStyle(
                                       color: Colors.white.withValues(alpha: 0.7),
                                       fontSize: 12,
@@ -173,8 +172,7 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    'Outstanding',
+                                  Text(AppLocalizations.of(context)!.outstanding,
                                     style: TextStyle(
                                       color: Colors.white.withValues(alpha: 0.7),
                                       fontSize: 12,
@@ -253,10 +251,9 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.only(left: 16, top: 14, bottom: 4),
-                            child: Text(
-                              'SALES ORDER DETAILS',
+                            child: Text(AppLocalizations.of(context)!.salesOrderDetails,
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
@@ -308,8 +305,7 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'CUSTOMER',
+                          Text(AppLocalizations.of(context)!.customer,
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -374,8 +370,7 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                               color: const Color(0xFFEAEAE4),
                               borderRadius: BorderRadius.circular(99),
                             ),
-                            child: const Text(
-                              'Downtown',
+                            child: Text(AppLocalizations.of(context)!.downtown,
                               style: TextStyle(
                                 color: Color(0xFF6B6B6B),
                                 fontSize: 11,
@@ -389,10 +384,9 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                     const SizedBox(height: 16),
 
                     // Section 4: SKUs & Quantities
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                      child: Text(
-                        'SKUS & QUANTITIES',
+                      child: Text(AppLocalizations.of(context)!.skusQuantities,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -430,8 +424,7 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  'Total',
+                                Text(AppLocalizations.of(context)!.total,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -462,12 +455,11 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                         border: Border.all(color: const Color(0xFFE52B13).withValues(alpha: 0.15)),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Row(
+                      child: Row(
                         children: [
                           Icon(Icons.access_time, color: Color(0xFFAF2409), size: 18),
                           SizedBox(width: 12),
-                          Text(
-                            'Awaiting delivery',
+                          Text(AppLocalizations.of(context)!.awaitingDelivery,
                             style: TextStyle(
                               color: Color(0xFFAF2409),
                               fontWeight: FontWeight.bold,

@@ -1,3 +1,4 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -104,8 +105,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Customer Added!',
+              Text(AppLocalizations.of(context)!.customerAdded,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -181,8 +181,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Add New Customer',
+        title: Text(AppLocalizations.of(context)!.addNewCustomer,
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,
@@ -200,10 +199,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // CUSTOMER TYPE SECTION
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                      child: Text(
-                        'CUSTOMER TYPE',
+                      child: Text(AppLocalizations.of(context)!.customerType,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -224,10 +222,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                     const SizedBox(height: 20),
 
                     // STEP 1 — VERIFY LOCATION
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                      child: Text(
-                        'STEP 1 — VERIFY LOCATION',
+                      child: Text(AppLocalizations.of(context)!.step1VerifyLocation,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -275,8 +272,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'Verify Customer Location',
+                                  Text(AppLocalizations.of(context)!.verifyCustomerLocation,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xFF1F2937),
@@ -310,10 +306,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                     const SizedBox(height: 20),
 
                     // STEP 2 — SHOP PHOTO
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                      child: Text(
-                        'STEP 2 — SHOP PHOTO',
+                      child: Text(AppLocalizations.of(context)!.step2ShopPhoto,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -369,13 +364,12 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                                             color: Colors.black.withValues(alpha: 0.6),
                                             borderRadius: BorderRadius.circular(20),
                                           ),
-                                          child: const Row(
+                                          child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Icon(Icons.camera_alt, color: Colors.white, size: 12),
                                               SizedBox(width: 4),
-                                              Text(
-                                                'Change Photo',
+                                              Text(AppLocalizations.of(context)!.changePhoto,
                                                 style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
                                               ),
                                             ],
@@ -401,8 +395,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                                       child: const Icon(Icons.camera_alt, color: Color(0xFF9CA3AF), size: 24),
                                     ),
                                     const SizedBox(height: 12),
-                                    const Text(
-                                      'Take a photo of the shop',
+                                    Text(AppLocalizations.of(context)!.takeAPhotoOfTheShop,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -410,8 +403,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 2),
-                                    const Text(
-                                      'Tap to capture current location photo',
+                                    Text(AppLocalizations.of(context)!.tapToCaptureCurrentLocationPhoto,
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Color(0xFF9CA3AF),
@@ -433,13 +425,12 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: const Color(0xFFFEF3C7)),
                         ),
-                        child: const Row(
+                        child: Row(
                           children: [
                             Icon(Icons.lock, color: Color(0xFFD97706), size: 16),
                             SizedBox(width: 8),
                             Expanded(
-                              child: Text(
-                                'Complete location verification and photo to unlock the remaining fields.',
+                              child: Text(AppLocalizations.of(context)!.completeLocationVerificationAndPhotoToUnlockTheRemainingFields,
                                 style: TextStyle(
                                   color: Color(0xFFB45309),
                                   fontSize: 11,
@@ -458,13 +449,12 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: const Color(0xFFDBEAFE)),
                         ),
-                        child: const Row(
+                        child: Row(
                           children: [
                             Icon(Icons.lock_open, color: Color(0xFF2563EB), size: 16),
                             SizedBox(width: 8),
                             Expanded(
-                              child: Text(
-                                'Verification steps completed! You can now fill in the store details.',
+                              child: Text(AppLocalizations.of(context)!.verificationStepsCompletedYouCanNowFillInTheStoreDetails,
                                 style: TextStyle(
                                   color: Color(0xFF1D4ED8),
                                   fontSize: 11,
@@ -486,10 +476,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Business Name
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-                              child: Text(
-                                'Business Name *',
+                              child: Text(AppLocalizations.of(context)!.businessName,
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
@@ -520,10 +509,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                             const SizedBox(height: 16),
 
                             // Address
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-                              child: Text(
-                                'Address *',
+                              child: Text(AppLocalizations.of(context)!.address,
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
@@ -554,10 +542,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                             const SizedBox(height: 16),
 
                             // Phone
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-                              child: Text(
-                                'Phone',
+                              child: Text(AppLocalizations.of(context)!.phone,
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
@@ -588,10 +575,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                             const SizedBox(height: 16),
 
                             // Area/Zone
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-                              child: Text(
-                                'Area / Zone',
+                              child: Text(AppLocalizations.of(context)!.areaZone,
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
@@ -659,8 +645,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                           size: 18,
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          'Save Customer',
+                        Text(AppLocalizations.of(context)!.saveCustomer,
                           style: TextStyle(
                             color: _canSave ? Colors.white : const Color(0xFF9CA3AF),
                             fontSize: 15,

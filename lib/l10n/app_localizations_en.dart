@@ -153,4 +153,353 @@ class AppLocalizationsEn extends AppLocalizations {
   String resetLinkSent(String email) {
     return 'Reset link sent to $email';
   }
+
+  @override
+  String get homeTab => 'Home';
+
+  @override
+  String get inventoryTab => 'Inventory';
+
+  @override
+  String get walletTab => 'Wallet';
+
+  @override
+  String get profileTab => 'Profile';
+
+  @override
+  String get addAnotherProduct => 'Add Another Product';
+
+  @override
+  String get address => 'Address *';
+
+  @override
+  String get areaZone => 'Area / Zone';
+
+  @override
+  String get askForBackEntranceParkOnSideStreet =>
+      'Ask for back entrance. Park on side street.';
+
+  @override
+  String get awaitingApproval => 'Awaiting Approval';
+
+  @override
+  String get awaitingDelivery => 'Awaiting delivery';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get businessName => 'Business Name *';
+
+  @override
+  String get customer => 'CUSTOMER';
+
+  @override
+  String get customerType => 'CUSTOMER TYPE';
+
+  @override
+  String get changePhoto => 'Change Photo';
+
+  @override
+  String get collected => 'Collected';
+
+  @override
+  String get collectionProgress => 'Collection progress';
+
+  @override
+  String get collectionsWallet => 'Collections & Wallet';
+
+  @override
+  String get completeLocationVerificationAndPhotoToUnlockTheRemainingFields =>
+      'Complete location verification and photo to unlock the remaining fields.';
+
+  @override
+  String get completeTheChecklistToStartYourSession =>
+      'Complete the checklist to start your session';
+
+  @override
+  String get confirmQuantitiesLoaded => 'Confirm Quantities Loaded';
+
+  @override
+  String get createSalesOrder => 'Create Sales Order';
+
+  @override
+  String get customerAdded => 'Customer Added!';
+
+  @override
+  String get doLinesStops => 'DO Lines / Stops';
+
+  @override
+  String get downtown => 'Downtown';
+
+  @override
+  String get driver => 'Driver';
+
+  @override
+  String get due => 'Due';
+
+  @override
+  String get financialSummary => 'FINANCIAL SUMMARY';
+
+  @override
+  String get finance => 'Finance';
+
+  @override
+  String get financialCustodyInvoices => 'Financial custody & invoices';
+
+  @override
+  String get fullRoute => 'Full Route';
+
+  @override
+  String get goodEvening => 'Good Evening 👋';
+
+  @override
+  String get goodEvening2 => 'Good Evening,';
+
+  @override
+  String get goodsLoadedOnYourTruck => 'Goods loaded on your truck';
+
+  @override
+  String get goodsToDeliver => 'Goods to Deliver';
+
+  @override
+  String get handleJuiceCartonsCarefullyFragileColdChainMaintained =>
+      'Handle juice cartons carefully – fragile. Cold chain maintained.';
+
+  @override
+  String get invoices => 'INVOICES';
+
+  @override
+  String get invoice => 'Invoice';
+
+  @override
+  String get invoiceTotal => 'Invoice Total';
+
+  @override
+  String get loadingInProgress => 'Loading in progress…';
+
+  @override
+  String get navigate => 'Navigate';
+
+  @override
+  String get navigateToTheStopToBegin => 'Navigate to the stop to begin';
+
+  @override
+  String get newOrderDraft => 'New Order Draft';
+
+  @override
+  String get noDetailsAvailable => 'No details available';
+
+  @override
+  String get noStopsCompletedYet => 'No stops completed yet';
+
+  @override
+  String get orderSummary => 'ORDER SUMMARY';
+
+  @override
+  String get offload => 'Offload';
+
+  @override
+  String get orderCreated => 'Order Created!';
+
+  @override
+  String get outstanding => 'Outstanding';
+
+  @override
+  String get physicalCustody => 'PHYSICAL CUSTODY';
+
+  @override
+  String get products => 'PRODUCTS';
+
+  @override
+  String get paid => 'Paid';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get preRouteChecklist => 'Pre-Route Checklist';
+
+  @override
+  String get resendCode => 'Resend Code';
+
+  @override
+  String get resetPassword => 'Reset Password';
+
+  @override
+  String get salesOrderDetails => 'SALES ORDER DETAILS';
+
+  @override
+  String get skusQuantities => 'SKUS & QUANTITIES';
+
+  @override
+  String get step1VerifyLocation => 'STEP 1 — VERIFY LOCATION';
+
+  @override
+  String get step2ShopPhoto => 'STEP 2 — SHOP PHOTO';
+
+  @override
+  String get saveCustomer => 'Save Customer';
+
+  @override
+  String get selectProduct => 'Select product...';
+
+  @override
+  String get sendResetLink => 'Send Reset Link';
+
+  @override
+  String get startDaySession => 'Start Day Session';
+
+  @override
+  String get totalCollected => 'TOTAL COLLECTED';
+
+  @override
+  String get takeAPhotoOfTheShop => 'Take a photo of the shop';
+
+  @override
+  String get tapToCaptureCurrentLocationPhoto =>
+      'Tap to capture current location photo';
+
+  @override
+  String get tapToSelectACustomer => 'Tap to select a customer';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get totalCustody => 'Total Custody';
+
+  @override
+  String get totalInvoice => 'Total Invoice';
+
+  @override
+  String get totalInvoiced => 'Total Invoiced';
+
+  @override
+  String get truckLoad => 'Truck Load';
+
+  @override
+  String get verification => 'Verification';
+
+  @override
+  String get verificationStepsCompletedYouCanNowFillInTheStoreDetails =>
+      'Verification steps completed! You can now fill in the store details.';
+
+  @override
+  String get verifyCustomerLocation => 'Verify Customer Location';
+
+  @override
+  String get viewDo => 'View DO';
+
+  @override
+  String get viewSalesOrderDetails => 'View Sales Order Details';
+
+  @override
+  String get virtualWarehouse => 'Virtual Warehouse';
+
+  @override
+  String get wazza3Distribution => 'WAZZA3 DISTRIBUTION';
+
+  @override
+  String get wazza3V10 => 'WAZZA3 · v1.0';
+
+  @override
+  String get warehouseIsLoadingYourTruckConfirmWhenDone =>
+      'Warehouse is loading your truck. Confirm when done.';
+
+  @override
+  String get goodEvening3 => 'Good Evening';
+
+  @override
+  String get num0OfRouteCollected => '0% of route collected';
+
+  @override
+  String get num2Lines116Units => '2 lines · 116 units';
+
+  @override
+  String get num4UpcomingStops => '4 upcoming stops';
+
+  @override
+  String get num5Skus => '5 SKUs';
+
+  @override
+  String get salesRep => 'Sales Rep';
+
+  @override
+  String get idRep042 => 'ID: REP-042';
+
+  @override
+  String get assignedTruck => 'Assigned Truck';
+
+  @override
+  String get truckA101 => 'Truck A-101';
+
+  @override
+  String get territory => 'Territory';
+
+  @override
+  String get northDistrict => 'North District';
+
+  @override
+  String get role => 'Role';
+
+  @override
+  String get appSettings => 'App Settings';
+
+  @override
+  String get endSessionLogout => 'End Session & Logout';
+
+  @override
+  String get newOrder => 'New Order';
+
+  @override
+  String get newCustomer => 'New Customer';
+
+  @override
+  String get custody => 'Custody';
+
+  @override
+  String get itemsOnTruck => 'items on truck';
+
+  @override
+  String get stops => 'Stops';
+
+  @override
+  String doneCount(String count) {
+    return '$count done';
+  }
+
+  @override
+  String leftCount(String count) {
+    return '$count left';
+  }
+
+  @override
+  String ofAmount(String amount) {
+    return 'of $amount';
+  }
+
+  @override
+  String cashAmount(String amount) {
+    return '$amount cash';
+  }
+
+  @override
+  String chkAmount(String amount) {
+    return '$amount chk';
+  }
+
+  @override
+  String ofStopsCount(String count) {
+    return 'of $count stops';
+  }
+
+  @override
+  String get upcomingTab => 'Upcoming';
+
+  @override
+  String get mapTab => 'Map';
+
+  @override
+  String get completedTab => 'Completed';
 }

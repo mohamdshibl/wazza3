@@ -192,8 +192,7 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Order Created!',
+              Text(AppLocalizations.of(context)!.orderCreated,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -267,8 +266,7 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
           icon: const Icon(Icons.arrow_back, color: Color(0xFF4B5563)),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'New Order Draft',
+        title: Text(AppLocalizations.of(context)!.newOrderDraft,
           style: TextStyle(
             color: Color(0xFF111827),
             fontSize: 16,
@@ -286,10 +284,9 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // CUSTOMER SECTION HEADER
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                      child: Text(
-                        'CUSTOMER',
+                      child: Text(AppLocalizations.of(context)!.customer,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -319,8 +316,7 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(vertical: 24),
                             alignment: Alignment.center,
-                            child: const Text(
-                              'Tap to select a customer',
+                            child: Text(AppLocalizations.of(context)!.tapToSelectACustomer,
                               style: TextStyle(
                                 color: Color(0xFF6B7280),
                                 fontSize: 14,
@@ -467,13 +463,12 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                                     color: Color(0xFFA9D7CD),
                                     borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
                                   ),
-                                  child: const Row(
+                                  child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(Icons.person_add_outlined, color: Color(0xFF0B4A38), size: 16),
                                       SizedBox(width: 6),
-                                      Text(
-                                        'Add New Customer',
+                                      Text(AppLocalizations.of(context)!.addNewCustomer,
                                         style: TextStyle(
                                           color: Color(0xFF0B4A38),
                                           fontSize: 13,
@@ -578,10 +573,9 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                     const SizedBox(height: 24),
                     
                     // PRODUCTS SECTION HEADER
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                      child: Text(
-                        'PRODUCTS',
+                      child: Text(AppLocalizations.of(context)!.products,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -653,8 +647,7 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                                       child: DropdownButtonHideUnderline(
                                         child: DropdownButton<String>(
                                           value: line.productId,
-                                          hint: const Text(
-                                            'Select product...',
+                                          hint: Text(AppLocalizations.of(context)!.selectProduct,
                                             style: TextStyle(fontSize: 13, color: Color(0xFF9CA3AF)),
                                           ),
                                           isExpanded: true,
@@ -785,13 +778,12 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           alignment: Alignment.center,
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.add, color: Color(0xFF6B7280), size: 16),
                               SizedBox(width: 4),
-                              Text(
-                                'Add Another Product',
+                              Text(AppLocalizations.of(context)!.addAnotherProduct,
                                 style: TextStyle(
                                   color: Color(0xFF6B7280),
                                   fontSize: 14,
@@ -818,12 +810,11 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Row(
+                            Row(
                               children: [
                                 Icon(Icons.inventory_2_outlined, color: Color(0xFF0B6B54), size: 16),
                                 SizedBox(width: 6),
-                                Text(
-                                  'ORDER SUMMARY',
+                                Text(AppLocalizations.of(context)!.orderSummary,
                                   style: TextStyle(
                                     color: Color(0xFF0B6B54),
                                     fontSize: 11,
@@ -867,8 +858,7 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  'Total',
+                                Text(AppLocalizations.of(context)!.total,
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -927,8 +917,7 @@ class _NewOrderDraftScreenState extends State<NewOrderDraftScreen> {
                           size: 20,
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          'Create Sales Order',
+                        Text(AppLocalizations.of(context)!.createSalesOrder,
                           style: TextStyle(
                             color: _isValid ? Colors.white : const Color(0xFF9CA3AF),
                             fontSize: 15,

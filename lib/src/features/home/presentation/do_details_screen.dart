@@ -331,9 +331,8 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                           color: const Color(0xFFD97706),
                         ),
                         const SizedBox(width: 10),
-                        const Expanded(
-                          child: Text(
-                            'Handle juice cartons carefully – fragile. Cold chain maintained.',
+                        Expanded(
+                          child: Text(AppLocalizations.of(context)!.handleJuiceCartonsCarefullyFragileColdChainMaintained,
                             style: TextStyle(
                               color: Color(0xFF92400E),
                               fontSize: 12,
@@ -377,12 +376,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              const Expanded(
+                              Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Loading in progress…',
+                                    Text(AppLocalizations.of(context)!.loadingInProgress,
                                       style: TextStyle(
                                         color: Color(0xFF1E3A8A),
                                         fontWeight: FontWeight.bold,
@@ -390,8 +388,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 2),
-                                    Text(
-                                      'Warehouse is loading your truck. Confirm when done.',
+                                    Text(AppLocalizations.of(context)!.warehouseIsLoadingYourTruckConfirmWhenDone,
                                       style: TextStyle(
                                         color: Color(0xFF1D4ED8),
                                         fontSize: 12,
@@ -426,8 +423,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                    color: Colors.white,
                                  ),
                                 const SizedBox(width: 8),
-                                const Text(
-                                  'Confirm Quantities Loaded',
+                                Text(AppLocalizations.of(context)!.confirmQuantitiesLoaded,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -469,8 +465,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                     : null,
                               ),
                               alignment: Alignment.center,
-                              child: Text(
-                                'DO Lines / Stops',
+                              child: Text(AppLocalizations.of(context)!.doLinesStops,
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -499,8 +494,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                     : null,
                               ),
                               alignment: Alignment.center,
-                              child: Text(
-                                'Finance',
+                              child: Text(AppLocalizations.of(context)!.finance,
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -870,8 +864,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                       color: const Color(0xFF0B4A38),
                     ),
                     const SizedBox(width: 6),
-                    const Text(
-                      'FINANCIAL SUMMARY',
+                    Text(AppLocalizations.of(context)!.financialSummary,
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
@@ -884,9 +877,8 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Total Invoiced',
+                  children: [
+                    Text(AppLocalizations.of(context)!.totalInvoiced,
                       style: TextStyle(fontSize: 14, color: Color(0xFF0B4A38)),
                     ),
                     Text(
@@ -898,9 +890,8 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'Collected',
+                  children: [
+                    Text(AppLocalizations.of(context)!.collected,
                       style: TextStyle(fontSize: 14, color: Color(0xFF0B4A38)),
                     ),
                     Text(
@@ -919,9 +910,8 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        'Outstanding',
+                    children: [
+                      Text(AppLocalizations.of(context)!.outstanding,
                         style: TextStyle(fontSize: 14, color: Color(0xFFAF2409)),
                       ),
                       Text(
@@ -1008,8 +998,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Invoice',
+              Text(AppLocalizations.of(context)!.invoice,
                 style: TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
               ),
               Text(
@@ -1025,9 +1014,8 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                'Collected',
+            children: [
+              Text(AppLocalizations.of(context)!.collected,
                 style: TextStyle(fontSize: 12, color: Color(0xFF0B6B54)),
               ),
               Text(
@@ -1044,8 +1032,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Due',
+              Text(AppLocalizations.of(context)!.due,
                 style: TextStyle(fontSize: 12, color: Color(0xFFE52B13)),
               ),
               Text(

@@ -1,3 +1,4 @@
+import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../../core/routing/app_routes.dart';
@@ -68,11 +69,10 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'WAZZA3 DISTRIBUTION',
+                            Text(AppLocalizations.of(context)!.wazza3Distribution,
                               style: TextStyle(
                                 color: Colors.white70,
                                 fontSize: 10,
@@ -95,18 +95,16 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                     ),
                     const SizedBox(height: 24),
                     // Greeting text
-                    const Text(
-                      'Good Evening,',
+                    Text(AppLocalizations.of(context)!.goodEvening2,
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
                       ),
                     ),
                     const SizedBox(height: 2),
-                    const Row(
+                    Row(
                       children: [
-                        Text(
-                          'Driver',
+                        Text(AppLocalizations.of(context)!.driver,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 32,
@@ -232,8 +230,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                                   color: const Color(0xFFFEF3C7),
                                   borderRadius: BorderRadius.circular(99),
                                 ),
-                                child: const Text(
-                                  'Awaiting Approval',
+                                child: Text(AppLocalizations.of(context)!.awaitingApproval,
                                   style: TextStyle(
                                     color: Color(0xFFB45309),
                                     fontSize: 11,
@@ -302,10 +299,9 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                                   minimumSize: Size.zero,
                                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 ),
-                                child: const Row(
+                                child: Row(
                                   children: [
-                                    Text(
-                                      'View DO',
+                                    Text(AppLocalizations.of(context)!.viewDo,
                                       style: TextStyle(
                                         color: Color(0xFFE52B13),
                                         fontSize: 12,
@@ -328,14 +324,13 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: const Color(0xFFFDE68A)),
                           ),
-                          child: const Row(
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Icon(Icons.description_outlined, color: Color(0xFFF59E0B), size: 14),
                               SizedBox(width: 8),
                               Expanded(
-                                child: Text(
-                                  'Handle juice cartons carefully – fragile. Cold chain maintained.',
+                                child: Text(AppLocalizations.of(context)!.handleJuiceCartonsCarefullyFragileColdChainMaintained,
                                   style: TextStyle(
                                     color: Color(0xFF92400E),
                                     fontSize: 11,
@@ -372,12 +367,11 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Row(
+                            Row(
                               children: [
                                 Icon(Icons.warehouse_outlined, color: Color(0xFF0B6B54), size: 16),
                                 SizedBox(width: 8),
-                                Text(
-                                  'Truck Load',
+                                Text(AppLocalizations.of(context)!.truckLoad,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -392,8 +386,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                                 color: const Color(0xFFC9F2E3),
                                 borderRadius: BorderRadius.circular(99),
                               ),
-                              child: const Text(
-                                '5 SKUs',
+                              child: Text(AppLocalizations.of(context)!.num5Skus,
                                 style: TextStyle(
                                   color: Color(0xFF0B4A38),
                                   fontSize: 10,
@@ -472,8 +465,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                             children: [
                               const Icon(Icons.check_circle_outline, color: Color(0xFFE52B13), size: 15),
                               const SizedBox(width: 8),
-                              const Text(
-                                'Pre-Route Checklist',
+                              Text(AppLocalizations.of(context)!.preRouteChecklist,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
@@ -557,8 +549,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Complete the checklist to start your session',
+                Text(AppLocalizations.of(context)!.completeTheChecklistToStartYourSession,
                   style: TextStyle(
                     fontSize: 12,
                     color: Color(0xFF9CA3AF),
@@ -598,8 +589,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                           size: 22,
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          'Start Day Session',
+                        Text(AppLocalizations.of(context)!.startDaySession,
                           style: TextStyle(
                             color: _isComplete ? Colors.white : Colors.white70,
                             fontWeight: FontWeight.bold,

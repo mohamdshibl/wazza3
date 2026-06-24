@@ -126,8 +126,7 @@ class _Header extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Good Evening 👋',
+                          Text(AppLocalizations.of(context)!.goodEvening,
                             style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontSize: 13, fontWeight: FontWeight.w500),
                           ),
                           Text(
@@ -156,7 +155,7 @@ class _Header extends StatelessWidget {
                     Expanded(
                       child: _HeaderButton(
                         icon: Icons.shopping_cart_outlined,
-                        label: 'New Order',
+                        label: AppLocalizations.of(context)!.newOrder,
                         onTap: () {
                           Navigator.pushNamed(context, AppRoutes.newOrderDraft);
                         },
@@ -166,7 +165,7 @@ class _Header extends StatelessWidget {
                     Expanded(
                       child: _HeaderButton(
                         icon: Icons.person_add_outlined,
-                        label: 'New Customer',
+                        label: AppLocalizations.of(context)!.newCustomer,
                         onTap: () {
                           Navigator.pushNamed(context, AppRoutes.addCustomer);
                         },
@@ -229,11 +228,11 @@ class _StatsRow extends StatelessWidget {
         Expanded(
           child: _StatCard(
             icon: Icons.local_shipping_outlined,
-            title: 'Custody',
+            title: AppLocalizations.of(context)!.custody,
             value: '857',
-            sub: 'items on truck',
-            dot1Label: '0 done',
-            dot2Label: '753 left',
+            sub: AppLocalizations.of(context)!.itemsOnTruck,
+            dot1Label: AppLocalizations.of(context)!.doneCount('0'),
+            dot2Label: AppLocalizations.of(context)!.leftCount('753'),
             progress: 0.0,
             bgSvgString: AppIcons.truck,
           ),
@@ -242,11 +241,11 @@ class _StatsRow extends StatelessWidget {
         Expanded(
           child: _StatCard(
             icon: Icons.account_balance_wallet_outlined,
-            title: 'Collected',
+            title: AppLocalizations.of(context)!.collected,
             value: '\$0',
-            sub: 'of \$1,658',
-            dot1Label: '\$1,915 cash',
-            dot2Label: '\$0 chk',
+            sub: AppLocalizations.of(context)!.ofAmount('\$1,658'),
+            dot1Label: AppLocalizations.of(context)!.cashAmount('\$1,915'),
+            dot2Label: AppLocalizations.of(context)!.chkAmount('\$0'),
             progress: 0.0,
             bgSvgString: AppIcons.wallet,
           ),
@@ -255,12 +254,12 @@ class _StatsRow extends StatelessWidget {
         Expanded(
           child: _StatCard(
             icon: Icons.alt_route,
-            title: 'Stops',
+            title: AppLocalizations.of(context)!.stops,
             value: '0',
             valueSuffix: '/4',
-            sub: 'of 4 stops',
-            dot1Label: '0 done',
-            dot2Label: '4 left',
+            sub: AppLocalizations.of(context)!.ofStopsCount('4'),
+            dot1Label: AppLocalizations.of(context)!.doneCount('0'),
+            dot2Label: AppLocalizations.of(context)!.leftCount('4'),
             progress: 0.0,
             bgSvgString: AppIcons.route,
           ),
@@ -429,9 +428,9 @@ class _RouteSection extends StatelessWidget {
           decoration: BoxDecoration(color: _navBg, borderRadius: BorderRadius.circular(99)),
           child: Row(
             children: [
-              _TabBtn(label: 'Upcoming', icon: Icons.checklist, active: tabIndex == 0, onTap: () => onTabChanged(0)),
-              _TabBtn(label: 'Map', icon: Icons.map_outlined, active: tabIndex == 1, onTap: () => onTabChanged(1)),
-              _TabBtn(label: 'Completed', icon: Icons.check_circle_outline, active: tabIndex == 2, onTap: () => onTabChanged(2)),
+              _TabBtn(label: AppLocalizations.of(context)!.upcomingTab, icon: Icons.checklist, active: tabIndex == 0, onTap: () => onTabChanged(0)),
+              _TabBtn(label: AppLocalizations.of(context)!.mapTab, icon: Icons.map_outlined, active: tabIndex == 1, onTap: () => onTabChanged(1)),
+              _TabBtn(label: AppLocalizations.of(context)!.completedTab, icon: Icons.check_circle_outline, active: tabIndex == 2, onTap: () => onTabChanged(2)),
             ],
           ),
         ),
@@ -515,8 +514,7 @@ class _RouteSection extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Row(
                     children: [
-                      const Text(
-                        '4 upcoming stops',
+                      Text(AppLocalizations.of(context)!.num4UpcomingStops,
                         style: TextStyle(
                           color: Color(0xFF4B5563),
                           fontWeight: FontWeight.bold,
@@ -551,8 +549,7 @@ class _RouteSection extends StatelessWidget {
                           height: 12,
                           color: Colors.white,
                         ),
-                        label: const Text(
-                          'Full Route',
+                        label: Text(AppLocalizations.of(context)!.fullRoute,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -580,8 +577,7 @@ class _RouteSection extends StatelessWidget {
                     color: const Color(0xFF9CA3AF),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'No stops completed yet',
+                  Text(AppLocalizations.of(context)!.noStopsCompletedYet,
                     style: TextStyle(
                       color: Color(0xFF9CA3AF),
                       fontSize: 14,
