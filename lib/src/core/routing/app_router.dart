@@ -7,6 +7,7 @@ import '../../features/orders/presentation/new_order_draft_screen.dart';
 import '../../features/customers/presentation/add_customer_screen.dart';
 import '../../features/home/presentation/stop_details_screen.dart';
 import '../../features/home/presentation/sales_order_details_screen.dart';
+import '../../features/home/presentation/session_start_screen.dart';
 import '../../features/home/presentation/widgets/home_view.dart';
 import 'app_routes.dart';
 
@@ -52,6 +53,11 @@ class AppRouter {
         final stopData = settings.arguments as StopData;
         return MaterialPageRoute(
           builder: (_) => SalesOrderDetailsScreen(stopData: stopData),
+          settings: settings,
+        );
+      case AppRoutes.sessionStart:
+        return MaterialPageRoute(
+          builder: (_) => const SessionStartScreen(),
           settings: settings,
         );
       default:

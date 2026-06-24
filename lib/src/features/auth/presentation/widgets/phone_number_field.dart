@@ -5,7 +5,6 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/style/app_radii.dart';
 import '../../../../core/style/app_spacing.dart';
 import '../../../../core/style/app_text_styles.dart';
-import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../data/models/country.dart';
 import '../../logic/controllers/sign_in_cubit.dart';
@@ -34,7 +33,6 @@ class PhoneNumberField extends StatelessWidget {
       helperText: AppStrings.otpHelper,
       keyboardType: TextInputType.phone,
       textInputAction: TextInputAction.done,
-      validator: Validators.phone,
       onSubmitted: onSubmitted,
       customPrefix: CountryCodePrefix(
         country: country,

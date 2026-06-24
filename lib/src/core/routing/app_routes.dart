@@ -9,4 +9,5 @@ class AppRoutes {
   static const String addCustomer = '/add-customer';
   static const String stopDetails = '/stop-details';
   static const String salesOrderDetails = '/sales-order-details';
+  static const String sessionStart = '/session-start';
 }

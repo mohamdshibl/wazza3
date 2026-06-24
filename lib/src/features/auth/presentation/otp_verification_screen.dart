@@ -65,7 +65,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           ),
         );
         Navigator.of(context).pushNamedAndRemoveUntil(
-          AppRoutes.dashboard,
+          AppRoutes.sessionStart,
           (route) => false,
         );
       }

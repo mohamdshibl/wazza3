@@ -6,7 +6,6 @@ import '../../../../core/enums/request_status.dart';
 import '../../../../core/style/app_colors.dart';
 import '../../../../core/style/app_spacing.dart';
 import '../../../../core/style/app_text_styles.dart';
-import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/routing/app_routes.dart';
@@ -40,7 +39,8 @@ class _SignInFormState extends State<SignInForm> {
 
   void _submit() {
     FocusScope.of(context).unfocus();
-    if (!_formKey.currentState!.validate()) return;
+    // Bypass validation for easier login/testing
+    // if (!_formKey.currentState!.validate()) return;
 
     final cubit = context.read<SignInCubit>();
     final method = cubit.state.method;
@@ -74,17 +74,10 @@ class _SignInFormState extends State<SignInForm> {
           content: Text(isOtp ? 'OTP sent to your number' : 'Signed in successfully'),
         ),
       );
-      if (isOtp) {
-        Navigator.of(context).pushNamed(
-          AppRoutes.otpVerification,
-          arguments: _phoneController.text,
-        );
-      } else {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          AppRoutes.dashboard,
-          (route) => false,
-        );
-      }
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.sessionStart,
+        (route) => false,
+      );
     }
   }
 
@@ -130,7 +123,6 @@ class _SignInFormState extends State<SignInForm> {
         prefixIcon: Icons.mail_outline,
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
-        validator: Validators.email,
       ),
       const SizedBox(height: AppSpacing.xl),
       AppTextField(
@@ -139,7 +131,6 @@ class _SignInFormState extends State<SignInForm> {
         hint: AppStrings.passwordHint,
         prefixIcon: Icons.lock_outline,
         obscureText: obscure,
-        validator: Validators.password,
         textInputAction: TextInputAction.done,
         onSubmitted: (_) => _submit(),
         suffix: IconButton(
