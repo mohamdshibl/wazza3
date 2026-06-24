@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../core/constants/app_icons.dart';
 import '../../../core/routing/app_routes.dart';
 import 'widgets/home_view.dart'; // To access the StopData class
 
@@ -14,19 +14,6 @@ class StopDetailsScreen extends StatefulWidget {
 
 class _StopDetailsScreenState extends State<StopDetailsScreen> {
   int _activeTab = 0; // 0: Summary, 1: Sales Orders, 2: Finance
-
-  // Navigation SVG icon from previous step
-  static const String _navigationSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
-''';
-
-  static const String _receiptSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
-''';
-
-  static const String _banknoteSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>
-''';
 
   @override
   Widget build(BuildContext context) {
@@ -379,9 +366,11 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                           }
                                         } catch (_) {}
                                       },
-                                      icon: SvgPicture.string(
-                                        _navigationSvg,
-                                        colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                                      icon: AppIcons.asset(
+                                        AppIcons.navigation,
+                                        width: 12,
+                                        height: 12,
+                                        color: Colors.white,
                                       ),
                                       label: const Text(
                                         'Navigate',
@@ -496,11 +485,11 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                         children: [
                                           Row(
                                             children: [
-                                              SvgPicture.string(
-                                                _receiptSvg,
+                                              AppIcons.asset(
+                                                AppIcons.receipt,
                                                 width: 13,
                                                 height: 13,
-                                                colorFilter: const ColorFilter.mode(Color(0xFF9CA3AF), BlendMode.srcIn),
+                                                color: const Color(0xFF9CA3AF),
                                               ),
                                               const SizedBox(width: 6),
                                               const Text(
@@ -645,9 +634,11 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                       children: [
                                         Row(
                                           children: [
-                                            SvgPicture.string(
-                                              _banknoteSvg,
-                                              colorFilter: const ColorFilter.mode(Color(0xFF0B6B54), BlendMode.srcIn),
+                                            AppIcons.asset(
+                                              AppIcons.banknote,
+                                              width: 14,
+                                              height: 14,
+                                              color: const Color(0xFF0B6B54),
                                             ),
                                             const SizedBox(width: 6),
                                             const Text(
@@ -776,11 +767,11 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          SvgPicture.string(
-                                            _receiptSvg,
+                                          AppIcons.asset(
+                                            AppIcons.receipt,
                                             width: 13,
                                             height: 13,
-                                            colorFilter: const ColorFilter.mode(Color(0xFF9CA3AF), BlendMode.srcIn),
+                                            color: const Color(0xFF9CA3AF),
                                           ),
                                           const SizedBox(width: 6),
                                           Text(

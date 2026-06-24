@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../../core/constants/app_icons.dart';
 import '../../../core/routing/app_routes.dart';
 import 'widgets/home_view.dart'; // To access the StopData class
 
@@ -21,54 +21,6 @@ class DoDetailsScreen extends StatefulWidget {
 class _DoDetailsScreenState extends State<DoDetailsScreen> {
   bool _isLoaded = false;
   int _activeTab = 0; // 0 = DO Lines / Stops, 1 = Finance
-
-  static const String _routeSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path><circle cx="18" cy="5" r="3"></circle></svg>
-''';
-
-  static const String _mapPinSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
-''';
-
-  static const String _packageSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
-''';
-
-  static const String _dollarSignSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-''';
-
-  static const String _banknoteSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>
-''';
-
-  static const String _truckSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M15 18H9"></path><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path><circle cx="17" cy="18" r="2"></circle><circle cx="7" cy="18" r="2"></circle></svg>
-''';
-
-  static const String _fileTextSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
-''';
-
-  static const String _clockSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-''';
-
-  static const String _chevronRightSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
-''';
-
-  static const String _trendingUpSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
-''';
-
-  static const String _circleAlertSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
-''';
-
-  static const String _circleCheckSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
-''';
 
   final List<_StopItem> _stops = const [
     _StopItem(
@@ -201,7 +153,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                           // Stops
                           Expanded(
                             child: _buildMetricCard(
-                              svgString: _routeSvg,
+                              svgString: AppIcons.route,
                               iconColor: const Color(0xFFE52B13),
                               label: 'Stops',
                               valueWidget: RichText(
@@ -251,7 +203,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                           // Collected
                           Expanded(
                             child: _buildMetricCard(
-                              svgString: _banknoteSvg,
+                              svgString: AppIcons.banknote,
                               iconColor: const Color(0xFF0B6B54),
                               label: 'Collected',
                               valueWidget: const Text(
@@ -276,7 +228,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                           // Value
                           Expanded(
                             child: _buildMetricCard(
-                              svgString: _dollarSignSvg,
+                              svgString: AppIcons.dollarSign,
                               iconColor: const Color(0xFFE52B13),
                               label: 'Value',
                               valueWidget: const Text(
@@ -321,11 +273,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                       children: [
                         Row(
                           children: [
-                            SvgPicture.string(
-                              _truckSvg,
+                            AppIcons.asset(
+                              AppIcons.truck,
                               width: 15,
                               height: 15,
-                              colorFilter: const ColorFilter.mode(Color(0xFFE52B13), BlendMode.srcIn),
+                              color: const Color(0xFFE52B13),
                             ),
                             const SizedBox(width: 8),
                             const Text(
@@ -371,9 +323,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SvgPicture.string(
-                          _fileTextSvg,
-                          colorFilter: const ColorFilter.mode(Color(0xFFD97706), BlendMode.srcIn),
+                        AppIcons.asset(
+                          AppIcons.fileText,
+                          width: 14,
+                          height: 14,
+                          color: const Color(0xFFD97706),
                         ),
                         const SizedBox(width: 10),
                         const Expanded(
@@ -414,11 +368,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 alignment: Alignment.center,
-                                child: SvgPicture.string(
-                                  _truckSvg,
+                                child: AppIcons.asset(
+                                  AppIcons.truck,
                                   width: 18,
                                   height: 18,
-                                  colorFilter: const ColorFilter.mode(Color(0xFF1D4ED8), BlendMode.srcIn),
+                                  color: const Color(0xFF1D4ED8),
                                 ),
                               ),
                               const SizedBox(width: 12),
@@ -464,10 +418,12 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SvgPicture.string(
-                                  _circleCheckSvg,
-                                  colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                                ),
+                                 AppIcons.asset(
+                                   AppIcons.circleCheck,
+                                   width: 17,
+                                   height: 17,
+                                   color: Colors.white,
+                                 ),
                                 const SizedBox(width: 8),
                                 const Text(
                                   'Confirm Quantities Loaded',
@@ -612,11 +568,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
         children: [
           Row(
             children: [
-              SvgPicture.string(
+              AppIcons.asset(
                 svgString,
                 width: 13,
                 height: 13,
-                colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+                color: iconColor,
               ),
               const SizedBox(width: 6),
               Text(
@@ -671,9 +627,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SvgPicture.string(
-                          _clockSvg,
-                          colorFilter: const ColorFilter.mode(Color(0xFF6B7280), BlendMode.srcIn),
+                        AppIcons.asset(
+                          AppIcons.clock,
+                          width: 13,
+                          height: 13,
+                          color: const Color(0xFF6B7280),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -721,9 +679,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                   ],
                                 ),
                               ),
-                              SvgPicture.string(
-                                _chevronRightSvg,
-                                colorFilter: const ColorFilter.mode(Color(0xFFD1D5DB), BlendMode.srcIn),
+                              AppIcons.asset(
+                                AppIcons.chevronRight,
+                                width: 15,
+                                height: 15,
+                                color: const Color(0xFFD1D5DB),
                               ),
                             ],
                           ),
@@ -732,11 +692,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                           // Map & Time Row
                           Row(
                             children: [
-                              SvgPicture.string(
-                                _mapPinSvg,
+                              AppIcons.asset(
+                                AppIcons.mapPin,
                                 width: 10,
                                 height: 10,
-                                colorFilter: const ColorFilter.mode(Color(0xFF9CA3AF), BlendMode.srcIn),
+                                color: const Color(0xFF9CA3AF),
                               ),
                               const SizedBox(width: 4),
                               Expanded(
@@ -750,11 +710,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              SvgPicture.string(
-                                _clockSvg,
+                              AppIcons.asset(
+                                AppIcons.clock,
                                 width: 10,
                                 height: 10,
-                                colorFilter: const ColorFilter.mode(Color(0xFF9CA3AF), BlendMode.srcIn),
+                                color: const Color(0xFF9CA3AF),
                               ),
                               const SizedBox(width: 4),
                               Text(
@@ -774,11 +734,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                             children: [
                               Row(
                                 children: [
-                                  SvgPicture.string(
-                                    _packageSvg,
+                                  AppIcons.asset(
+                                    AppIcons.package,
                                     width: 11,
                                     height: 11,
-                                    colorFilter: const ColorFilter.mode(Color(0xFF6B7280), BlendMode.srcIn),
+                                    color: const Color(0xFF6B7280),
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
@@ -860,10 +820,12 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SvgPicture.string(
-                  _circleAlertSvg,
-                  colorFilter: const ColorFilter.mode(Color(0xFFD97706), BlendMode.srcIn),
-                ),
+                 AppIcons.asset(
+                   AppIcons.circleAlert,
+                   width: 11,
+                   height: 11,
+                   color: const Color(0xFFD97706),
+                 ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
@@ -900,9 +862,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
               children: [
                 Row(
                   children: [
-                    SvgPicture.string(
-                      _trendingUpSvg,
-                      colorFilter: const ColorFilter.mode(Color(0xFF0B4A38), BlendMode.srcIn),
+                    AppIcons.asset(
+                      AppIcons.trendingUp,
+                      width: 12,
+                      height: 12,
+                      color: const Color(0xFF0B4A38),
                     ),
                     const SizedBox(width: 6),
                     const Text(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../../core/constants/app_icons.dart';
 import '../../../core/routing/app_routes.dart';
 
 class SessionStartScreen extends StatefulWidget {
@@ -12,26 +12,6 @@ class SessionStartScreen extends StatefulWidget {
 class _SessionStartScreenState extends State<SessionStartScreen> {
   // Checklist item checked states
   final List<bool> _checklist = [false, false, false, false];
-
-  static const String _wazzaLogoSvg = '''
-<svg fill="none" viewBox="0 0 565 408"><path d="M129.518 408C143.302 408 154.476 396.819 154.476 383.026C154.476 369.233 143.302 358.052 129.518 358.052C115.734 358.052 104.56 369.233 104.56 383.026C104.56 396.819 115.734 408 129.518 408Z" fill="#FFFFFF"></path><path d="M426.543 408C440.327 408 451.501 396.819 451.501 383.026C451.501 369.233 440.327 358.052 426.543 358.052C412.759 358.052 401.585 369.233 401.585 383.026C401.585 396.819 412.759 408 426.543 408Z" fill="#FFFFFF"></path><path d="M565 132.367V281.88C565 316.091 537.186 343.963 503.01 343.963H354.259C320.07 343.963 292.216 316.078 292.216 281.88V209.217C292.216 202.066 286.412 196.258 279.266 196.258C272.12 196.258 266.315 202.066 266.315 209.217V281.88C266.315 316.091 238.502 343.963 204.326 343.963H61.9897C27.8137 343.976 0 316.091 0 281.88V62.03C0 27.8318 27.8137 0 61.9897 0H193.699V213.164C193.699 226.695 182.715 237.726 169.153 237.726C155.592 237.726 144.607 226.681 144.607 213.164V7.61586H61.9897C54.8437 7.61586 49.0392 13.4241 49.0392 20.5748V323.348C49.0392 330.499 54.8437 336.307 61.9897 336.307H204.312C211.458 336.307 217.263 330.499 217.263 323.348V250.685C217.263 216.434 245.076 188.602 279.252 188.602C313.442 188.602 341.295 216.434 341.295 250.685V323.348C341.295 330.499 347.1 336.307 354.246 336.307H503.01C510.156 336.307 515.961 330.499 515.961 323.348V90.8985C515.961 83.801 510.156 77.9396 503.01 77.9396H413.924V223.784C413.924 230.935 419.729 236.743 426.875 236.743H464.371C469.193 236.743 473.696 238.138 477.481 240.584C473.696 242.963 469.193 244.372 464.371 244.372H426.875C392.685 244.372 364.885 216.54 364.885 182.342V70.3237H503.01C537.2 70.3237 565 98.1555 565 132.367Z" fill="rgba(255,255,255,0.88)"></path></svg>
-''';
-
-  static const String _routeSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path><circle cx="18" cy="5" r="3"></circle></svg>
-''';
-
-  static const String _mapPinSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
-''';
-
-  static const String _packageSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
-''';
-
-  static const String _dollarSignSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-''';
 
   int get _checkedCount => _checklist.where((x) => x).length;
   bool get _isComplete => _checkedCount == 4;
@@ -81,8 +61,8 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                             border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1.5),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: SvgPicture.string(
-                            _wazzaLogoSvg,
+                          child: AppIcons.asset(
+                            AppIcons.logo,
                             width: 32,
                             height: 23,
                           ),
@@ -215,11 +195,11 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     alignment: Alignment.center,
-                                    child: SvgPicture.string(
-                                      _routeSvg,
+                                    child: AppIcons.asset(
+                                      AppIcons.route,
                                       width: 15,
                                       height: 15,
-                                      colorFilter: const ColorFilter.mode(Color(0xFFE52B13), BlendMode.srcIn),
+                                      color: const Color(0xFFE52B13),
                                     ),
                                   ),
                                   const SizedBox(width: 12),
@@ -272,13 +252,13 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                             ),
                           ),
                           child: Row(
-                            children: [
-                              _buildMetricItem(_mapPinSvg, '4', 'Stops'),
-                              _buildVerticalDivider(),
-                              _buildMetricItem(_packageSvg, '857', 'Items'),
-                              _buildVerticalDivider(),
-                              _buildMetricItem(_dollarSignSvg, '\$1.7k', 'Value'),
-                            ],
+                              children: [
+                                _buildMetricItem(AppIcons.mapPin, '4', 'Stops'),
+                                _buildVerticalDivider(),
+                                _buildMetricItem(AppIcons.package, '857', 'Items'),
+                                _buildVerticalDivider(),
+                                _buildMetricItem(AppIcons.dollarSign, '\$1.7k', 'Value'),
+                              ],
                           ),
                         ),
                         // Footer: Vehicle & Driver details
@@ -646,17 +626,17 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
     );
   }
 
-  Widget _buildMetricItem(String svgString, String value, String label) {
+  Widget _buildMetricItem(String svgRaw, String value, String label) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Column(
           children: [
-            SvgPicture.string(
-              svgString,
+            AppIcons.asset(
+              svgRaw,
               width: 12,
               height: 12,
-              colorFilter: const ColorFilter.mode(Color(0xFFE52B13), BlendMode.srcIn),
+              color: const Color(0xFFE52B13),
             ),
             const SizedBox(height: 2),
             Text(

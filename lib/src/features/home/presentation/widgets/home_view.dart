@@ -1,28 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/constants/app_icons.dart';
 import '../../../../core/routing/app_routes.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
-
-const String _truckSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M15 18H9"></path><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path><circle cx="17" cy="18" r="2"></circle><circle cx="7" cy="18" r="2"></circle></svg>
-''';
-
-const String _walletSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
-''';
-
-const String _routeSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-route"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path><circle cx="18" cy="5" r="3"></circle></svg>
-''';
-
-const String _listChecksSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>
-''';
-
-const String _navigationSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
-''';
 
 // Color tokens
 const _teal = Color(0xFF0B6B54);
@@ -246,7 +226,7 @@ class _StatsRow extends StatelessWidget {
             dot1Label: '0 done',
             dot2Label: '753 left',
             progress: 0.0,
-            bgSvgString: _truckSvg,
+            bgSvgString: AppIcons.truck,
           ),
         ),
         const SizedBox(width: 8),
@@ -259,7 +239,7 @@ class _StatsRow extends StatelessWidget {
             dot1Label: '\$1,915 cash',
             dot2Label: '\$0 chk',
             progress: 0.0,
-            bgSvgString: _walletSvg,
+            bgSvgString: AppIcons.wallet,
           ),
         ),
         const SizedBox(width: 8),
@@ -273,7 +253,7 @@ class _StatsRow extends StatelessWidget {
             dot1Label: '0 done',
             dot2Label: '4 left',
             progress: 0.0,
-            bgSvgString: _routeSvg,
+            bgSvgString: AppIcons.route,
           ),
         ),
       ],
@@ -322,11 +302,11 @@ class _StatCard extends StatelessWidget {
               right: -8,
               child: Opacity(
                 opacity: 0.10,
-                child: SvgPicture.string(
+                child: AppIcons.asset(
                   bgSvgString,
                   width: 80,
                   height: 80,
-                  colorFilter: const ColorFilter.mode(_teal, BlendMode.srcIn),
+                  color: _teal,
                 ),
               ),
             ),
@@ -556,9 +536,11 @@ class _RouteSection extends StatelessWidget {
                             }
                           } catch (_) {}
                         },
-                        icon: SvgPicture.string(
-                          _navigationSvg,
-                          colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                        icon: AppIcons.asset(
+                          AppIcons.navigation,
+                          width: 12,
+                          height: 12,
+                          color: Colors.white,
                         ),
                         label: const Text(
                           'Full Route',
@@ -582,11 +564,11 @@ class _RouteSection extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.string(
-                    _listChecksSvg,
+                  AppIcons.asset(
+                    AppIcons.listChecks,
                     width: 32,
                     height: 32,
-                    colorFilter: const ColorFilter.mode(Color(0xFF9CA3AF), BlendMode.srcIn),
+                    color: const Color(0xFF9CA3AF),
                   ),
                   const SizedBox(height: 12),
                   const Text(

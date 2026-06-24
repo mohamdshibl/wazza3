@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../../core/constants/app_icons.dart';
 import 'widgets/home_view.dart'; // To access the StopData class
 
 class SalesOrderDetailsScreen extends StatelessWidget {
   const SalesOrderDetailsScreen({super.key, required this.stopData});
   final StopData stopData;
 
-  static const String _receiptSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
-''';
-
-  static const String _packageSvg = '''
-<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
-''';
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +68,11 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            SvgPicture.string(
-                              _receiptSvg,
-                              colorFilter: ColorFilter.mode(Colors.white.withValues(alpha: 0.8), BlendMode.srcIn),
+                            AppIcons.asset(
+                              AppIcons.receipt,
+                              width: 14,
+                              height: 14,
+                              color: Colors.white.withValues(alpha: 0.8),
                             ),
                             const SizedBox(width: 6),
                             Text(
@@ -614,9 +609,11 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SvgPicture.string(
-                      _packageSvg,
-                      colorFilter: const ColorFilter.mode(Color(0xFF0B6B54), BlendMode.srcIn),
+                    AppIcons.asset(
+                      AppIcons.package,
+                      width: 11,
+                      height: 11,
+                      color: const Color(0xFF0B6B54),
                     ),
                     const SizedBox(width: 4),
                     Text(
