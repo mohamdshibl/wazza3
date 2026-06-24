@@ -146,7 +146,8 @@ class _SignInFormState extends State<SignInForm> {
       Align(
         alignment: Alignment.centerRight,
         child: TextButton(
-          onPressed: () {/* TODO: forgot-password flow */},
+          onPressed: () =>
+              Navigator.of(context).pushNamed(AppRoutes.resetPassword),
           style: TextButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
             minimumSize: Size.zero,

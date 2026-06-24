@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../features/auth/presentation/otp_verification_screen.dart';
 import '../../features/auth/presentation/sign_in_screen.dart';
+import '../../features/auth/presentation/reset_password_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/orders/presentation/new_order_draft_screen.dart';
 import '../../features/customers/presentation/add_customer_screen.dart';
@@ -21,6 +22,11 @@ class AppRouter {
       case AppRoutes.signIn:
         return MaterialPageRoute(
           builder: (_) => const SignInScreen(),
+          settings: settings,
+        );
+      case AppRoutes.resetPassword:
+        return MaterialPageRoute(
+          builder: (_) => const ResetPasswordScreen(),
           settings: settings,
         );
       case AppRoutes.otpVerification:
