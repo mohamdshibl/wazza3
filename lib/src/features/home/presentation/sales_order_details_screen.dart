@@ -357,9 +357,9 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 8),
-                          const Row(
+                          Row(
                             children: [
-                              Icon(Icons.phone, color: Color(0xFFE52B13), size: 14),
+                              AppIcons.asset(AppIcons.phone, color: const Color(0xFFE52B13), width: 14, height: 14),
                               SizedBox(width: 8),
                               Text(
                                 '+1 555-0101',

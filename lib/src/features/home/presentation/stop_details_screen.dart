@@ -192,10 +192,11 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                   shape: BoxShape.circle,
                                 ),
                                 alignment: Alignment.center,
-                                child: const Icon(
-                                  Icons.phone,
-                                  color: Color(0xFF0B6B54),
-                                  size: 16,
+                                child: AppIcons.asset(
+                                  AppIcons.phone,
+                                  color: const Color(0xFF0B6B54),
+                                  width: 16,
+                                  height: 16,
                                 ),
                               ),
                             ),
@@ -218,10 +219,11 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                   shape: BoxShape.circle,
                                 ),
                                 alignment: Alignment.center,
-                                child: const Icon(
-                                  Icons.message_outlined,
-                                  color: Color(0xFF0B6B54),
-                                  size: 16,
+                                child: AppIcons.asset(
+                                  AppIcons.messageCircle,
+                                  color: const Color(0xFF0B6B54),
+                                  width: 16,
+                                  height: 16,
                                 ),
                               ),
                             ),
