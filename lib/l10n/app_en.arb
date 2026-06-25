@@ -225,5 +225,62 @@
   },
   "upcomingTab": "Upcoming",
   "mapTab": "Map",
-  "completedTab": "Completed"
+  "completedTab": "Completed",
+  "available": "Available",
+  "availableToOffer": "Available to Offer",
+  "valueAmount": "{amount} value",
+  "@valueAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remainingOfLoaded": "{remaining} remaining of {loaded} loaded",
+  "@remainingOfLoaded": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      },
+      "loaded": {
+        "type": "String"
+      }
+    }
+  },
+  "ctns": "Ctns",
+  "sku": "SKU",
+  "cash": "Cash",
+  "checks": "Checks",
+  "physicalNotesHeld": "Physical notes held",
+  "checksInCustody": "Checks in custody",
+  "unpaid": "Unpaid",
+  "fullyPaid": "Fully paid ✓",
+  "dueAmount": "Due {amount}",
+  "@dueAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "collectedPercent": "{percent}% collected",
+  "@collectedPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "amountCollected": "{amount} collected",
+  "@amountCollected": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "soNumberLabel": "SO NUMBER",
+  "dateLabel": "DATE",
+  "statusLabel": "STATUS",
+  "invoiceRefLabel": "INVOICE REF"
 }

@@ -502,4 +502,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completedTab => 'Completed';
+
+  @override
+  String get available => 'Available';
+
+  @override
+  String get availableToOffer => 'Available to Offer';
+
+  @override
+  String valueAmount(String amount) {
+    return '$amount value';
+  }
+
+  @override
+  String remainingOfLoaded(String remaining, String loaded) {
+    return '$remaining remaining of $loaded loaded';
+  }
+
+  @override
+  String get ctns => 'Ctns';
+
+  @override
+  String get sku => 'SKU';
+
+  @override
+  String get cash => 'Cash';
+
+  @override
+  String get checks => 'Checks';
+
+  @override
+  String get physicalNotesHeld => 'Physical notes held';
+
+  @override
+  String get checksInCustody => 'Checks in custody';
+
+  @override
+  String get unpaid => 'Unpaid';
+
+  @override
+  String get fullyPaid => 'Fully paid ✓';
+
+  @override
+  String dueAmount(String amount) {
+    return 'Due $amount';
+  }
+
+  @override
+  String collectedPercent(String percent) {
+    return '$percent% collected';
+  }
+
+  @override
+  String amountCollected(String amount) {
+    return '$amount collected';
+  }
+
+  @override
+  String get soNumberLabel => 'SO NUMBER';
+
+  @override
+  String get dateLabel => 'DATE';
+
+  @override
+  String get statusLabel => 'STATUS';
+
+  @override
+  String get invoiceRefLabel => 'INVOICE REF';
 }

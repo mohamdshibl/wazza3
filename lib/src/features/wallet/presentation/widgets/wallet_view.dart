@@ -141,9 +141,9 @@ class WalletView extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
-                            child: const Text(
-                              '\$1658.00 due',
-                              style: TextStyle(
+                            child: Text(
+                              AppLocalizations.of(context)!.amountDue('\$1658.00'),
+                              style: const TextStyle(
                                 fontFamily: AppFontFamily.catamaran,
                                 color: Colors.white70,
                                 fontSize: 14,
@@ -209,27 +209,27 @@ class WalletView extends StatelessWidget {
                 ),
                 
                 // Cash & Checks Grid
-                const Row(
+                Row(
                   children: [
                     Expanded(
                       child: _CustodyCard(
                         icon: Icons.money,
-                        iconBg: Color(0xFFC9F2E3),
-                        iconColor: Color(0xFF0B6B54),
-                        label: 'Cash',
+                        iconBg: const Color(0xFFC9F2E3),
+                        iconColor: const Color(0xFF0B6B54),
+                        label: AppLocalizations.of(context)!.cash,
                         value: '\$0.00',
-                        caption: 'Physical notes held',
+                        caption: AppLocalizations.of(context)!.physicalNotesHeld,
                       ),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: _CustodyCard(
                         icon: Icons.credit_card,
-                        iconBg: Color(0xFFDBEAFE),
-                        iconColor: Color(0xFF2563EB),
-                        label: 'Checks',
+                        iconBg: const Color(0xFFDBEAFE),
+                        iconColor: const Color(0xFF2563EB),
+                        label: AppLocalizations.of(context)!.checks,
                         value: '\$0.00',
-                        caption: 'Checks in custody',
+                        caption: AppLocalizations.of(context)!.checksInCustody,
                       ),
                     ),
                   ],
@@ -399,15 +399,20 @@ class _InvoiceCard extends StatelessWidget {
     
     final Color badgeBg = data.isPaid ? const Color(0xFFC9F2E3) : const Color(0xFFFFF0EE);
     final Color badgeFg = data.isPaid ? const Color(0xFF0B6B54) : const Color(0xFFAF2409);
-    final String badgeText = data.isPaid ? 'Paid' : 'Unpaid';
+    
+    final String badgeText = data.isPaid 
+        ? AppLocalizations.of(context)!.paid 
+        : AppLocalizations.of(context)!.unpaid;
     final IconData badgeIcon = data.isPaid ? Icons.check_circle_outline : Icons.error_outline;
     
-    final String dueText = data.isPaid ? 'Fully paid ✓' : 'Due $formattedAmount';
+    final String dueText = data.isPaid 
+        ? AppLocalizations.of(context)!.fullyPaid 
+        : AppLocalizations.of(context)!.dueAmount(formattedAmount);
     final Color dueColor = data.isPaid ? const Color(0xFF0B6B54) : const Color(0xFFE52B13);
     
     final double progressWidth = data.isPaid ? 1.0 : 0.0;
     
-    final String collectedPercent = data.isPaid ? '100% collected' : '0% collected';
+    final String collectedPercent = AppLocalizations.of(context)!.collectedPercent(data.isPaid ? '100' : '0');
 
     return Container(
       decoration: BoxDecoration(
@@ -506,7 +511,7 @@ class _InvoiceCard extends StatelessWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      text: 'Invoice: ',
+                      text: '${AppLocalizations.of(context)!.invoice}: ',
                       style: const TextStyle(color: Color(0xFF6B7280), fontSize: 13, fontWeight: FontWeight.normal),
                       children: [
                         TextSpan(

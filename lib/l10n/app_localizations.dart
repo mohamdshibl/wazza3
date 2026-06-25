@@ -1033,6 +1033,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Completed'**
   String get completedTab;
+
+  /// No description provided for @available.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get available;
+
+  /// No description provided for @availableToOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Available to Offer'**
+  String get availableToOffer;
+
+  /// No description provided for @valueAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} value'**
+  String valueAmount(String amount);
+
+  /// No description provided for @remainingOfLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'{remaining} remaining of {loaded} loaded'**
+  String remainingOfLoaded(String remaining, String loaded);
+
+  /// No description provided for @ctns.
+  ///
+  /// In en, this message translates to:
+  /// **'Ctns'**
+  String get ctns;
+
+  /// No description provided for @sku.
+  ///
+  /// In en, this message translates to:
+  /// **'SKU'**
+  String get sku;
+
+  /// No description provided for @cash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get cash;
+
+  /// No description provided for @checks.
+  ///
+  /// In en, this message translates to:
+  /// **'Checks'**
+  String get checks;
+
+  /// No description provided for @physicalNotesHeld.
+  ///
+  /// In en, this message translates to:
+  /// **'Physical notes held'**
+  String get physicalNotesHeld;
+
+  /// No description provided for @checksInCustody.
+  ///
+  /// In en, this message translates to:
+  /// **'Checks in custody'**
+  String get checksInCustody;
+
+  /// No description provided for @unpaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpaid'**
+  String get unpaid;
+
+  /// No description provided for @fullyPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Fully paid ✓'**
+  String get fullyPaid;
+
+  /// No description provided for @dueAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {amount}'**
+  String dueAmount(String amount);
+
+  /// No description provided for @collectedPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% collected'**
+  String collectedPercent(String percent);
+
+  /// No description provided for @amountCollected.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} collected'**
+  String amountCollected(String amount);
+
+  /// No description provided for @soNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SO NUMBER'**
+  String get soNumberLabel;
+
+  /// No description provided for @dateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'DATE'**
+  String get dateLabel;
+
+  /// No description provided for @statusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'STATUS'**
+  String get statusLabel;
+
+  /// No description provided for @invoiceRefLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'INVOICE REF'**
+  String get invoiceRefLabel;
 }
 
 class _AppLocalizationsDelegate

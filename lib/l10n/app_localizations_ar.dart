@@ -502,4 +502,71 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get completedTab => 'المكتملة';
+
+  @override
+  String get available => 'متاح';
+
+  @override
+  String get availableToOffer => 'متاح للبيع';
+
+  @override
+  String valueAmount(String amount) {
+    return 'بقيمة $amount';
+  }
+
+  @override
+  String remainingOfLoaded(String remaining, String loaded) {
+    return 'متبقي $remaining من $loaded محملة';
+  }
+
+  @override
+  String get ctns => 'كرتونة';
+
+  @override
+  String get sku => 'SKU';
+
+  @override
+  String get cash => 'نقد';
+
+  @override
+  String get checks => 'شيكات';
+
+  @override
+  String get physicalNotesHeld => 'السيولة النقدية المتوفرة';
+
+  @override
+  String get checksInCustody => 'شيكات في العهدة';
+
+  @override
+  String get unpaid => 'غير مدفوع';
+
+  @override
+  String get fullyPaid => 'مدفوعة بالكامل ✓';
+
+  @override
+  String dueAmount(String amount) {
+    return 'مستحقة $amount';
+  }
+
+  @override
+  String collectedPercent(String percent) {
+    return '$percent% تم تحصيله';
+  }
+
+  @override
+  String amountCollected(String amount) {
+    return '$amount تم تحصيله';
+  }
+
+  @override
+  String get soNumberLabel => 'رقم أمر البيع';
+
+  @override
+  String get dateLabel => 'التاريخ';
+
+  @override
+  String get statusLabel => 'الحالة';
+
+  @override
+  String get invoiceRefLabel => 'مرجع الفاتورة';
 }

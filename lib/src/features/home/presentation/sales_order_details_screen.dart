@@ -214,7 +214,7 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '\$0.00 collected',
+                                AppLocalizations.of(context)!.amountCollected('\$0.00'),
                                 style: TextStyle(
                                   color: Colors.white.withValues(alpha: 0.7),
                                   fontSize: 12,
@@ -270,14 +270,14 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                             children: [
                               TableRow(
                                 children: [
-                                  _buildGridCell('SO NUMBER', soNumber, color: const Color(0xFFE52B13), letterSpacing: 0.5),
-                                  _buildGridCell('DATE', 'Jun 23, 2026'),
+                                  _buildGridCell(AppLocalizations.of(context)!.soNumberLabel, soNumber, color: const Color(0xFFE52B13), letterSpacing: 0.5),
+                                  _buildGridCell(AppLocalizations.of(context)!.dateLabel, 'Jun 23, 2026'),
                                 ],
                               ),
                               TableRow(
                                 children: [
-                                  _buildGridCell('STATUS', 'Pending', color: const Color(0xFFAF2409)),
-                                  _buildGridCell('INVOICE REF', soNumber),
+                                  _buildGridCell(AppLocalizations.of(context)!.statusLabel, AppLocalizations.of(context)!.pending, color: const Color(0xFFAF2409)),
+                                  _buildGridCell(AppLocalizations.of(context)!.invoiceRefLabel, soNumber),
                                 ],
                               ),
                             ],
@@ -329,9 +329,9 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                               color: const Color(0xFFDBEAFE),
                               borderRadius: BorderRadius.circular(99),
                             ),
-                            child: const Text(
-                              'retail',
-                              style: TextStyle(
+                            child: Text(
+                              AppLocalizations.of(context)!.retail.toLowerCase(),
+                              style: const TextStyle(
                                 color: Color(0xFF1D4ED8),
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
@@ -411,9 +411,9 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          _buildSkuItem('Premium Water 1L', 'WAT-1L', 2.5, 60, 150.0),
+                          _buildSkuItem(context, 'Premium Water 1L', 'WAT-1L', 2.5, 60, 150.0),
                           const Divider(height: 1, color: Color(0xFFF3F4F6)),
-                          _buildSkuItem('Juice Orange 1L', 'JCE-ORG', 4.0, 56, 224.0),
+                          _buildSkuItem(context, 'Juice Orange 1L', 'JCE-ORG', 4.0, 56, 224.0),
                           // Total Row
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -491,7 +491,12 @@ class SalesOrderDetailsScreen extends StatelessWidget {
               child: Row(
                 children: List.generate(4, (i) {
                   final active = i == 0; // standard Home state
-                  final labels = ['Home', 'Inventory', 'Wallet', 'Profile'];
+                  final labels = [
+                    AppLocalizations.of(context)!.homeTab,
+                    AppLocalizations.of(context)!.inventoryTab,
+                    AppLocalizations.of(context)!.walletTab,
+                    AppLocalizations.of(context)!.profileTab,
+                  ];
                   final icons = [
                     Icons.home_outlined,
                     Icons.inventory_2_outlined,
@@ -560,7 +565,7 @@ class SalesOrderDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSkuItem(String title, String sku, double price, int qty, double total) {
+  Widget _buildSkuItem(BuildContext context, String title, String sku, double price, int qty, double total) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
@@ -580,7 +585,7 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'SKU: $sku · \$$price/Ctn',
+                  '${AppLocalizations.of(context)!.sku}: $sku · \$$price/Ctn',
                   style: const TextStyle(
                     fontSize: 11,
                     color: Color(0xFF9CA3AF),

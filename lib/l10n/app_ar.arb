@@ -225,5 +225,62 @@
   },
   "upcomingTab": "القادمة",
   "mapTab": "الخريطة",
-  "completedTab": "المكتملة"
+  "completedTab": "المكتملة",
+  "available": "متاح",
+  "availableToOffer": "متاح للبيع",
+  "valueAmount": "بقيمة {amount}",
+  "@valueAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "remainingOfLoaded": "متبقي {remaining} من {loaded} محملة",
+  "@remainingOfLoaded": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      },
+      "loaded": {
+        "type": "String"
+      }
+    }
+  },
+  "ctns": "كرتونة",
+  "sku": "SKU",
+  "cash": "نقد",
+  "checks": "شيكات",
+  "physicalNotesHeld": "السيولة النقدية المتوفرة",
+  "checksInCustody": "شيكات في العهدة",
+  "unpaid": "غير مدفوع",
+  "fullyPaid": "مدفوعة بالكامل ✓",
+  "dueAmount": "مستحقة {amount}",
+  "@dueAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "collectedPercent": "{percent}% تم تحصيله",
+  "@collectedPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "amountCollected": "{amount} تم تحصيله",
+  "@amountCollected": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "soNumberLabel": "رقم أمر البيع",
+  "dateLabel": "التاريخ",
+  "statusLabel": "الحالة",
+  "invoiceRefLabel": "مرجع الفاتورة"
 }

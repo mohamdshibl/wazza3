@@ -120,13 +120,17 @@ class _Header extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.18),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.white.withValues(alpha: 0.30), width: 1.5),
                       ),
-                      child: const Icon(Icons.local_shipping_outlined, color: Colors.white, size: 28),
+                      child: AppIcons.asset(
+                        AppIcons.logo,
+                        width: 32,
+                        height: 23,
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(

@@ -199,17 +199,17 @@ class _InventoryViewState extends State<InventoryView> {
                         children: [
                           Expanded(
                             child: _HeaderStatBox(
-                              title: 'Truck Load',
+                              title: AppLocalizations.of(context)!.truckLoad,
                               units: 857,
-                              value: '\$2,164 value',
+                              value: AppLocalizations.of(context)!.valueAmount('\$2,164'),
                             ),
                           ),
                           const SizedBox(width: 8),
                           Expanded(
                             child: _HeaderStatBox(
-                              title: 'Available',
+                              title: AppLocalizations.of(context)!.available,
                               units: 165,
-                              value: '\$400 value',
+                              value: AppLocalizations.of(context)!.valueAmount('\$400'),
                             ),
                           ),
                         ],
@@ -225,13 +225,13 @@ class _InventoryViewState extends State<InventoryView> {
                         child: Row(
                           children: [
                             _ToggleTabBtn(
-                              label: 'Truck Load',
+                              label: AppLocalizations.of(context)!.truckLoad,
                               icon: AppIcons.boxes,
                               active: _activeTab == 0,
                               onTap: () => setState(() => _activeTab = 0),
                             ),
                             _ToggleTabBtn(
-                              label: 'Available to Offer',
+                              label: AppLocalizations.of(context)!.availableToOffer,
                               icon: AppIcons.packageSearch,
                               active: _activeTab == 1,
                               onTap: () => setState(() => _activeTab = 1),
@@ -453,7 +453,7 @@ class _InventoryCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'SKU: ${data.sku} · ${data.priceText}',
+                        '${AppLocalizations.of(context)!.sku}: ${data.sku} · ${data.priceText}',
                         style: const TextStyle(
                           fontSize: 11,
                           color: Color(0xFF9CA3AF),
@@ -475,10 +475,10 @@ class _InventoryCard extends StatelessWidget {
                           fontSize: 22,
                           fontWeight: FontWeight.w900,
                         ),
-                        children: const [
+                        children: [
                           TextSpan(
-                            text: 'Ctns',
-                            style: TextStyle(
+                            text: AppLocalizations.of(context)!.ctns,
+                            style: const TextStyle(
                               color: Color(0xFF9CA3AF),
                               fontSize: 11,
                               fontWeight: FontWeight.normal,
@@ -509,9 +509,9 @@ class _InventoryCard extends StatelessWidget {
                     color: const Color(0xFFC9F2E3), // rgb(201, 242, 227)
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  child: const Text(
-                    'Available to offer',
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context)!.availableToOffer,
+                    style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF0B4A38), // rgb(11, 74, 56)
@@ -526,7 +526,10 @@ class _InventoryCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${data.remaining} remaining of ${data.totalLoaded} loaded',
+                    AppLocalizations.of(context)!.remainingOfLoaded(
+                      data.remaining.toString(),
+                      data.totalLoaded.toString(),
+                    ),
                     style: const TextStyle(
                       fontSize: 10,
                       color: Color(0xFF9CA3AF),
