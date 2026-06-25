@@ -25,10 +25,14 @@ class HomeView extends StatefulWidget {
     super.key,
     required this.driverName,
     required this.onLogout,
+    this.onNavigateToInventory,
+    this.onNavigateToWallet,
   });
 
   final String driverName;
   final VoidCallback onLogout;
+  final VoidCallback? onNavigateToInventory;
+  final VoidCallback? onNavigateToWallet;
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -48,7 +52,10 @@ class _HomeViewState extends State<HomeView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _StatsRow(),
+                _StatsRow(
+                  onNavigateToInventory: widget.onNavigateToInventory,
+                  onNavigateToWallet: widget.onNavigateToWallet,
+                ),
                 const SizedBox(height: 12),
                 _RouteSection(
                   tabIndex: _routeTab,
@@ -221,6 +228,10 @@ class _HeaderButton extends StatelessWidget {
 
 // ─── Stats Row ─────────────────────────────────────────────────────────────
 class _StatsRow extends StatelessWidget {
+  const _StatsRow({this.onNavigateToInventory, this.onNavigateToWallet});
+  final VoidCallback? onNavigateToInventory;
+  final VoidCallback? onNavigateToWallet;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -235,6 +246,7 @@ class _StatsRow extends StatelessWidget {
             dot2Label: AppLocalizations.of(context)!.leftCount('753'),
             progress: 0.0,
             bgSvgString: AppIcons.truck,
+            onTap: onNavigateToInventory,
           ),
         ),
         const SizedBox(width: 8),
@@ -248,6 +260,7 @@ class _StatsRow extends StatelessWidget {
             dot2Label: AppLocalizations.of(context)!.chkAmount('\$0'),
             progress: 0.0,
             bgSvgString: AppIcons.wallet,
+            onTap: onNavigateToWallet,
           ),
         ),
         const SizedBox(width: 8),
@@ -262,6 +275,9 @@ class _StatsRow extends StatelessWidget {
             dot2Label: AppLocalizations.of(context)!.leftCount('4'),
             progress: 0.0,
             bgSvgString: AppIcons.route,
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.doDetails);
+            },
           ),
         ),
       ],
@@ -280,6 +296,7 @@ class _StatCard extends StatelessWidget {
     required this.dot2Label,
     required this.progress,
     required this.bgSvgString,
+    this.onTap,
   });
 
   final IconData icon;
@@ -291,83 +308,87 @@ class _StatCard extends StatelessWidget {
   final String dot2Label;
   final double progress;
   final String bgSvgString;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: _tealLight,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _tealBorder, width: 1),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 4, offset: const Offset(0, 1))],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          children: [
-            Positioned(
-              bottom: -8,
-              right: -8,
-              child: Opacity(
-                opacity: 0.10,
-                child: AppIcons.asset(
-                  bgSvgString,
-                  width: 80,
-                  height: 80,
-                  color: _teal,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: _tealLight,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: _tealBorder, width: 1),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 4, offset: const Offset(0, 1))],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: -8,
+                right: -8,
+                child: Opacity(
+                  opacity: 0.10,
+                  child: AppIcons.asset(
+                    bgSvgString,
+                    width: 80,
+                    height: 80,
+                    color: _teal,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 24, height: 24,
-                        decoration: BoxDecoration(
-                          color: _teal.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(6),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 24, height: 24,
+                          decoration: BoxDecoration(
+                            color: _teal.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Icon(icon, color: _teal, size: 13),
                         ),
-                        child: Icon(icon, color: _teal, size: 13),
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(title, style: const TextStyle(color: _tealMid, fontSize: 11, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  RichText(
-                    text: TextSpan(
-                      text: value,
-                      style: const TextStyle(color: _tealDark, fontSize: 24, fontWeight: FontWeight.bold),
-                      children: valueSuffix != null
-                          ? [TextSpan(text: valueSuffix, style: const TextStyle(color: Color(0xFF6B7280), fontSize: 13, fontWeight: FontWeight.w500))]
-                          : [],
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(title, style: const TextStyle(color: _tealMid, fontSize: 11, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(sub, style: const TextStyle(color: _teal, fontSize: 10), overflow: TextOverflow.ellipsis),
-                  const SizedBox(height: 6),
-                  _DotRow(color: _teal, label: dot1Label),
-                  const SizedBox(height: 2),
-                  _DotRow(color: Colors.white.withValues(alpha: 0.6), label: dot2Label, labelColor: const Color(0xFF6B7280)),
-                  const SizedBox(height: 6),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: LinearProgressIndicator(
-                      value: progress,
-                      minHeight: 6,
-                      backgroundColor: _tealProgress,
-                      valueColor: const AlwaysStoppedAnimation<Color>(_brandRed),
+                    const SizedBox(height: 6),
+                    RichText(
+                      text: TextSpan(
+                        text: value,
+                        style: const TextStyle(color: _tealDark, fontSize: 24, fontWeight: FontWeight.bold),
+                        children: valueSuffix != null
+                            ? [TextSpan(text: valueSuffix, style: const TextStyle(color: Color(0xFF6B7280), fontSize: 13, fontWeight: FontWeight.w500))]
+                            : [],
+                      ),
                     ),
-                  ),
-                ],
+                    Text(sub, style: const TextStyle(color: _teal, fontSize: 10), overflow: TextOverflow.ellipsis),
+                    const SizedBox(height: 6),
+                    _DotRow(color: _teal, label: dot1Label),
+                    const SizedBox(height: 2),
+                    _DotRow(color: Colors.white.withValues(alpha: 0.6), label: dot2Label, labelColor: const Color(0xFF6B7280)),
+                    const SizedBox(height: 6),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        minHeight: 6,
+                        backgroundColor: _tealProgress,
+                        valueColor: const AlwaysStoppedAnimation<Color>(_brandRed),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

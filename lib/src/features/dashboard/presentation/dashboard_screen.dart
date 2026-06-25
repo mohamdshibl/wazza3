@@ -36,7 +36,12 @@ class _DriverDashboardScreenState extends State<DriverDashboardScreen> {
     } else if (_navIndex == 1) {
       body = const InventoryView();
     } else {
-      body = HomeView(driverName: driverName, onLogout: _logout);
+      body = HomeView(
+        driverName: driverName,
+        onLogout: _logout,
+        onNavigateToInventory: () => setState(() => _navIndex = 1),
+        onNavigateToWallet: () => setState(() => _navIndex = 2),
+      );
     }
 
     return Scaffold(

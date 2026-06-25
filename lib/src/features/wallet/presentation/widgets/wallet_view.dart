@@ -1,5 +1,6 @@
 import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/style/app_text_styles.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
 
 class WalletView extends StatelessWidget {
@@ -77,14 +78,16 @@ class WalletView extends StatelessWidget {
                             children: [
                               Text(AppLocalizations.of(context)!.collectionsWallet,
                                 style: TextStyle(
+                                  fontFamily: AppFontFamily.catamaran,
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               SizedBox(height: 2),
                               Text(AppLocalizations.of(context)!.financialCustodyInvoices,
                                 style: TextStyle(
+                                  fontFamily: AppFontFamily.catamaran,
                                   color: Colors.white70,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
@@ -117,6 +120,7 @@ class WalletView extends StatelessWidget {
                             children: [
                               Text(AppLocalizations.of(context)!.totalCollected,
                                 style: TextStyle(
+                                  fontFamily: AppFontFamily.catamaran,
                                   color: Colors.white70,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w500,
@@ -127,6 +131,7 @@ class WalletView extends StatelessWidget {
                               Text(
                                 '\$0.00',
                                 style: TextStyle(
+                                  fontFamily: AppFontFamily.catamaran,
                                   color: Colors.white,
                                   fontSize: 30,
                                   fontWeight: FontWeight.bold,
@@ -139,6 +144,7 @@ class WalletView extends StatelessWidget {
                             child: const Text(
                               '\$1658.00 due',
                               style: TextStyle(
+                                fontFamily: AppFontFamily.catamaran,
                                 color: Colors.white70,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -170,6 +176,7 @@ class WalletView extends StatelessWidget {
                       const SizedBox(height: 6),
                       Text(AppLocalizations.of(context)!.num0OfRouteCollected,
                         style: TextStyle(
+                          fontFamily: AppFontFamily.catamaran,
                           color: Colors.white60,
                           fontSize: 11,
                           fontWeight: FontWeight.w400,

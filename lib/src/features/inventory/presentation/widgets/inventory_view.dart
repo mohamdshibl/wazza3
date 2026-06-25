@@ -1,5 +1,8 @@
 import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_icons.dart';
+import '../../../../core/style/app_radii.dart';
+import '../../../../core/style/app_text_styles.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
 
 // Color tokens
@@ -88,20 +91,40 @@ class _InventoryViewState extends State<InventoryView> {
       name: 'Sparkling Water 500ml',
       sku: 'SPK-500',
       priceText: '\$1.5/Ctn',
-      quantity: 100,
-      totalValue: 150.0,
-      remaining: 100,
-      totalLoaded: 100,
+      quantity: 60,
+      totalValue: 90.0,
+      remaining: 60,
+      totalLoaded: 60,
+      percent: 1.0,
+    ),
+    const _InventoryItemData(
+      name: 'Energy Drink 250ml',
+      sku: 'NRG-250',
+      priceText: '\$3/Ctn',
+      quantity: 20,
+      totalValue: 60.0,
+      remaining: 20,
+      totalLoaded: 20,
       percent: 1.0,
     ),
     const _InventoryItemData(
       name: 'Juice Orange 1L',
       sku: 'JCE-ORG',
       priceText: '\$4/Ctn',
-      quantity: 25,
-      totalValue: 100.0,
-      remaining: 25,
-      totalLoaded: 25,
+      quantity: 30,
+      totalValue: 120.0,
+      remaining: 30,
+      totalLoaded: 30,
+      percent: 1.0,
+    ),
+    const _InventoryItemData(
+      name: 'Iced Tea 500ml',
+      sku: 'ICT-500',
+      priceText: '\$2/Ctn',
+      quantity: 15,
+      totalValue: 30.0,
+      remaining: 15,
+      totalLoaded: 15,
       percent: 1.0,
     ),
   ];
@@ -155,6 +178,7 @@ class _InventoryViewState extends State<InventoryView> {
                       // Titles
                       Text(AppLocalizations.of(context)!.virtualWarehouse,
                         style: TextStyle(
+                          fontFamily: AppFontFamily.catamaran,
                           color: Colors.white,
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -163,6 +187,7 @@ class _InventoryViewState extends State<InventoryView> {
                       const SizedBox(height: 2),
                       Text(AppLocalizations.of(context)!.goodsLoadedOnYourTruck,
                         style: TextStyle(
+                          fontFamily: AppFontFamily.catamaran,
                           color: Colors.white70,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -195,19 +220,19 @@ class _InventoryViewState extends State<InventoryView> {
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           color: Colors.black.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: AppRadii.toggle,
                         ),
                         child: Row(
                           children: [
                             _ToggleTabBtn(
                               label: 'Truck Load',
-                              icon: Icons.grid_view_outlined,
+                              icon: AppIcons.boxes,
                               active: _activeTab == 0,
                               onTap: () => setState(() => _activeTab = 0),
                             ),
                             _ToggleTabBtn(
                               label: 'Available to Offer',
-                              icon: Icons.manage_search_outlined,
+                              icon: AppIcons.packageSearch,
                               active: _activeTab == 1,
                               onTap: () => setState(() => _activeTab = 1),
                             ),
@@ -231,7 +256,10 @@ class _InventoryViewState extends State<InventoryView> {
               itemCount: displayedItems.length,
               separatorBuilder: (_, index) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
-                return _InventoryCard(data: displayedItems[index]);
+                return _InventoryCard(
+                  data: displayedItems[index],
+                  isAvailableToOffer: _activeTab == 1,
+                );
               },
             ),
           ),
@@ -318,7 +346,7 @@ class _ToggleTabBtn extends StatelessWidget {
   });
 
   final String label;
-  final IconData icon;
+  final String icon;
   final bool active;
   final VoidCallback onTap;
 
@@ -332,14 +360,15 @@ class _ToggleTabBtn extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: active ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: AppRadii.toggle,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              AppIcons.asset(
                 icon,
-                size: 13,
+                width: 13,
+                height: 13,
                 color: active ? _brandRed : Colors.white70,
               ),
               const SizedBox(width: 6),
@@ -360,8 +389,12 @@ class _ToggleTabBtn extends StatelessWidget {
 }
 
 class _InventoryCard extends StatelessWidget {
-  const _InventoryCard({required this.data});
+  const _InventoryCard({
+    required this.data,
+    required this.isAvailableToOffer,
+  });
   final _InventoryItemData data;
+  final bool isAvailableToOffer;
 
   @override
   Widget build(BuildContext context) {
@@ -466,49 +499,71 @@ class _InventoryCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            // Progress Bar Labels
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${data.remaining} remaining of ${data.totalLoaded} loaded',
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Color(0xFF9CA3AF),
-                  ),
-                ),
-                Text(
-                  '${(data.percent * 100).toInt()}%',
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Color(0xFF9CA3AF),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            // Progress indicator bar with red gradient
-            Container(
-              width: double.infinity,
-              height: 6,
-              decoration: BoxDecoration(
-                color: _brandRed.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(3),
-              ),
-              alignment: Alignment.centerLeft,
-              child: FractionallySizedBox(
-                widthFactor: data.percent,
+            if (isAvailableToOffer) ...[
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerLeft,
                 child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFE52B13), Color(0xFFAF2409)],
+                    color: const Color(0xFFC9F2E3), // rgb(201, 242, 227)
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: const Text(
+                    'Available to offer',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0B4A38), // rgb(11, 74, 56)
                     ),
-                    borderRadius: BorderRadius.circular(3),
                   ),
                 ),
               ),
-            ),
+            ] else ...[
+              const SizedBox(height: 12),
+              // Progress Bar Labels
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${data.remaining} remaining of ${data.totalLoaded} loaded',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Color(0xFF9CA3AF),
+                    ),
+                  ),
+                  Text(
+                    '${(data.percent * 100).toInt()}%',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Color(0xFF9CA3AF),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              // Progress indicator bar with red gradient
+              Container(
+                width: double.infinity,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: _brandRed.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+                alignment: Alignment.centerLeft,
+                child: FractionallySizedBox(
+                  widthFactor: data.percent,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFE52B13), Color(0xFFAF2409)],
+                      ),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
