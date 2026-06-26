@@ -12,4 +12,6 @@ class AppRoutes {
   static const String sessionStart = '/session-start';
   static const String doDetails = '/do-details';
   static const String resetPassword = '/reset-password';
+  static const String previousOrders = '/previous-orders';
+  static const String completedDoDetails = '/completed-do-details';
 }

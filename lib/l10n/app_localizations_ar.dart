@@ -141,6 +141,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get done => 'تم';
 
   @override
+  String get distributionOrders => 'أوامر التوزيع';
+
+  @override
+  String completedOrdersCount(String count) {
+    return '$count طلبات مكتملة';
+  }
+
+  @override
   String get quantitiesLoaded => 'تم تحميل الكميات بنجاح!';
 
   @override

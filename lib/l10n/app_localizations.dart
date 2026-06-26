@@ -350,6 +350,18 @@ abstract class AppLocalizations {
   /// **'Done'**
   String get done;
 
+  /// No description provided for @distributionOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Distribution Orders'**
+  String get distributionOrders;
+
+  /// No description provided for @completedOrdersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} completed orders'**
+  String completedOrdersCount(String count);
+
   /// No description provided for @quantitiesLoaded.
   ///
   /// In en, this message translates to:

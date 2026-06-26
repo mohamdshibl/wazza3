@@ -63,6 +63,15 @@
   "previousOrders": "الطلبات السابقة",
   "viewMore": "عرض المزيد",
   "done": "تم",
+  "distributionOrders": "أوامر التوزيع",
+  "completedOrdersCount": "{count} طلبات مكتملة",
+  "@completedOrdersCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "quantitiesLoaded": "تم تحميل الكميات بنجاح!",
   "phoneVerified": "تم التحقق من رقم الهاتف بنجاح!",
   "enterValidEmail": "يرجى إدخال بريد إلكتروني صحيح",

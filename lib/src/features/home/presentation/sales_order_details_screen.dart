@@ -1,5 +1,6 @@
 import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_icons.dart';
 import 'widgets/home_view.dart'; // To access the StopData class
 
@@ -347,17 +348,27 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           // Address and phone list
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on, color: Color(0xFFE52B13), size: 14),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  stop.address,
-                                  style: const TextStyle(fontSize: 13, color: Color(0xFF6B7280)),
+                          GestureDetector(
+                            onTap: () async {
+                              final Uri url = Uri.parse('https://maps.google.com/maps?q=${Uri.encodeComponent(stop.address)}');
+                              try {
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url, mode: LaunchMode.externalApplication);
+                                }
+                              } catch (_) {}
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(Icons.location_on, color: Color(0xFFE52B13), size: 14),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    stop.address,
+                                    style: const TextStyle(fontSize: 13, color: Color(0xFF6B7280), decoration: TextDecoration.underline),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 8),
                           Row(

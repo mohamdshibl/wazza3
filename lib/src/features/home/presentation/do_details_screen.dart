@@ -1,5 +1,6 @@
 import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../../core/routing/app_routes.dart';
 import 'widgets/home_view.dart'; // To access the StopData class
@@ -702,13 +703,24 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                               ),
                               const SizedBox(width: 4),
                               Expanded(
-                                child: Text(
-                                  stop.data.address,
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    color: Color(0xFF9CA3AF),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    final Uri url = Uri.parse('https://maps.google.com/maps?q=${Uri.encodeComponent(stop.data.address)}');
+                                    try {
+                                      if (await canLaunchUrl(url)) {
+                                        await launchUrl(url, mode: LaunchMode.externalApplication);
+                                      }
+                                    } catch (_) {}
+                                  },
+                                  child: Text(
+                                    stop.data.address,
+                                    style: const TextStyle(
+                                      fontSize: 11,
+                                      color: Color(0xFF9CA3AF),
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               const SizedBox(width: 8),

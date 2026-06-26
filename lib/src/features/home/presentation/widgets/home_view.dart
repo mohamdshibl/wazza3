@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../core/routing/app_routes.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
+import '../completed_do_details_screen.dart';
 
 // Color tokens
 const _teal = Color(0xFF0B6B54);
@@ -1110,15 +1111,25 @@ class _StopCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.location_on_outlined, size: 11, color: _teal),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(data.address,
-                      style: const TextStyle(color: _teal, fontSize: 11, decoration: TextDecoration.underline, decorationColor: _teal)),
-                ),
-              ],
+            GestureDetector(
+              onTap: () async {
+                final Uri url = Uri.parse('https://maps.google.com/maps?q=${Uri.encodeComponent(data.address)}');
+                try {
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  }
+                } catch (_) {}
+              },
+              child: Row(
+                children: [
+                  const Icon(Icons.location_on_outlined, size: 11, color: _teal),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(data.address,
+                        style: const TextStyle(color: _teal, fontSize: 11, decoration: TextDecoration.underline, decorationColor: _teal)),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 8),
             Row(
@@ -1146,9 +1157,9 @@ class _PreviousOrdersSection extends StatelessWidget {
   const _PreviousOrdersSection();
 
   static const _orders = [
-    _OrderData(id: 'DO-2024', date: 'Mon, Jun 22 · 3/3 stops · \$1315 collected'),
-    _OrderData(id: 'DO-2023', date: 'Sun, Jun 21 · 2/2 stops · \$978 collected'),
-    _OrderData(id: 'DO-2022', date: 'Sat, Jun 20 · 3/3 stops · \$1590 collected'),
+    _OrderData(id: 'DO-2024', date: 'Thu, Jun 25 · 3/3 stops · \$1315 collected'),
+    _OrderData(id: 'DO-2023', date: 'Wed, Jun 24 · 2/2 stops · \$978 collected'),
+    _OrderData(id: 'DO-2022', date: 'Tue, Jun 23 · 3/3 stops · \$1590 collected'),
   ];
 
   @override
@@ -1161,7 +1172,9 @@ class _PreviousOrdersSection extends StatelessWidget {
             Text(AppLocalizations.of(context)!.previousOrders, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1F2937))),
             const Spacer(),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.previousOrders);
+              },
               child: Row(children: [
                 Text(AppLocalizations.of(context)!.viewMore, style: const TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
                 const Icon(Icons.chevron_right, color: _brandRed, size: 14),
@@ -1188,44 +1201,217 @@ class _OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: _cardBg,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF3F4F6)),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 1))],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 36, height: 36,
-            decoration: BoxDecoration(color: _navBg, borderRadius: BorderRadius.circular(10)),
-            child: const Icon(Icons.check_circle_outline, color: _teal, size: 17),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(data.id, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF374151))),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(color: _doneBadgeBg, borderRadius: BorderRadius.circular(99)),
-                      child: Text(AppLocalizations.of(context)!.done, style: TextStyle(color: _doneBadgeFg, fontSize: 10, fontWeight: FontWeight.w600)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 2),
-                Text(data.date, style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF))),
-              ],
+    return GestureDetector(
+      onTap: () {
+        final CompletedDoData completedDo;
+        if (data.id == 'DO-2024') {
+          completedDo = const CompletedDoData(
+            id: 'DO-2024',
+            date: 'Thursday, Jun 25, 2026',
+            stops: '3/3',
+            totalStops: 3,
+            completedStops: 3,
+            collected: '\$1,315.00',
+            due: '\$0.00',
+            value: '\$1,320.00',
+            truck: 'ABC-1234',
+            driver: 'Alex Driver',
+            stopsList: [
+              CompletedStopData(
+                num: 1,
+                name: 'Downtown Mart',
+                lineId: 'DO-2024 / Line 1',
+                address: '123 Main St, Downtown',
+                time: '08:30',
+                units: '130',
+                amount: '\$245.00',
+              ),
+              CompletedStopData(
+                num: 2,
+                name: 'City Cafe & Diner',
+                lineId: 'DO-2024 / Line 2',
+                address: '78 Park Ave, Midtown',
+                time: '09:30',
+                units: '200',
+                amount: '\$720.00',
+              ),
+              CompletedStopData(
+                num: 3,
+                name: 'Beachside Kiosk',
+                lineId: 'DO-2024 / Line 3',
+                address: '12 Shore Rd, Eastside',
+                time: '10:45',
+                units: '160',
+                amount: '\$350.00',
+              ),
+            ],
+          );
+        } else if (data.id == 'DO-2023') {
+          completedDo = const CompletedDoData(
+            id: 'DO-2023',
+            date: 'Wednesday, Jun 24, 2026',
+            stops: '2/2',
+            totalStops: 2,
+            completedStops: 2,
+            collected: '\$978.00',
+            due: '\$0.00',
+            value: '\$978.00',
+            truck: 'ABC-1234',
+            driver: 'Alex Driver',
+            stopsList: [
+              CompletedStopData(
+                num: 1,
+                name: 'Uptown Groceries',
+                lineId: 'DO-2023 / Line 1',
+                address: '456 High St, Uptown',
+                time: '09:15',
+                units: '220',
+                amount: '\$480.00',
+              ),
+              CompletedStopData(
+                num: 2,
+                name: 'City Cafe & Diner',
+                lineId: 'DO-2023 / Line 2',
+                address: '78 Park Ave, Midtown',
+                time: '10:00',
+                units: '210',
+                amount: '\$498.00',
+              ),
+            ],
+          );
+        } else {
+          completedDo = const CompletedDoData(
+            id: 'DO-2022',
+            date: 'Tuesday, Jun 23, 2026',
+            stops: '3/3',
+            totalStops: 3,
+            completedStops: 3,
+            collected: '\$1,590.00',
+            due: '\$0.00',
+            value: '\$1,590.00',
+            truck: 'ABC-1234',
+            driver: 'Alex Driver',
+            stopsList: [
+              CompletedStopData(
+                num: 1,
+                name: 'Downtown Mart',
+                lineId: 'DO-2022 / Line 1',
+                address: '123 Main St, Downtown',
+                time: '08:30',
+                units: '130',
+                amount: '\$600.00',
+              ),
+              CompletedStopData(
+                num: 2,
+                name: 'North Star Wholesale',
+                lineId: 'DO-2022 / Line 2',
+                address: '900 Industrial Blvd, Northside',
+                time: '11:00',
+                units: '207',
+                amount: '\$590.00',
+              ),
+              CompletedStopData(
+                num: 3,
+                name: 'Beachside Kiosk',
+                lineId: 'DO-2022 / Line 3',
+                address: '12 Shore Rd, Eastside',
+                time: '10:45',
+                units: '160',
+                amount: '\$400.00',
+              ),
+            ],
+          );
+        }
+
+        Navigator.pushNamed(
+          context,
+          AppRoutes.completedDoDetails,
+          arguments: completedDo,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: _cardBg,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFF3F4F6)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 1),
+            )
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: _navBg,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.check_circle_outline,
+                color: _teal,
+                size: 17,
+              ),
             ),
-          ),
-          const Icon(Icons.chevron_right, color: Color(0xFFD1D5DB), size: 16),
-        ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        data.id,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                          color: Color(0xFF374151),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _doneBadgeBg,
+                          borderRadius: BorderRadius.circular(99),
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.done,
+                          style: TextStyle(
+                            color: _doneBadgeFg,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    data.date,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: Color(0xFF9CA3AF),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.chevron_right,
+              color: Color(0xFFD1D5DB),
+              size: 16,
+            ),
+          ],
+        ),
       ),
     );
   }

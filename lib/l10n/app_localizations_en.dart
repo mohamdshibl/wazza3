@@ -141,6 +141,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get done => 'Done';
 
   @override
+  String get distributionOrders => 'Distribution Orders';
+
+  @override
+  String completedOrdersCount(String count) {
+    return '$count completed orders';
+  }
+
+  @override
   String get quantitiesLoaded => 'Quantities loaded successfully!';
 
   @override

@@ -174,13 +174,24 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   const SizedBox(height: 2),
-                                  Text(
-                                    stop.address,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xFF9CA3AF),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      final Uri url = Uri.parse('https://maps.google.com/maps?q=${Uri.encodeComponent(stop.address)}');
+                                      try {
+                                        if (await canLaunchUrl(url)) {
+                                          await launchUrl(url, mode: LaunchMode.externalApplication);
+                                        }
+                                      } catch (_) {}
+                                    },
+                                    child: Text(
+                                      stop.address,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xFF9CA3AF),
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),

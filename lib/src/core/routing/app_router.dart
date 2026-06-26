@@ -11,6 +11,8 @@ import '../../features/home/presentation/sales_order_details_screen.dart';
 import '../../features/home/presentation/session_start_screen.dart';
 import '../../features/home/presentation/do_details_screen.dart';
 import '../../features/home/presentation/widgets/home_view.dart';
+import '../../features/home/presentation/previous_orders_screen.dart';
+import '../../features/home/presentation/completed_do_details_screen.dart';
 import 'app_routes.dart';
 
 /// Centralized route generation. Swap for go_router as the app grows.
@@ -70,6 +72,16 @@ class AppRouter {
       case AppRoutes.doDetails:
         return MaterialPageRoute(
           builder: (_) => const DoDetailsScreen(),
+          settings: settings,
+        );
+      case AppRoutes.previousOrders:
+        return MaterialPageRoute(
+          builder: (_) => const PreviousOrdersScreen(),
+          settings: settings,
+        );
+      case AppRoutes.completedDoDetails:
+        return MaterialPageRoute(
+          builder: (_) => const CompletedDoDetailsScreen(),
           settings: settings,
         );
       default:

@@ -63,6 +63,15 @@
   "previousOrders": "Previous Orders",
   "viewMore": "View more",
   "done": "Done",
+  "distributionOrders": "Distribution Orders",
+  "completedOrdersCount": "{count} completed orders",
+  "@completedOrdersCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "quantitiesLoaded": "Quantities loaded successfully!",
   "phoneVerified": "Phone number verified successfully!",
   "enterValidEmail": "Please enter a valid email address",
