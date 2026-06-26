@@ -660,4 +660,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String etaWithTime(String time) {
     return 'ETA $time';
   }
+
+  @override
+  String get view => 'View';
 }

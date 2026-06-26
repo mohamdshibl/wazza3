@@ -1297,6 +1297,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ETA {time}'**
   String etaWithTime(String time);
+
+  /// No description provided for @view.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get view;
 }
 
 class _AppLocalizationsDelegate

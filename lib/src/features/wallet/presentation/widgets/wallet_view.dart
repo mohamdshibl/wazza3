@@ -208,28 +208,30 @@ class WalletView extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: 2),
-                              Text(
-                                '\$10.00',
-                                style: TextStyle(
-                                  fontFamily: AppFontFamily.catamaran,
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
+                              Text.rich(
+                                _buildCurrencyTextSpan(
+                                  '\$10.00',
+                                  const TextStyle(
+                                    fontFamily: AppFontFamily.catamaran,
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.amountDue('\$1658.00'),
-                              style: const TextStyle(
-                                fontFamily: AppFontFamily.catamaran,
-                                color: Colors.white70,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                            child: Text.rich(
+                              _buildCurrencyTextSpan(
+                                AppLocalizations.of(context)!.amountDue('\$1658.00'),
+                                const TextStyle(
+                                  fontFamily: AppFontFamily.catamaran,
+                                  color: Colors.white70,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),
@@ -351,12 +353,14 @@ class WalletView extends StatelessWidget {
                           color: Color(0xFF374151),
                         ),
                       ),
-                      Text(
-                        '\$0.00',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF111827),
+                       Text.rich(
+                        _buildCurrencyTextSpan(
+                          '\$0.00',
+                          const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF111827),
+                          ),
                         ),
                       ),
                     ],
@@ -458,12 +462,14 @@ class _CustodyCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF111827),
+          Text.rich(
+            _buildCurrencyTextSpan(
+              value,
+              const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF111827),
+              ),
             ),
           ),
           const SizedBox(height: 4),
@@ -619,9 +625,9 @@ class _InvoiceCard extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                       ),
                       children: [
-                        TextSpan(
-                          text: formattedAmount,
-                          style: const TextStyle(
+                        _buildCurrencyTextSpan(
+                          formattedAmount,
+                          const TextStyle(
                             color: Color(0xFF1F2937),
                             fontWeight: FontWeight.bold,
                           ),
@@ -629,12 +635,14 @@ class _InvoiceCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Text(
-                    dueText,
-                    style: TextStyle(
-                      color: dueColor,
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
+                  Text.rich(
+                    _buildCurrencyTextSpan(
+                      dueText,
+                      TextStyle(
+                        color: dueColor,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -687,4 +695,33 @@ class _InvoiceData {
   final String orderId;
   final double amount;
   final bool isPaid;
+}
+
+TextSpan _buildCurrencyTextSpan(String text, TextStyle style) {
+  final List<TextSpan> spans = [];
+  final RegExp regExp = RegExp(r'(\$)');
+  final matches = regExp.allMatches(text);
+
+  int lastIndex = 0;
+  for (final match in matches) {
+    if (match.start > lastIndex) {
+      spans.add(TextSpan(
+        text: text.substring(lastIndex, match.start),
+        style: style,
+      ));
+    }
+    spans.add(TextSpan(
+      text: '\$',
+      style: style.copyWith(fontFamily: 'sans-serif'),
+    ));
+    lastIndex = match.end;
+  }
+  if (lastIndex < text.length) {
+    spans.add(TextSpan(
+      text: text.substring(lastIndex),
+      style: style,
+    ));
+  }
+
+  return TextSpan(children: spans);
 }

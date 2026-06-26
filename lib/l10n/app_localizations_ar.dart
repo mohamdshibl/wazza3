@@ -661,4 +661,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String etaWithTime(String time) {
     return 'وقت الوصول المقدر $time';
   }
+
+  @override
+  String get view => 'عرض';
 }

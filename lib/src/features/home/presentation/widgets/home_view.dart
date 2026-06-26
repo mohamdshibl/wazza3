@@ -418,16 +418,32 @@ class _DotRow extends StatelessWidget {
 }
 
 // ─── Today's Route ─────────────────────────────────────────────────────────
-class _RouteSection extends StatelessWidget {
+class _RouteSection extends StatefulWidget {
   const _RouteSection({required this.tabIndex, required this.onTabChanged});
   final int tabIndex;
   final ValueChanged<int> onTabChanged;
+
+  @override
+  State<_RouteSection> createState() => _RouteSectionState();
+}
+
+class _RouteSectionState extends State<_RouteSection> {
+  StopData? _selectedStop;
 
   static const _stops = [
     StopData(num: 1, name: 'Downtown Mart', address: '123 Main St, Downtown', units: 116, time: '08:30', amount: '\$374.00'),
     StopData(num: 2, name: 'Uptown Groceries', address: '456 High St, Uptown', units: 220, time: '09:15', amount: '\$480.00'),
     StopData(num: 3, name: 'City Cafe & Diner', address: '78 Park Ave, Midtown', units: 210, time: '10:00', amount: '\$560.00'),
+    StopData(num: 4, name: 'North Star Wholesale', address: '900 Industrial Blvd, Northside', units: 207, time: '11:00', amount: '\$424.00'),
   ];
+
+  @override
+  void didUpdateWidget(covariant _RouteSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.tabIndex != widget.tabIndex) {
+      _selectedStop = null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -453,15 +469,15 @@ class _RouteSection extends StatelessWidget {
           decoration: BoxDecoration(color: _navBg, borderRadius: BorderRadius.circular(99)),
           child: Row(
             children: [
-              _TabBtn(label: AppLocalizations.of(context)!.upcomingTab, icon: Icons.checklist, active: tabIndex == 0, onTap: () => onTabChanged(0)),
-              _TabBtn(label: AppLocalizations.of(context)!.mapTab, icon: Icons.map_outlined, active: tabIndex == 1, onTap: () => onTabChanged(1)),
-              _TabBtn(label: AppLocalizations.of(context)!.completedTab, icon: Icons.check_circle_outline, active: tabIndex == 2, onTap: () => onTabChanged(2)),
+              _TabBtn(label: AppLocalizations.of(context)!.upcomingTab, icon: Icons.checklist, active: widget.tabIndex == 0, onTap: () => widget.onTabChanged(0)),
+              _TabBtn(label: AppLocalizations.of(context)!.mapTab, icon: Icons.map_outlined, active: widget.tabIndex == 1, onTap: () => widget.onTabChanged(1)),
+              _TabBtn(label: AppLocalizations.of(context)!.completedTab, icon: Icons.check_circle_outline, active: widget.tabIndex == 2, onTap: () => widget.onTabChanged(2)),
             ],
           ),
         ),
         const SizedBox(height: 12),
-        if (tabIndex == 0) ...[
-          ...(_stops.map((s) => Padding(padding: const EdgeInsets.only(bottom: 8), child: _StopCard(data: s)))),
+        if (widget.tabIndex == 0) ...[
+          ...(_stops.take(3).map((s) => Padding(padding: const EdgeInsets.only(bottom: 8), child: _StopCard(data: s)))),
           GestureDetector(
             onTap: () {},
             child: Center(
@@ -471,7 +487,7 @@ class _RouteSection extends StatelessWidget {
               ),
             ),
           ),
-        ] else if (tabIndex == 1) ...[
+        ] else if (widget.tabIndex == 1) ...[
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -506,28 +522,161 @@ class _RouteSection extends StatelessWidget {
                             Positioned(
                               left: w * 0.18,
                               top: h * 0.20,
-                              child: const _MapPin(number: '1'),
+                              child: _MapPin(
+                                number: '1',
+                                active: _selectedStop?.num == 1,
+                                onTap: () => setState(() => _selectedStop = _stops[0]),
+                              ),
                             ),
                             Positioned(
                               left: w * 0.66,
                               top: h * 0.08,
-                              child: const _MapPin(number: '3'),
+                              child: _MapPin(
+                                number: '3',
+                                active: _selectedStop?.num == 3,
+                                onTap: () => setState(() => _selectedStop = _stops[2]),
+                              ),
                             ),
                             Positioned(
                               left: w * 0.58,
                               top: h * 0.38,
-                              child: const _MapPin(number: '2'),
+                              child: _MapPin(
+                                number: '2',
+                                active: _selectedStop?.num == 2,
+                                onTap: () => setState(() => _selectedStop = _stops[1]),
+                              ),
                             ),
                             Positioned(
                               left: w * 0.28,
                               top: h * 0.48,
-                              child: const _MapPin(number: '4'),
+                              child: _MapPin(
+                                number: '4',
+                                active: _selectedStop?.num == 4,
+                                onTap: () => setState(() => _selectedStop = _stops[3]),
+                              ),
                             ),
                             Positioned(
                               left: w * 0.47 - 20,
                               top: h * 0.50 - 20,
                               child: const _CurrentLocationIndicator(),
                             ),
+                            if (_selectedStop != null)
+                              Positioned(
+                                bottom: 11,
+                                left: 12,
+                                right: 12,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(alpha: 0.15),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  width: 16,
+                                                  height: 16,
+                                                  decoration: const BoxDecoration(
+                                                    color: Color(0xFFE52B13),
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    '${_selectedStop!.num}',
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 9,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 6),
+                                                Expanded(
+                                                  child: Text(
+                                                    _selectedStop!.name,
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Color(0xFF1F2937),
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Text(
+                                              _selectedStop!.address,
+                                              style: const TextStyle(
+                                                fontSize: 11,
+                                                color: Color(0xFF6B7280),
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Text(
+                                              AppLocalizations.of(context)!.etaWithTime(_selectedStop!.time),
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color(0xFF0B6B54),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color(0xFF0B6B54),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          elevation: 0,
+                                          minimumSize: Size.zero,
+                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pushNamed(
+                                            AppRoutes.stopDetails,
+                                            arguments: _selectedStop,
+                                          );
+                                        },
+                                        child: Text(
+                                          AppLocalizations.of(context)!.view,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      IconButton(
+                                        constraints: const BoxConstraints(),
+                                        padding: const EdgeInsets.all(4),
+                                        icon: const Icon(Icons.close, color: Color(0xFF9CA3AF), size: 14),
+                                        onPressed: () => setState(() => _selectedStop = null),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                           ],
                         );
                       },
@@ -539,49 +688,102 @@ class _RouteSection extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Row(
                     children: [
-                      Text(AppLocalizations.of(context)!.num4UpcomingStops,
-                        style: TextStyle(
-                          color: Color(0xFF4B5563),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                      const Spacer(),
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE52B13),
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 0,
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        onPressed: () async {
-                          final Uri url = Uri.parse(
-                            'https://maps.google.com/maps/dir/123%20Main%20St%2C%20Downtown/456%20High%20St%2C%20Uptown/78%20Park%20Ave%2C%20Midtown/900%20Industrial%20Blvd%2C%20Northside'
-                          );
-                          try {
-                            if (await canLaunchUrl(url)) {
-                              await launchUrl(url, mode: LaunchMode.externalApplication);
-                            }
-                          } catch (_) {}
-                        },
-                        icon: AppIcons.asset(
-                          AppIcons.navigation,
-                          width: 12,
-                          height: 12,
-                          color: Colors.white,
-                        ),
-                        label: Text(AppLocalizations.of(context)!.fullRoute,
-                          style: TextStyle(
-                            color: Colors.white,
+                      if (_selectedStop == null) ...[
+                        Text(
+                          AppLocalizations.of(context)!.num4UpcomingStops,
+                          style: const TextStyle(
+                            color: Color(0xFF4B5563),
                             fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                            fontSize: 13,
                           ),
                         ),
-                      ),
+                        const Spacer(),
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFE52B13),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 0,
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          onPressed: () async {
+                            final Uri url = Uri.parse(
+                              'https://maps.google.com/maps/dir/123%20Main%20St%2C%20Downtown/456%20High%20St%2C%20Uptown/78%20Park%20Ave%2C%20Midtown/900%20Industrial%20Blvd%2C%20Northside'
+                            );
+                            try {
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url, mode: LaunchMode.externalApplication);
+                              }
+                            } catch (_) {}
+                          },
+                          icon: AppIcons.asset(
+                            AppIcons.navigation,
+                            width: 12,
+                            height: 12,
+                            color: Colors.white,
+                          ),
+                          label: Text(
+                            AppLocalizations.of(context)!.fullRoute,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ] else ...[
+                        Expanded(
+                          child: Text(
+                            _selectedStop!.address,
+                            style: const TextStyle(
+                              color: Color(0xFF374151),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFE52B13),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 0,
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          onPressed: () async {
+                            final Uri url = Uri.parse(
+                              'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(_selectedStop!.address)}'
+                            );
+                            try {
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url, mode: LaunchMode.externalApplication);
+                              }
+                            } catch (_) {}
+                          },
+                          icon: AppIcons.asset(
+                            AppIcons.navigation,
+                            width: 12,
+                            height: 12,
+                            color: Colors.white,
+                          ),
+                          label: Text(
+                            AppLocalizations.of(context)!.navigate,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -671,45 +873,58 @@ class _MapBackgroundPainter extends CustomPainter {
 
 // ─── Map Pin Marker ─────────────────────────────────────────────────────────
 class _MapPin extends StatelessWidget {
-  const _MapPin({required this.number});
+  const _MapPin({
+    required this.number,
+    this.active = false,
+    this.onTap,
+  });
+
   final String number;
+  final bool active;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 30,
-          height: 30,
-          decoration: BoxDecoration(
-            color: const Color(0xFFE52B13),
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.white, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.25),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
+    final size = active ? 38.0 : 28.0;
+    final fontSize = active ? 14.0 : 11.0;
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: const Color(0xFFE52B13),
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.25),
+                  blurRadius: active ? 6 : 4,
+                  offset: active ? const Offset(0, 3) : const Offset(0, 2),
+                ),
+              ],
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              number,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: fontSize,
               ),
-            ],
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            number,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
             ),
           ),
-        ),
-        Container(
-          width: 2,
-          height: 6,
-          color: const Color(0xFF7F1D1D),
-        ),
-      ],
+          Container(
+            width: 2,
+            height: 6,
+            color: const Color(0xFF7F1D1D),
+          ),
+        ],
+      ),
     );
   }
 }
