@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../../core/routing/app_routes.dart';
 import 'widgets/home_view.dart'; // To access the StopData class
+import '../../../core/style/app_text_styles.dart';
 
 class _StopItem {
   final StopData data;
@@ -207,19 +208,23 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                               svgString: AppIcons.banknote,
                               iconColor: const Color(0xFF0B6B54),
                               label: AppLocalizations.of(context)!.collected,
-                              valueWidget: const Text(
-                                '\$0',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF0B6B54),
+                              valueWidget: Text.rich(
+                                buildCurrencyTextSpan(
+                                  '\$0.00',
+                                  const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF0B6B54),
+                                  ),
                                 ),
                               ),
-                              extraWidget: Text(
-                                AppLocalizations.of(context)!.amountDue('\$1838'),
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  color: Color(0xFF9CA3AF),
+                              extraWidget: Text.rich(
+                                buildCurrencyTextSpan(
+                                  AppLocalizations.of(context)!.amountDue('\$1,838.00'),
+                                  const TextStyle(
+                                    fontSize: 10,
+                                    color: Color(0xFF9CA3AF),
+                                  ),
                                 ),
                               ),
                             ),
@@ -232,12 +237,14 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                               svgString: AppIcons.dollarSign,
                               iconColor: const Color(0xFFE52B13),
                               label: AppLocalizations.of(context)!.valueLabel,
-                              valueWidget: const Text(
-                                '\$1,658',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF1A1A1A),
+                              valueWidget: Text.rich(
+                                buildCurrencyTextSpan(
+                                  '\$1,658.00',
+                                  const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF1A1A1A),
+                                  ),
                                 ),
                               ),
                               extraWidget: Text(
@@ -766,23 +773,27 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    stop.data.amount,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Color(0xFF1F2937),
-                                    ),
-                                  ),
+                                   Text.rich(
+                                     buildCurrencyTextSpan(
+                                       stop.data.amount,
+                                       const TextStyle(
+                                         fontWeight: FontWeight.bold,
+                                         fontSize: 14,
+                                         color: Color(0xFF1F2937),
+                                       ),
+                                     ),
+                                   ),
                                   const SizedBox(height: 2),
-                                  Text(
-                                    AppLocalizations.of(context)!.dueAmount(stop.data.amount),
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFE52B13),
-                                    ),
-                                  ),
+                                   Text.rich(
+                                     buildCurrencyTextSpan(
+                                       AppLocalizations.of(context)!.dueAmount(stop.data.amount),
+                                       const TextStyle(
+                                         fontSize: 10,
+                                         fontWeight: FontWeight.bold,
+                                         color: Color(0xFFE52B13),
+                                       ),
+                                     ),
+                                   ),
                                 ],
                               ),
                             ],
@@ -1001,12 +1012,14 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
               Text(AppLocalizations.of(context)!.invoice,
                 style: TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
               ),
-              Text(
-                stop.data.amount,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF374151),
+              Text.rich(
+                buildCurrencyTextSpan(
+                  stop.data.amount,
+                  const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF374151),
+                  ),
                 ),
               ),
             ],
@@ -1018,12 +1031,14 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
               Text(AppLocalizations.of(context)!.collected,
                 style: TextStyle(fontSize: 12, color: Color(0xFF0B6B54)),
               ),
-              Text(
-                '\$0.00',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF0B6B54),
+              Text.rich(
+                buildCurrencyTextSpan(
+                  '\$0.00',
+                  const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0B6B54),
+                  ),
                 ),
               ),
             ],
@@ -1035,12 +1050,14 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
               Text(AppLocalizations.of(context)!.due,
                 style: TextStyle(fontSize: 12, color: Color(0xFFE52B13)),
               ),
-              Text(
-                stop.data.amount,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFFE52B13),
+              Text.rich(
+                buildCurrencyTextSpan(
+                  stop.data.amount,
+                  const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFE52B13),
+                  ),
                 ),
               ),
             ],

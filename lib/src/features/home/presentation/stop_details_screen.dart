@@ -1,5 +1,6 @@
 import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import '../../../core/style/app_text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../../core/routing/app_routes.dart';
@@ -448,9 +449,11 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            _buildGoodsCard('Premium Water 1L', 'WAT-1L', 2.5, 60),
+                            _buildGoodsCard('Sparkling Water 500ml', 'SPK-500', 1.5, 120),
                             const SizedBox(height: 8),
-                            _buildGoodsCard('Juice Orange 1L', 'JCE-ORG', 4.0, 56),
+                            _buildGoodsCard('Energy Drink 250ml', 'NRG-250', 3.0, 100),
+                            const SizedBox(height: 12),
+                            _buildDeliverySummaryCard(context),
                           ],
                         ),
                       ),
@@ -521,12 +524,14 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                           ),
                                         ],
                                       ),
-                                      Text(
-                                        stop.amount,
-                                        style: const TextStyle(
+                                      Text.rich(
+                                        buildCurrencyTextSpan(
+                                          stop.amount,
+                                          const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
                                           color: Color(0xFF111827),
+                                        ),
                                         ),
                                       ),
                                     ],
@@ -619,12 +624,14 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                         Text(AppLocalizations.of(context)!.totalInvoice,
                                           style: TextStyle(fontSize: 13, color: Color(0xFF4B5563)),
                                         ),
-                                        Text(
-                                          stop.amount,
-                                          style: const TextStyle(
+                                        Text.rich(
+                                          buildCurrencyTextSpan(
+                                            stop.amount,
+                                            const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFF111827),
+                                          ),
                                           ),
                                         ),
                                       ],
@@ -694,12 +701,14 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                             ),
                                           ],
                                         ),
-                                        Text(
-                                          stop.amount,
-                                          style: const TextStyle(
+                                        Text.rich(
+                                          buildCurrencyTextSpan(
+                                            stop.amount,
+                                            const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFFE52B13),
+                                          ),
                                           ),
                                         ),
                                       ],
@@ -788,12 +797,14 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                           ),
                                         ],
                                       ),
-                                      Text(
-                                        stop.amount,
-                                        style: const TextStyle(
+                                      Text.rich(
+                                        buildCurrencyTextSpan(
+                                          stop.amount,
+                                          const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
                                           color: Color(0xFF111827),
+                                        ),
                                         ),
                                       ),
                                     ],
@@ -917,6 +928,8 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
       () => TextEditingController(text: offloadedQty != null ? offloadedQty.toString() : ''),
     );
 
+    final hasOffloaded = offloadedQty != null && offloadedQty > 0;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -951,87 +964,134 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Row(
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 8,
+                        runSpacing: 4,
                         children: [
-                          Text(
-                            'SKU: $sku · \$$price/Ctn',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: Color(0xFF9CA3AF),
+                          Text.rich(
+                            buildCurrencyTextSpan(
+                              'SKU: $sku · \$$price/Ctn',
+                              const TextStyle(
+                                fontSize: 11,
+                                color: Color(0xFF9CA3AF),
+                              ),
                             ),
                           ),
-                          if (offloadedQty != null && offloadedQty > 0) ...[
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFEE2E2),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                '${AppLocalizations.of(context)!.quantityOffloaded}: $offloadedQty',
-                                style: const TextStyle(
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFFEF4444),
-                                ),
+                          if (hasOffloaded)
+                            Text(
+                              '✓ $offloadedQty/$qty offloaded',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF0B6B54),
                               ),
                             ),
-                          ],
                         ],
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  '×$qty',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2937),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                // Offload Dropdown Button
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFE52B13),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(99),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '×$qty',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1F2937),
+                          ),
+                        ),
+                        if (hasOffloaded) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            offloadedQty >= qty ? 'Full' : '${qty - offloadedQty} short',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: offloadedQty >= qty
+                                  ? const Color(0xFF0B6B54)
+                                  : const Color(0xFFE52B13),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
-                    elevation: 0,
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      if (isExpanded) {
-                        _expandedSkus.remove(sku);
-                      } else {
-                        _expandedSkus.add(sku);
-                      }
-                    });
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(AppLocalizations.of(context)!.offload,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
+                    const SizedBox(width: 12),
+                    if (hasOffloaded)
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (isExpanded) {
+                              _expandedSkus.remove(sku);
+                            } else {
+                              _expandedSkus.add(sku);
+                            }
+                          });
+                        },
+                        child: Container(
+                          width: 28,
+                          height: 28,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xFFA9D7CD),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Icon(
+                            Icons.check_circle_outline,
+                            color: Color(0xFF0B6B54),
+                            size: 15,
+                          ),
+                        ),
+                      )
+                    else
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFE52B13),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(99),
+                          ),
+                          elevation: 0,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (isExpanded) {
+                              _expandedSkus.remove(sku);
+                            } else {
+                              _expandedSkus.add(sku);
+                            }
+                          });
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.offload,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 11,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Icon(
+                              isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                              color: Colors.white,
+                              size: 12,
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      Icon(
-                        isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                        color: Colors.white,
-                        size: 12,
-                      ),
-                    ],
-                  ),
+                  ],
                 ),
               ],
             ),
@@ -1120,7 +1180,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                     listenable: controller,
                     builder: (context, _) {
                       final val = int.tryParse(controller.text);
-                      final isValid = val != null && val >= 0 && val <= qty;
+                      final isValid = val != null && val >= 0;
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0B6B54),
@@ -1167,6 +1227,167 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
               ),
             ),
           ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDeliverySummaryCard(BuildContext context) {
+    final spkOffloaded = _confirmedOffloaded['SPK-500'] ?? 0;
+    final nrgOffloaded = _confirmedOffloaded['NRG-250'] ?? 0;
+    final totalOffloaded = spkOffloaded + nrgOffloaded;
+    final totalInvoice = (120 * 1.5) + (100 * 3.0);
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFA9D7CD),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFF0B6B54).withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.trending_up,
+                color: Color(0xFF0B4A38),
+                size: 14,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                'DELIVERY SUMMARY',
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0B4A38),
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '$totalOffloaded',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF063527),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      const Text(
+                        'Units Offloaded',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF0B6B54),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        '2',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF063527),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      const Text(
+                        'Total SKUs',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF0B6B54),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        '0%',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF063527),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      const Text(
+                        'Collected',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF0B6B54),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Total Invoice',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF0B4A38),
+                ),
+              ),
+              Text.rich(
+                buildCurrencyTextSpan(
+                  '\$${totalInvoice.toStringAsFixed(2)}',
+                  const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF063527),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

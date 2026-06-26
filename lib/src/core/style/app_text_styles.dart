@@ -107,3 +107,32 @@ class AppTextStyles {
     color: AppColors.textSecondary,
   );
 }
+
+InlineSpan buildCurrencyTextSpan(String text, TextStyle style) {
+  final List<TextSpan> spans = [];
+  final RegExp regExp = RegExp(r'(\$)');
+  final matches = regExp.allMatches(text);
+
+  int lastIndex = 0;
+  for (final match in matches) {
+    if (match.start > lastIndex) {
+      spans.add(TextSpan(
+        text: text.substring(lastIndex, match.start),
+        style: style,
+      ));
+    }
+    spans.add(TextSpan(
+      text: '\$',
+      style: style.copyWith(fontFamily: 'sans-serif'),
+    ));
+    lastIndex = match.end;
+  }
+  if (lastIndex < text.length) {
+    spans.add(TextSpan(
+      text: text.substring(lastIndex),
+      style: style,
+    ));
+  }
+
+  return TextSpan(children: spans);
+}

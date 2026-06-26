@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_icons.dart';
 import 'widgets/home_view.dart'; // To access the StopData class
 
+import '../../../core/style/app_text_styles.dart';
 class SalesOrderDetailsScreen extends StatelessWidget {
   const SalesOrderDetailsScreen({super.key, required this.stopData});
   final StopData stopData;
@@ -159,14 +160,16 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 2),
-                                  Text(
-                                    stop.amount,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                   Text.rich(
+                                     buildCurrencyTextSpan(
+                                       stop.amount,
+                                       const TextStyle(
+                                         color: Colors.white,
+                                         fontSize: 28,
+                                         fontWeight: FontWeight.bold,
+                                       ),
+                                     ),
+                                   ),
                                 ],
                               ),
                               Column(
@@ -179,14 +182,16 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 2),
-                                  Text(
-                                    stop.amount,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                   Text.rich(
+                                     buildCurrencyTextSpan(
+                                       stop.amount,
+                                       const TextStyle(
+                                         color: Colors.white,
+                                         fontSize: 20,
+                                         fontWeight: FontWeight.bold,
+                                       ),
+                                     ),
+                                   ),
                                 ],
                               ),
                             ],
@@ -213,11 +218,13 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                AppLocalizations.of(context)!.amountCollected('\$0.00'),
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.7),
-                                  fontSize: 12,
+                              Text.rich(
+                                buildCurrencyTextSpan(
+                                  AppLocalizations.of(context)!.amountCollected('\$0.00'),
+                                  TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.7),
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
                               Text(
@@ -431,14 +438,16 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                                     color: Color(0xFF374151),
                                   ),
                                 ),
-                                Text(
-                                  stop.amount,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Color(0xFFE52B13),
-                                  ),
-                                ),
+                                 Text.rich(
+                                   buildCurrencyTextSpan(
+                                     stop.amount,
+                                     const TextStyle(
+                                       fontWeight: FontWeight.bold,
+                                       fontSize: 16,
+                                       color: Color(0xFFE52B13),
+                                     ),
+                                   ),
+                                 ),
                               ],
                             ),
                           ),
@@ -584,11 +593,13 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  '${AppLocalizations.of(context)!.sku}: $sku · \$$price/Ctn',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Color(0xFF9CA3AF),
+                Text.rich(
+                  buildCurrencyTextSpan(
+                    '${AppLocalizations.of(context)!.sku}: $sku · \$$price/Ctn',
+                    const TextStyle(
+                      fontSize: 11,
+                      color: Color(0xFF9CA3AF),
+                    ),
                   ),
                 ),
               ],
@@ -625,11 +636,13 @@ class SalesOrderDetailsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                '\$${total.toStringAsFixed(2)}',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF6B7280),
+              Text.rich(
+                buildCurrencyTextSpan(
+                  '\$${total.toStringAsFixed(2)}',
+                  const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF6B7280),
+                  ),
                 ),
               ),
             ],
