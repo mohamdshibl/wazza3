@@ -455,7 +455,9 @@ class _RouteSectionState extends State<_RouteSection> {
             Text(AppLocalizations.of(context)!.todaysRoute, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1F2937))),
             const Spacer(),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.doDetails);
+              },
               child: Row(children: [
                 Text(AppLocalizations.of(context)!.viewAll, style: const TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
                 const Icon(Icons.chevron_right, color: _brandRed, size: 14),
@@ -479,7 +481,9 @@ class _RouteSectionState extends State<_RouteSection> {
         if (widget.tabIndex == 0) ...[
           ...(_stops.take(3).map((s) => Padding(padding: const EdgeInsets.only(bottom: 8), child: _StopCard(data: s)))),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.doDetails);
+            },
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
