@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appName => 'وزع';
+  String get appName => 'Wazza3';
 
   @override
   String get tagline => 'مندوب مبيعات التوزيع';
@@ -18,7 +18,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signInTitle => 'تسجيل الدخول';
 
   @override
-  String get signInSubtitle => 'مرحباً بك مجدداً في وزع';
+  String get signInSubtitle => 'مرحباً بك مجدداً في Wazza3';
 
   @override
   String get email => 'البريد الإلكتروني';
@@ -128,7 +128,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String amountDue(String amount) {
-    return '$amount مستحقة';
+    return 'مستحق $amount';
   }
 
   @override
@@ -398,10 +398,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get virtualWarehouse => 'المستودع الافتراضي';
 
   @override
-  String get wazza3Distribution => 'توزيع وزع';
+  String get wazza3Distribution => 'WAZZA3 DISTRIBUTION';
 
   @override
-  String get wazza3V10 => 'وزع · v1.0';
+  String get wazza3V10 => 'WAZZA3 · v1.0';
 
   @override
   String get warehouseIsLoadingYourTruckConfirmWhenDone =>
@@ -569,4 +569,96 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invoiceRefLabel => 'مرجع الفاتورة';
+
+  @override
+  String get checklistTruckLoaded => 'تم تحميل الشاحنة وإغلاقها';
+
+  @override
+  String get checklistRouteSheet => 'تمت مراجعة خط السير';
+
+  @override
+  String get checklistPhoneCharged => 'تم شحن الهاتف والأجهزة';
+
+  @override
+  String get checklistColdChain => 'تم التحقق من عناصر سلسلة التبريد';
+
+  @override
+  String firstStopEta(String time) {
+    return 'وقت الوصول المقدر للمحطة الأولى: $time';
+  }
+
+  @override
+  String get readyToStartRoute => 'هل أنت مستعد لبدء خط سير اليوم؟';
+
+  @override
+  String get todaysDo => 'أمر التوزيع اليوم';
+
+  @override
+  String get stopsLabel => 'نقاط التوقف';
+
+  @override
+  String get itemsLabel => 'العناصر';
+
+  @override
+  String get valueLabel => 'القيمة';
+
+  @override
+  String unitsLoadedCount(String count) {
+    return '$count وحدة محملة';
+  }
+
+  @override
+  String get mockDateShort => 'الأربعاء، ٢٤ يونيو ٢٠٢٦';
+
+  @override
+  String get loaded => 'تم التحميل';
+
+  @override
+  String get loading => 'جاري التحميل';
+
+  @override
+  String doLineCount(String line) {
+    return 'أمر التوزيع ٢٠٢٥ / بند $line';
+  }
+
+  @override
+  String unitsCount(String count) {
+    return '$count وحدة';
+  }
+
+  @override
+  String sosCount(String count) {
+    return '$count أمر بيع';
+  }
+
+  @override
+  String get stopAlert1 =>
+      'اطلب الدخول من الباب الخلفي. توقف في الشارع الجانبي.';
+
+  @override
+  String get stopAlert2 => 'دق الجرس عند البوابة. جهة الاتصال: السيد سام.';
+
+  @override
+  String get stopAlert3 =>
+      'التسليم لمدخل المطبخ. تجنب المدخل الرئيسي. اطلب الشيف ماركو.';
+
+  @override
+  String get stopAlert4 =>
+      'تسليم شحنة كبيرة. الرافعة الشوكية متوفرة في الموقع. سجل الدخول عند بوابة الأمن.';
+
+  @override
+  String get quantityOffloaded => 'الكمية المفرغة';
+
+  @override
+  String get confirm => 'تأكيد';
+
+  @override
+  String offloadSuccess(String count, String itemName) {
+    return 'تم تفريغ $count وحدة من $itemName بنجاح';
+  }
+
+  @override
+  String etaWithTime(String time) {
+    return 'وقت الوصول المقدر $time';
+  }
 }

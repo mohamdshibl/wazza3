@@ -119,9 +119,9 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Ready to start your day\'s route?',
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.readyToStartRoute,
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
                       ),
@@ -201,7 +201,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                                     ),
                                   ),
                                   const SizedBox(width: 12),
-                                  const Column(
+                                  Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
@@ -214,8 +214,8 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                                       ),
                                       SizedBox(height: 2),
                                       Text(
-                                        'Today\'s distribution order',
-                                        style: TextStyle(
+                                        AppLocalizations.of(context)!.todaysDo,
+                                        style: const TextStyle(
                                           fontSize: 11,
                                           color: Color(0xFF9CA3AF),
                                         ),
@@ -250,11 +250,11 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                           ),
                           child: Row(
                               children: [
-                                _buildMetricItem(AppIcons.mapPin, '4', 'Stops'),
+                                _buildMetricItem(AppIcons.mapPin, '4', AppLocalizations.of(context)!.stopsLabel),
                                 _buildVerticalDivider(),
-                                _buildMetricItem(AppIcons.package, '857', 'Items'),
+                                _buildMetricItem(AppIcons.package, '857', AppLocalizations.of(context)!.itemsLabel),
                                 _buildVerticalDivider(),
-                                _buildMetricItem(AppIcons.dollarSign, '\$1.7k', 'Value'),
+                                _buildMetricItem(AppIcons.dollarSign, '\$1.7k', AppLocalizations.of(context)!.valueLabel),
                               ],
                           ),
                         ),
@@ -397,27 +397,30 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        const Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Text(
-                              '857',
-                              style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w900,
-                                color: Color(0xFF0B6B54),
+                        Builder(
+                          builder: (context) {
+                            final fullText = AppLocalizations.of(context)!.unitsLoadedCount('857');
+                            final parts = fullText.split('857');
+                            final prefix = parts.isNotEmpty ? parts[0] : '';
+                            final suffix = parts.length > 1 ? parts[1] : '';
+                            return RichText(
+                              text: TextSpan(
+                                style: const TextStyle(fontSize: 13, color: Color(0xFF9CA3AF)),
+                                children: [
+                                  if (prefix.isNotEmpty) TextSpan(text: prefix, style: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 13)),
+                                  const TextSpan(
+                                    text: '857',
+                                    style: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w900,
+                                      color: Color(0xFF0B6B54),
+                                    ),
+                                  ),
+                                  if (suffix.isNotEmpty) TextSpan(text: suffix, style: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 13)),
+                                ],
                               ),
-                            ),
-                            SizedBox(width: 6),
-                            Text(
-                              'units loaded',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Color(0xFF9CA3AF),
-                              ),
-                            ),
-                          ],
+                            );
+                          }
                         ),
                         const SizedBox(height: 8),
                         // Loading progress indicator (100% full)
@@ -486,10 +489,10 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                         ),
                         const Divider(height: 1, color: Color(0xFFF3F4F6)),
                         // Checklist items
-                        _buildChecklistItem(0, 'Truck loaded and sealed'),
-                        _buildChecklistItem(1, 'Route sheet reviewed'),
-                        _buildChecklistItem(2, 'Phone & devices charged'),
-                        _buildChecklistItem(3, 'Cold chain items checked'),
+                        _buildChecklistItem(0, AppLocalizations.of(context)!.checklistTruckLoaded),
+                        _buildChecklistItem(1, AppLocalizations.of(context)!.checklistRouteSheet),
+                        _buildChecklistItem(2, AppLocalizations.of(context)!.checklistPhoneCharged),
+                        _buildChecklistItem(3, AppLocalizations.of(context)!.checklistColdChain),
                       ],
                     ),
                   ),
@@ -507,17 +510,26 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                       children: [
                         const Icon(Icons.access_time, color: Color(0xFFE52B13), size: 15),
                         const SizedBox(width: 8),
-                        RichText(
-                          text: const TextSpan(
-                            style: TextStyle(fontSize: 13, color: Color(0xFF4B5563)),
-                            children: [
-                              TextSpan(text: 'First stop ETA: '),
-                              TextSpan(
-                                text: '08:30',
-                                style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
+                        Builder(
+                          builder: (context) {
+                            final fullText = AppLocalizations.of(context)!.firstStopEta('08:30');
+                            final parts = fullText.split('08:30');
+                            final prefix = parts.isNotEmpty ? parts[0] : '';
+                            final suffix = parts.length > 1 ? parts[1] : '';
+                            return RichText(
+                              text: TextSpan(
+                                style: const TextStyle(fontSize: 13, color: Color(0xFF4B5563)),
+                                children: [
+                                  if (prefix.isNotEmpty) TextSpan(text: prefix),
+                                  const TextSpan(
+                                    text: '08:30',
+                                    style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
+                                  ),
+                                  if (suffix.isNotEmpty) TextSpan(text: suffix),
+                                ],
                               ),
-                            ],
-                          ),
+                            );
+                          }
                         ),
                       ],
                     ),

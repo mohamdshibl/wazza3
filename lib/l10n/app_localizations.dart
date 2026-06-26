@@ -1147,6 +1147,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'INVOICE REF'**
   String get invoiceRefLabel;
+
+  /// No description provided for @checklistTruckLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Truck loaded and sealed'**
+  String get checklistTruckLoaded;
+
+  /// No description provided for @checklistRouteSheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Route sheet reviewed'**
+  String get checklistRouteSheet;
+
+  /// No description provided for @checklistPhoneCharged.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone & devices charged'**
+  String get checklistPhoneCharged;
+
+  /// No description provided for @checklistColdChain.
+  ///
+  /// In en, this message translates to:
+  /// **'Cold chain items checked'**
+  String get checklistColdChain;
+
+  /// No description provided for @firstStopEta.
+  ///
+  /// In en, this message translates to:
+  /// **'First stop ETA: {time}'**
+  String firstStopEta(String time);
+
+  /// No description provided for @readyToStartRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to start your day\'s route?'**
+  String get readyToStartRoute;
+
+  /// No description provided for @todaysDo.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s distribution order'**
+  String get todaysDo;
+
+  /// No description provided for @stopsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stops'**
+  String get stopsLabel;
+
+  /// No description provided for @itemsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get itemsLabel;
+
+  /// No description provided for @valueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get valueLabel;
+
+  /// No description provided for @unitsLoadedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} units loaded'**
+  String unitsLoadedCount(String count);
+
+  /// No description provided for @mockDateShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Wednesday, Jun 24, 2026'**
+  String get mockDateShort;
+
+  /// No description provided for @loaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Loaded'**
+  String get loaded;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get loading;
+
+  /// No description provided for @doLineCount.
+  ///
+  /// In en, this message translates to:
+  /// **'DO-2025 / Line {line}'**
+  String doLineCount(String line);
+
+  /// No description provided for @unitsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} units'**
+  String unitsCount(String count);
+
+  /// No description provided for @sosCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} SOs'**
+  String sosCount(String count);
+
+  /// No description provided for @stopAlert1.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for back entrance. Park on side street.'**
+  String get stopAlert1;
+
+  /// No description provided for @stopAlert2.
+  ///
+  /// In en, this message translates to:
+  /// **'Ring bell at gate. Contact: Mr. Sam.'**
+  String get stopAlert2;
+
+  /// No description provided for @stopAlert3.
+  ///
+  /// In en, this message translates to:
+  /// **'Deliver to kitchen entrance. Avoid main entrance. Ask for Chef Marco.'**
+  String get stopAlert3;
+
+  /// No description provided for @stopAlert4.
+  ///
+  /// In en, this message translates to:
+  /// **'Large delivery. Forklift available on site. Check in at security gate.'**
+  String get stopAlert4;
+
+  /// No description provided for @quantityOffloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity Offloaded'**
+  String get quantityOffloaded;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @offloadSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully offloaded {count} units of {itemName}'**
+  String offloadSuccess(String count, String itemName);
+
+  /// No description provided for @etaWithTime.
+  ///
+  /// In en, this message translates to:
+  /// **'ETA {time}'**
+  String etaWithTime(String time);
 }
 
 class _AppLocalizationsDelegate

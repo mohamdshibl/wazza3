@@ -15,6 +15,17 @@ class StopDetailsScreen extends StatefulWidget {
 
 class _StopDetailsScreenState extends State<StopDetailsScreen> {
   int _activeTab = 0; // 0: Summary, 1: Sales Orders, 2: Finance
+  final Set<String> _expandedSkus = {};
+  final Map<String, int> _confirmedOffloaded = {};
+  final Map<String, TextEditingController> _offloadControllers = {};
+
+  @override
+  void dispose() {
+    for (final controller in _offloadControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -316,7 +327,7 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
                                               ),
                                               const SizedBox(width: 4),
                                               Text(
-                                                'ETA ${stop.time}',
+                                                AppLocalizations.of(context)!.etaWithTime(stop.time),
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.bold,
@@ -899,8 +910,14 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
   }
 
   Widget _buildGoodsCard(String title, String sku, double price, int qty) {
+    final isExpanded = _expandedSkus.contains(sku);
+    final offloadedQty = _confirmedOffloaded[sku];
+    final controller = _offloadControllers.putIfAbsent(
+      sku,
+      () => TextEditingController(text: offloadedQty != null ? offloadedQty.toString() : ''),
+    );
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -913,73 +930,243 @@ class _StopDetailsScreenState extends State<StopDetailsScreen> {
           ),
         ],
       ),
-      child: Row(
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
               children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1F2937),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          Text(
+                            'SKU: $sku · \$$price/Ctn',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Color(0xFF9CA3AF),
+                            ),
+                          ),
+                          if (offloadedQty != null && offloadedQty > 0) ...[
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFEE2E2),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                '${AppLocalizations.of(context)!.quantityOffloaded}: $offloadedQty',
+                                style: const TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFEF4444),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
                 Text(
-                  title,
+                  '×$qty',
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF1F2937),
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  'SKU: $sku · \$$price/Ctn',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Color(0xFF9CA3AF),
+                const SizedBox(width: 12),
+                // Offload Dropdown Button
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFE52B13),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(99),
+                    ),
+                    elevation: 0,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (isExpanded) {
+                        _expandedSkus.remove(sku);
+                      } else {
+                        _expandedSkus.add(sku);
+                      }
+                    });
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(AppLocalizations.of(context)!.offload,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                        color: Colors.white,
+                        size: 12,
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 8),
-          Text(
-            '×$qty',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1F2937),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Offload Dropdown Button
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFE52B13),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(99),
+          if (isExpanded) ...[
+            Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFFF9FAFB),
+                border: Border(
+                  top: BorderSide(color: Color(0xFFE5E7EB)),
+                ),
               ),
-              elevation: 0,
-              minimumSize: Size.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            onPressed: () {},
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(AppLocalizations.of(context)!.offload,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 11,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.quantityOffloaded.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF6B7280),
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 80,
+                              height: 38,
+                              child: ListenableBuilder(
+                                listenable: controller,
+                                builder: (context, _) {
+                                  return TextField(
+                                    controller: controller,
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: false, signed: false),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF1F2937),
+                                    ),
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                                      hintText: '0–$qty',
+                                      hintStyle: const TextStyle(
+                                        fontSize: 13,
+                                        color: Color(0xFFD1D5DB),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(color: Color(0xFFE5E7EB), width: 2),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(color: Color(0xFFE52B13), width: 2),
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '/ $qty',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Color(0xFF6B7280),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(width: 4),
-                Icon(
-                  Icons.keyboard_arrow_down,
-                  color: Colors.white,
-                  size: 12,
-                ),
-              ],
+                  const SizedBox(width: 12),
+                  ListenableBuilder(
+                    listenable: controller,
+                    builder: (context, _) {
+                      final val = int.tryParse(controller.text);
+                      final isValid = val != null && val >= 0 && val <= qty;
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF0B6B54),
+                          disabledBackgroundColor: const Color(0xFF0B6B54).withValues(alpha: 0.4),
+                          foregroundColor: Colors.white,
+                          disabledForegroundColor: Colors.white.withValues(alpha: 0.7),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: isValid
+                            ? () {
+                                setState(() {
+                                  _confirmedOffloaded[sku] = val;
+                                  _expandedSkus.remove(sku);
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: const Color(0xFF0B6B54),
+                                    content: Text(
+                                      AppLocalizations.of(context)!.offloadSuccess(
+                                        val.toString(),
+                                        title,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            : null,
+                        child: Text(AppLocalizations.of(context)!.confirm,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );

@@ -8,6 +8,7 @@ import '../../home/presentation/widgets/home_view.dart';
 import '../../inventory/presentation/widgets/inventory_view.dart';
 import '../../profile/presentation/widgets/profile_view.dart';
 import '../../wallet/presentation/widgets/wallet_view.dart';
+import '../../../core/constants/app_icons.dart';
 
 const _bgPage = Color(0xFFF9FAEC);
 const _brandRed = Color(0xFFE52B13);
@@ -75,10 +76,10 @@ class _BottomNav extends StatelessWidget {
   List<_NavItem> _getItems(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return [
-      _NavItem(icon: Icons.home_outlined, label: l10n.homeTab),
-      _NavItem(icon: Icons.inventory_2_outlined, label: l10n.inventoryTab),
-      _NavItem(icon: Icons.account_balance_wallet_outlined, label: l10n.walletTab),
-      _NavItem(icon: Icons.person_outline, label: l10n.profileTab),
+      _NavItem(icon: AppIcons.house, label: l10n.homeTab),
+      _NavItem(icon: AppIcons.package, label: l10n.inventoryTab),
+      _NavItem(icon: AppIcons.wallet, label: l10n.walletTab),
+      _NavItem(icon: AppIcons.user, label: l10n.profileTab),
     ];
   }
 
@@ -122,7 +123,13 @@ class _BottomNav extends StatelessWidget {
                         color: active ? _brandRed.withValues(alpha: 0.08) : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Icon(items[i].icon, size: 21, color: active ? _brandRed : const Color(0xFF9CA3AF)),
+                      alignment: Alignment.center,
+                      child: AppIcons.asset(
+                        items[i].icon,
+                        width: 21,
+                        height: 21,
+                        color: active ? _brandRed : const Color(0xFF9CA3AF),
+                      ),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -142,6 +149,6 @@ class _BottomNav extends StatelessWidget {
 
 class _NavItem {
   const _NavItem({required this.icon, required this.label});
-  final IconData icon;
+  final String icon;
   final String label;
 }

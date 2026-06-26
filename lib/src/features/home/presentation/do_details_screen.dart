@@ -23,23 +23,23 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
   bool _isLoaded = false;
   int _activeTab = 0; // 0 = DO Lines / Stops, 1 = Finance
 
-  final List<_StopItem> _stops = const [
+  List<_StopItem> get _stops => [
     _StopItem(
-      data: StopData(num: 1, name: 'Downtown Mart', address: '123 Main St, Downtown', units: 116, time: '08:30', amount: '\$374.00'),
-      alert: 'Ask for back entrance. Park on side street.',
+      data: const StopData(num: 1, name: 'Downtown Mart', address: '123 Main St, Downtown', units: 116, time: '08:30', amount: '\$374.00'),
+      alert: AppLocalizations.of(context)!.stopAlert1,
     ),
     _StopItem(
-      data: StopData(num: 2, name: 'Uptown Groceries', address: '456 High St, Uptown', units: 220, time: '09:15', amount: '\$480.00'),
-      alert: 'Ring bell at gate. Contact: Mr. Sam.',
+      data: const StopData(num: 2, name: 'Uptown Groceries', address: '456 High St, Uptown', units: 220, time: '09:15', amount: '\$480.00'),
+      alert: AppLocalizations.of(context)!.stopAlert2,
     ),
     _StopItem(
-      data: StopData(num: 3, name: 'City Cafe & Diner', address: '78 Park Ave, Midtown', units: 210, time: '10:00', amount: '\$560.00'),
-      alert: 'Deliver to kitchen entrance. Avoid main entrance. Ask for Chef Marco.',
+      data: const StopData(num: 3, name: 'City Cafe & Diner', address: '78 Park Ave, Midtown', units: 210, time: '10:00', amount: '\$560.00'),
+      alert: AppLocalizations.of(context)!.stopAlert3,
       soCount: 2,
     ),
     _StopItem(
-      data: StopData(num: 4, name: 'North Star Wholesale', address: '900 Industrial Blvd, Northside', units: 207, time: '11:00', amount: '\$424.00'),
-      alert: 'Large delivery. Forklift available on site. Check in at security gate.',
+      data: const StopData(num: 4, name: 'North Star Wholesale', address: '900 Industrial Blvd, Northside', units: 207, time: '11:00', amount: '\$424.00'),
+      alert: AppLocalizations.of(context)!.stopAlert4,
     ),
   ];
 
@@ -96,11 +96,11 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'DO-2025',
                         style: TextStyle(
                           color: Colors.white,
@@ -108,10 +108,10 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       Text(
-                        'Wednesday, Jun 24, 2026',
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.mockDateShort,
+                        style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 11,
                         ),
@@ -127,7 +127,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                     borderRadius: BorderRadius.circular(99),
                   ),
                   child: Text(
-                    _isLoaded ? 'Loaded' : 'Loading',
+                    _isLoaded ? AppLocalizations.of(context)!.loaded : AppLocalizations.of(context)!.loading,
                     style: TextStyle(
                       color: _isLoaded ? const Color(0xFF0B4A38) : const Color(0xFF1D4ED8),
                       fontSize: 12,
@@ -156,7 +156,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                             child: _buildMetricCard(
                               svgString: AppIcons.route,
                               iconColor: const Color(0xFFE52B13),
-                              label: 'Stops',
+                              label: AppLocalizations.of(context)!.stopsLabel,
                               valueWidget: RichText(
                                 text: TextSpan(
                                   style: const TextStyle(
@@ -206,7 +206,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                             child: _buildMetricCard(
                               svgString: AppIcons.banknote,
                               iconColor: const Color(0xFF0B6B54),
-                              label: 'Collected',
+                              label: AppLocalizations.of(context)!.collected,
                               valueWidget: const Text(
                                 '\$0',
                                 style: TextStyle(
@@ -215,9 +215,9 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                   color: Color(0xFF0B6B54),
                                 ),
                               ),
-                              extraWidget: const Text(
-                                '\$1838 due',
-                                style: TextStyle(
+                              extraWidget: Text(
+                                AppLocalizations.of(context)!.amountDue('\$1838'),
+                                style: const TextStyle(
                                   fontSize: 10,
                                   color: Color(0xFF9CA3AF),
                                 ),
@@ -231,7 +231,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                             child: _buildMetricCard(
                               svgString: AppIcons.dollarSign,
                               iconColor: const Color(0xFFE52B13),
-                              label: 'Value',
+                              label: AppLocalizations.of(context)!.valueLabel,
                               valueWidget: const Text(
                                 '\$1,658',
                                 style: TextStyle(
@@ -240,9 +240,9 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                   color: Color(0xFF1A1A1A),
                                 ),
                               ),
-                              extraWidget: const Text(
-                                'total invoiced',
-                                style: TextStyle(
+                              extraWidget: Text(
+                                AppLocalizations.of(context)!.totalInvoiced,
+                                style: const TextStyle(
                                   fontSize: 10,
                                   color: Color(0xFF9CA3AF),
                                 ),
@@ -665,7 +665,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
-                                      'DO-2025 / Line ${stop.data.num}',
+                                      AppLocalizations.of(context)!.doLineCount(stop.data.num.toString()),
                                       style: const TextStyle(
                                         fontSize: 10,
                                         color: Color(0xFF9CA3AF),
@@ -737,7 +737,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    '${stop.data.units} units',
+                                    AppLocalizations.of(context)!.unitsCount(stop.data.units.toString()),
                                     style: const TextStyle(
                                       fontSize: 11,
                                       color: Color(0xFF6B7280),
@@ -752,7 +752,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Text(
-                                        '${stop.soCount} SOs',
+                                        AppLocalizations.of(context)!.sosCount(stop.soCount.toString()),
                                         style: const TextStyle(
                                           fontSize: 10,
                                           color: Color(0xFF6B7280),
@@ -776,7 +776,7 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    'Due ${stop.data.amount}',
+                                    AppLocalizations.of(context)!.dueAmount(stop.data.amount),
                                     style: const TextStyle(
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold,

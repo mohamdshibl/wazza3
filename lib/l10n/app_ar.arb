@@ -1,9 +1,9 @@
 {
   "@@locale": "ar",
-  "appName": "وزع",
+  "appName": "Wazza3",
   "tagline": "مندوب مبيعات التوزيع",
   "signInTitle": "تسجيل الدخول",
-  "signInSubtitle": "مرحباً بك مجدداً في وزع",
+  "signInSubtitle": "مرحباً بك مجدداً في Wazza3",
   "email": "البريد الإلكتروني",
   "phone": "رقم الهاتف",
   "emailLabel": "عنوان البريد الإلكتروني",
@@ -153,8 +153,8 @@
   "viewDo": "عرض أمر التوزيع",
   "viewSalesOrderDetails": "عرض تفاصيل أمر البيع",
   "virtualWarehouse": "المستودع الافتراضي",
-  "wazza3Distribution": "توزيع وزع",
-  "wazza3V10": "وزع · v1.0",
+  "wazza3Distribution": "WAZZA3 DISTRIBUTION",
+  "wazza3V10": "WAZZA3 · v1.0",
   "warehouseIsLoadingYourTruckConfirmWhenDone": "المستودع يقوم بتحميل شاحنتك. قم بالتأكيد عند الانتهاء.",
   "goodEvening3": "مساء الخير",
   "num0OfRouteCollected": "0% من المسار تم تحصيله",
@@ -282,5 +282,90 @@
   "soNumberLabel": "رقم أمر البيع",
   "dateLabel": "التاريخ",
   "statusLabel": "الحالة",
-  "invoiceRefLabel": "مرجع الفاتورة"
+  "invoiceRefLabel": "مرجع الفاتورة",
+  "checklistTruckLoaded": "تم تحميل الشاحنة وإغلاقها",
+  "checklistRouteSheet": "تمت مراجعة خط السير",
+  "checklistPhoneCharged": "تم شحن الهاتف والأجهزة",
+  "checklistColdChain": "تم التحقق من عناصر سلسلة التبريد",
+  "firstStopEta": "وقت الوصول المقدر للمحطة الأولى: {time}",
+  "@firstStopEta": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "readyToStartRoute": "هل أنت مستعد لبدء خط سير اليوم؟",
+  "todaysDo": "أمر التوزيع اليوم",
+  "stopsLabel": "نقاط التوقف",
+  "itemsLabel": "العناصر",
+  "valueLabel": "القيمة",
+  "unitsLoadedCount": "{count} وحدة محملة",
+  "@unitsLoadedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "mockDateShort": "الأربعاء، ٢٤ يونيو ٢٠٢٦",
+  "loaded": "تم التحميل",
+  "loading": "جاري التحميل",
+  "amountDue": "مستحق {amount}",
+  "@amountDue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doLineCount": "أمر التوزيع ٢٠٢٥ / بند {line}",
+  "@doLineCount": {
+    "placeholders": {
+      "line": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsCount": "{count} وحدة",
+  "@unitsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "sosCount": "{count} أمر بيع",
+  "@sosCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "stopAlert1": "اطلب الدخول من الباب الخلفي. توقف في الشارع الجانبي.",
+  "stopAlert2": "دق الجرس عند البوابة. جهة الاتصال: السيد سام.",
+  "stopAlert3": "التسليم لمدخل المطبخ. تجنب المدخل الرئيسي. اطلب الشيف ماركو.",
+  "stopAlert4": "تسليم شحنة كبيرة. الرافعة الشوكية متوفرة في الموقع. سجل الدخول عند بوابة الأمن.",
+  "quantityOffloaded": "الكمية المفرغة",
+  "confirm": "تأكيد",
+  "offloadSuccess": "تم تفريغ {count} وحدة من {itemName} بنجاح",
+  "@offloadSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "etaWithTime": "وقت الوصول المقدر {time}",
+  "@etaWithTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

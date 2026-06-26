@@ -282,5 +282,90 @@
   "soNumberLabel": "SO NUMBER",
   "dateLabel": "DATE",
   "statusLabel": "STATUS",
-  "invoiceRefLabel": "INVOICE REF"
+  "invoiceRefLabel": "INVOICE REF",
+  "checklistTruckLoaded": "Truck loaded and sealed",
+  "checklistRouteSheet": "Route sheet reviewed",
+  "checklistPhoneCharged": "Phone & devices charged",
+  "checklistColdChain": "Cold chain items checked",
+  "firstStopEta": "First stop ETA: {time}",
+  "@firstStopEta": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "readyToStartRoute": "Ready to start your day's route?",
+  "todaysDo": "Today's distribution order",
+  "stopsLabel": "Stops",
+  "itemsLabel": "Items",
+  "valueLabel": "Value",
+  "unitsLoadedCount": "{count} units loaded",
+  "@unitsLoadedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "mockDateShort": "Wednesday, Jun 24, 2026",
+  "loaded": "Loaded",
+  "loading": "Loading",
+  "amountDue": "{amount} due",
+  "@amountDue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "doLineCount": "DO-2025 / Line {line}",
+  "@doLineCount": {
+    "placeholders": {
+      "line": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsCount": "{count} units",
+  "@unitsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "sosCount": "{count} SOs",
+  "@sosCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "stopAlert1": "Ask for back entrance. Park on side street.",
+  "stopAlert2": "Ring bell at gate. Contact: Mr. Sam.",
+  "stopAlert3": "Deliver to kitchen entrance. Avoid main entrance. Ask for Chef Marco.",
+  "stopAlert4": "Large delivery. Forklift available on site. Check in at security gate.",
+  "quantityOffloaded": "Quantity Offloaded",
+  "confirm": "Confirm",
+  "offloadSuccess": "Successfully offloaded {count} units of {itemName}",
+  "@offloadSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "etaWithTime": "ETA {time}",
+  "@etaWithTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -569,4 +569,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invoiceRefLabel => 'INVOICE REF';
+
+  @override
+  String get checklistTruckLoaded => 'Truck loaded and sealed';
+
+  @override
+  String get checklistRouteSheet => 'Route sheet reviewed';
+
+  @override
+  String get checklistPhoneCharged => 'Phone & devices charged';
+
+  @override
+  String get checklistColdChain => 'Cold chain items checked';
+
+  @override
+  String firstStopEta(String time) {
+    return 'First stop ETA: $time';
+  }
+
+  @override
+  String get readyToStartRoute => 'Ready to start your day\'s route?';
+
+  @override
+  String get todaysDo => 'Today\'s distribution order';
+
+  @override
+  String get stopsLabel => 'Stops';
+
+  @override
+  String get itemsLabel => 'Items';
+
+  @override
+  String get valueLabel => 'Value';
+
+  @override
+  String unitsLoadedCount(String count) {
+    return '$count units loaded';
+  }
+
+  @override
+  String get mockDateShort => 'Wednesday, Jun 24, 2026';
+
+  @override
+  String get loaded => 'Loaded';
+
+  @override
+  String get loading => 'Loading';
+
+  @override
+  String doLineCount(String line) {
+    return 'DO-2025 / Line $line';
+  }
+
+  @override
+  String unitsCount(String count) {
+    return '$count units';
+  }
+
+  @override
+  String sosCount(String count) {
+    return '$count SOs';
+  }
+
+  @override
+  String get stopAlert1 => 'Ask for back entrance. Park on side street.';
+
+  @override
+  String get stopAlert2 => 'Ring bell at gate. Contact: Mr. Sam.';
+
+  @override
+  String get stopAlert3 =>
+      'Deliver to kitchen entrance. Avoid main entrance. Ask for Chef Marco.';
+
+  @override
+  String get stopAlert4 =>
+      'Large delivery. Forklift available on site. Check in at security gate.';
+
+  @override
+  String get quantityOffloaded => 'Quantity Offloaded';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String offloadSuccess(String count, String itemName) {
+    return 'Successfully offloaded $count units of $itemName';
+  }
+
+  @override
+  String etaWithTime(String time) {
+    return 'ETA $time';
+  }
 }

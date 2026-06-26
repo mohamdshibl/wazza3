@@ -9,24 +9,99 @@ class WalletView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
-    
+
     // Invoices list data
     final invoices = [
-      const _InvoiceData(customer: 'Downtown Mart', orderId: 'SO-6001', amount: 374.0, isPaid: false),
-      const _InvoiceData(customer: 'Uptown Groceries', orderId: 'SO-6002', amount: 480.0, isPaid: false),
-      const _InvoiceData(customer: 'City Cafe & Diner', orderId: 'SO-6003', amount: 360.0, isPaid: false),
-      const _InvoiceData(customer: 'City Cafe & Diner', orderId: 'SO-6003B', amount: 200.0, isPaid: false),
-      const _InvoiceData(customer: 'North Star Wholesale', orderId: 'SO-6004', amount: 424.0, isPaid: false),
-      const _InvoiceData(customer: 'Beachside Kiosk', orderId: 'SO-7001', amount: 380.0, isPaid: false),
-      const _InvoiceData(customer: 'Uptown Groceries', orderId: 'SO-7002', amount: 240.0, isPaid: false),
-      const _InvoiceData(customer: 'Downtown Mart', orderId: 'SO-H1-1', amount: 245.0, isPaid: true),
-      const _InvoiceData(customer: 'City Cafe & Diner', orderId: 'SO-H1-2', amount: 720.0, isPaid: true),
-      const _InvoiceData(customer: 'Beachside Kiosk', orderId: 'SO-H1-3', amount: 350.0, isPaid: true),
-      const _InvoiceData(customer: 'Uptown Groceries', orderId: 'SO-H2-1', amount: 570.0, isPaid: true),
-      const _InvoiceData(customer: 'North Star Wholesale', orderId: 'SO-H2-2', amount: 408.0, isPaid: true),
-      const _InvoiceData(customer: 'Downtown Mart', orderId: 'SO-H3-1', amount: 600.0, isPaid: true),
-      const _InvoiceData(customer: 'City Cafe & Diner', orderId: 'SO-H3-2', amount: 840.0, isPaid: true),
-      const _InvoiceData(customer: 'Beachside Kiosk', orderId: 'SO-H3-3', amount: 150.0, isPaid: true),
+      const _InvoiceData(
+        customer: 'Downtown Mart',
+        orderId: 'SO-6001',
+        amount: 374.0,
+        isPaid: false,
+      ),
+      const _InvoiceData(
+        customer: 'Uptown Groceries',
+        orderId: 'SO-6002',
+        amount: 480.0,
+        isPaid: false,
+      ),
+      const _InvoiceData(
+        customer: 'City Cafe & Diner',
+        orderId: 'SO-6003',
+        amount: 360.0,
+        isPaid: false,
+      ),
+      const _InvoiceData(
+        customer: 'City Cafe & Diner',
+        orderId: 'SO-6003B',
+        amount: 200.0,
+        isPaid: false,
+      ),
+      const _InvoiceData(
+        customer: 'North Star Wholesale',
+        orderId: 'SO-6004',
+        amount: 424.0,
+        isPaid: false,
+      ),
+      const _InvoiceData(
+        customer: 'Beachside Kiosk',
+        orderId: 'SO-7001',
+        amount: 380.0,
+        isPaid: false,
+      ),
+      const _InvoiceData(
+        customer: 'Uptown Groceries',
+        orderId: 'SO-7002',
+        amount: 240.0,
+        isPaid: false,
+      ),
+      const _InvoiceData(
+        customer: 'Downtown Mart',
+        orderId: 'SO-H1-1',
+        amount: 245.0,
+        isPaid: true,
+      ),
+      const _InvoiceData(
+        customer: 'City Cafe & Diner',
+        orderId: 'SO-H1-2',
+        amount: 720.0,
+        isPaid: true,
+      ),
+      const _InvoiceData(
+        customer: 'Beachside Kiosk',
+        orderId: 'SO-H1-3',
+        amount: 350.0,
+        isPaid: true,
+      ),
+      const _InvoiceData(
+        customer: 'Uptown Groceries',
+        orderId: 'SO-H2-1',
+        amount: 570.0,
+        isPaid: true,
+      ),
+      const _InvoiceData(
+        customer: 'North Star Wholesale',
+        orderId: 'SO-H2-2',
+        amount: 408.0,
+        isPaid: true,
+      ),
+      const _InvoiceData(
+        customer: 'Downtown Mart',
+        orderId: 'SO-H3-1',
+        amount: 600.0,
+        isPaid: true,
+      ),
+      const _InvoiceData(
+        customer: 'City Cafe & Diner',
+        orderId: 'SO-H3-2',
+        amount: 840.0,
+        isPaid: true,
+      ),
+      const _InvoiceData(
+        customer: 'Beachside Kiosk',
+        orderId: 'SO-H3-3',
+        amount: 150.0,
+        isPaid: true,
+      ),
     ];
 
     return SingleChildScrollView(
@@ -76,7 +151,8 @@ class WalletView extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(AppLocalizations.of(context)!.collectionsWallet,
+                              Text(
+                                AppLocalizations.of(context)!.collectionsWallet,
                                 style: TextStyle(
                                   fontFamily: AppFontFamily.catamaran,
                                   color: Colors.white,
@@ -85,7 +161,10 @@ class WalletView extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: 2),
-                              Text(AppLocalizations.of(context)!.financialCustodyInvoices,
+                              Text(
+                                AppLocalizations.of(
+                                  context,
+                                )!.financialCustodyInvoices,
                                 style: TextStyle(
                                   fontFamily: AppFontFamily.catamaran,
                                   color: Colors.white70,
@@ -118,7 +197,8 @@ class WalletView extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(AppLocalizations.of(context)!.totalCollected,
+                              Text(
+                                AppLocalizations.of(context)!.totalCollected,
                                 style: TextStyle(
                                   fontFamily: AppFontFamily.catamaran,
                                   color: Colors.white70,
@@ -129,7 +209,7 @@ class WalletView extends StatelessWidget {
                               ),
                               SizedBox(height: 2),
                               Text(
-                                '\$0.00',
+                                '\$10.00',
                                 style: TextStyle(
                                   fontFamily: AppFontFamily.catamaran,
                                   color: Colors.white,
@@ -142,7 +222,9 @@ class WalletView extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
                             child: Text(
-                              AppLocalizations.of(context)!.amountDue('\$1658.00'),
+                              AppLocalizations.of(
+                                context,
+                              )!.amountDue('\$1658.00'),
                               style: const TextStyle(
                                 fontFamily: AppFontFamily.catamaran,
                                 color: Colors.white70,
@@ -174,7 +256,8 @@ class WalletView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      Text(AppLocalizations.of(context)!.num0OfRouteCollected,
+                      Text(
+                        AppLocalizations.of(context)!.num0OfRouteCollected,
                         style: TextStyle(
                           fontFamily: AppFontFamily.catamaran,
                           color: Colors.white60,
@@ -188,7 +271,7 @@ class WalletView extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Body content
           Padding(
             padding: const EdgeInsets.all(16),
@@ -198,7 +281,8 @@ class WalletView extends StatelessWidget {
                 // Physical Custody Label
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                  child: Text(AppLocalizations.of(context)!.physicalCustody,
+                  child: Text(
+                    AppLocalizations.of(context)!.physicalCustody,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -207,7 +291,7 @@ class WalletView extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 // Cash & Checks Grid
                 Row(
                   children: [
@@ -218,7 +302,9 @@ class WalletView extends StatelessWidget {
                         iconColor: const Color(0xFF0B6B54),
                         label: AppLocalizations.of(context)!.cash,
                         value: '\$0.00',
-                        caption: AppLocalizations.of(context)!.physicalNotesHeld,
+                        caption: AppLocalizations.of(
+                          context,
+                        )!.physicalNotesHeld,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -235,10 +321,13 @@ class WalletView extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
-                
+
                 // Total Custody Card
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -254,7 +343,8 @@ class WalletView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(AppLocalizations.of(context)!.totalCustody,
+                      Text(
+                        AppLocalizations.of(context)!.totalCustody,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -273,11 +363,12 @@ class WalletView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                
+
                 // Invoices Section
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                  child: Text(AppLocalizations.of(context)!.invoices,
+                  child: Text(
+                    AppLocalizations.of(context)!.invoices,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -286,7 +377,7 @@ class WalletView extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 // Invoices List
                 ListView.separated(
                   shrinkWrap: true,
@@ -378,10 +469,7 @@ class _CustodyCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             caption,
-            style: const TextStyle(
-              fontSize: 11,
-              color: Color(0xFF9CA3AF),
-            ),
+            style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF)),
           ),
         ],
       ),
@@ -396,23 +484,33 @@ class _InvoiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formattedAmount = '\$${data.amount.toStringAsFixed(2)}';
-    
-    final Color badgeBg = data.isPaid ? const Color(0xFFC9F2E3) : const Color(0xFFFFF0EE);
-    final Color badgeFg = data.isPaid ? const Color(0xFF0B6B54) : const Color(0xFFAF2409);
-    
-    final String badgeText = data.isPaid 
-        ? AppLocalizations.of(context)!.paid 
+
+    final Color badgeBg = data.isPaid
+        ? const Color(0xFFC9F2E3)
+        : const Color(0xFFFFF0EE);
+    final Color badgeFg = data.isPaid
+        ? const Color(0xFF0B6B54)
+        : const Color(0xFFAF2409);
+
+    final String badgeText = data.isPaid
+        ? AppLocalizations.of(context)!.paid
         : AppLocalizations.of(context)!.unpaid;
-    final IconData badgeIcon = data.isPaid ? Icons.check_circle_outline : Icons.error_outline;
-    
-    final String dueText = data.isPaid 
-        ? AppLocalizations.of(context)!.fullyPaid 
+    final IconData badgeIcon = data.isPaid
+        ? Icons.check_circle_outline
+        : Icons.error_outline;
+
+    final String dueText = data.isPaid
+        ? AppLocalizations.of(context)!.fullyPaid
         : AppLocalizations.of(context)!.dueAmount(formattedAmount);
-    final Color dueColor = data.isPaid ? const Color(0xFF0B6B54) : const Color(0xFFE52B13);
-    
+    final Color dueColor = data.isPaid
+        ? const Color(0xFF0B6B54)
+        : const Color(0xFFE52B13);
+
     final double progressWidth = data.isPaid ? 1.0 : 0.0;
-    
-    final String collectedPercent = AppLocalizations.of(context)!.collectedPercent(data.isPaid ? '100' : '0');
+
+    final String collectedPercent = AppLocalizations.of(
+      context,
+    )!.collectedPercent(data.isPaid ? '100' : '0');
 
     return Container(
       decoration: BoxDecoration(
@@ -476,7 +574,10 @@ class _InvoiceCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
                     decoration: BoxDecoration(
                       color: badgeBg,
                       borderRadius: BorderRadius.circular(99),
@@ -512,11 +613,18 @@ class _InvoiceCard extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       text: '${AppLocalizations.of(context)!.invoice}: ',
-                      style: const TextStyle(color: Color(0xFF6B7280), fontSize: 13, fontWeight: FontWeight.normal),
+                      style: const TextStyle(
+                        color: Color(0xFF6B7280),
+                        fontSize: 13,
+                        fontWeight: FontWeight.normal,
+                      ),
                       children: [
                         TextSpan(
                           text: formattedAmount,
-                          style: const TextStyle(color: Color(0xFF1F2937), fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                            color: Color(0xFF1F2937),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
@@ -544,9 +652,11 @@ class _InvoiceCard extends StatelessWidget {
                   widthFactor: progressWidth,
                   child: Container(
                     decoration: BoxDecoration(
-                      gradient: progressWidth > 0 
-                        ? const LinearGradient(colors: [Color(0xFF0B6B54), Color(0xFF0D9B72)])
-                        : null,
+                      gradient: progressWidth > 0
+                          ? const LinearGradient(
+                              colors: [Color(0xFF0B6B54), Color(0xFF0D9B72)],
+                            )
+                          : null,
                       borderRadius: BorderRadius.circular(3),
                     ),
                   ),
@@ -555,10 +665,7 @@ class _InvoiceCard extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 collectedPercent,
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: Color(0xFF9CA3AF),
-                ),
+                style: const TextStyle(fontSize: 10, color: Color(0xFF9CA3AF)),
               ),
             ],
           ),
