@@ -25,7 +25,7 @@ class Validators {
   static String? password(BuildContext context, String? value) {
     final v = value ?? '';
     if (v.isEmpty) return AppLocalizations.of(context)!.passwordRequired;
-    if (v.length < 6) return AppLocalizations.of(context)!.passwordTooShort;
+    if (v.length < 5) return 'Password must be at least 5 characters';
     return null;
   }
 }

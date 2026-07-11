@@ -41,7 +41,7 @@ class Wazza3App extends StatelessWidget {
               Locale('en'), // English
               Locale('ar'), // Arabic
             ],
-            initialRoute: AppRoutes.dashboard,
+            initialRoute: AppRoutes.signIn,
             onGenerateRoute: AppRouter.onGenerateRoute,
           );
         },

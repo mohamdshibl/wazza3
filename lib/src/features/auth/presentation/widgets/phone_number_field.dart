@@ -2,6 +2,7 @@ import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/utils/validators.dart';
 import '../../../../core/style/app_radii.dart';
 import '../../../../core/style/app_spacing.dart';
 import '../../../../core/style/app_text_styles.dart';
@@ -34,6 +35,7 @@ class PhoneNumberField extends StatelessWidget {
       keyboardType: TextInputType.phone,
       textInputAction: TextInputAction.done,
       onSubmitted: onSubmitted,
+      validator: (v) => Validators.phone(context, v),
       customPrefix: CountryCodePrefix(
         country: country,
         onTap: () => _pickCountry(context),

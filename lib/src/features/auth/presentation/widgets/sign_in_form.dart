@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/enums/request_status.dart';
+import '../../../../core/utils/validators.dart';
 import '../../../../core/style/app_colors.dart';
 import '../../../../core/style/app_spacing.dart';
 import '../../../../core/style/app_text_styles.dart';
@@ -39,8 +40,7 @@ class _SignInFormState extends State<SignInForm> {
 
   void _submit() {
     FocusScope.of(context).unfocus();
-    // Bypass validation for easier login/testing
-    // if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) return;
 
     final cubit = context.read<SignInCubit>();
     final method = cubit.state.method;
@@ -55,18 +55,91 @@ class _SignInFormState extends State<SignInForm> {
     }
   }
 
-  void _handleStatusChange(BuildContext context, SignInState state) {
-    final messenger = ScaffoldMessenger.of(context);
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          elevation: 8,
+          backgroundColor: AppColors.surface,
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.xxl),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  decoration: BoxDecoration(
+                    color: AppColors.error.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.lock_outline_rounded,
+                    color: AppColors.error,
+                    size: 36,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                const Text(
+                  'Invalid Credentials',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.subtitle.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xxl),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.brandRed,
+                      foregroundColor: AppColors.onBrand,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Try Again',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
+  void _handleStatusChange(BuildContext context, SignInState state) {
     if (state.status.isFailure) {
-      messenger.showSnackBar(
-        SnackBar(
-          backgroundColor: AppColors.error,
-          content: Text(state.errorMessage ?? AppLocalizations.of(context)!.genericError),
-        ),
+      _showErrorDialog(
+        context,
+        state.errorMessage ?? AppLocalizations.of(context)!.genericError,
       );
       context.read<SignInCubit>().acknowledgeError();
     } else if (state.status.isSuccess) {
+      final messenger = ScaffoldMessenger.of(context);
       final isOtp = state.method == AuthMethod.phone;
       messenger.showSnackBar(
         SnackBar(
@@ -123,6 +196,12 @@ class _SignInFormState extends State<SignInForm> {
         prefixIcon: Icons.mail_outline,
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
+        validator: (v) {
+          if (v == null || v.trim().isEmpty) {
+            return 'Username or Email is required';
+          }
+          return null;
+        },
       ),
       const SizedBox(height: AppSpacing.xl),
       AppTextField(
@@ -133,6 +212,7 @@ class _SignInFormState extends State<SignInForm> {
         obscureText: obscure,
         textInputAction: TextInputAction.done,
         onSubmitted: (_) => _submit(),
+        validator: (v) => Validators.password(context, v),
         suffix: IconButton(
           onPressed: () => context.read<SignInCubit>().togglePasswordVisibility(),
           icon: Icon(

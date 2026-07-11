@@ -1,6 +1,7 @@
 
 
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/remote/odoo_client.dart';
 import '../data_sources/auth_remote_data_source.dart';
 import '../models/auth_user.dart';
 import '../models/login_params.dart';
@@ -84,6 +85,6 @@ class AuthRepositoryImpl implements AuthRepository {
 }
 
 /// DI: repository wired to its data source.
-final AuthRepository authRepository = AuthRepositoryImpl(FakeAuthRemoteDataSource()); //
+final AuthRepository authRepository = AuthRepositoryImpl(OdooAuthRemoteDataSource(OdooClientImpl()));
 
 

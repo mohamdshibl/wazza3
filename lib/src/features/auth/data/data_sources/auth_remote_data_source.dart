@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
 import '../../../../core/errors/failure.dart';
+import '../../../../core/network/remote/odoo_client.dart';
+import '../../../../core/config/app_config.dart';
 import '../models/auth_user.dart';
 import '../models/login_params.dart';
 
@@ -12,6 +15,99 @@ abstract interface class AuthRemoteDataSource {
 
   /// Verifies [code] for [phoneNumber]; returns the authenticated user.
   Future<AuthUser> verifyOtp({required String phoneNumber, required String code});
+}
+
+/// Odoo implementation of the remote data source using JSON-RPC.
+class OdooAuthRemoteDataSource implements AuthRemoteDataSource {
+  OdooAuthRemoteDataSource(this._client);
+
+  final OdooClient _client;
+
+  @override
+  Future<AuthUser> signIn(LoginParams params) async {
+    try {
+      final result = await _client.call(
+        service: 'common',
+        method: 'authenticate',
+        args: [
+          AppConfig.db,
+          params.identifier,
+          params.password,
+          const {}, // Empty options dictionary
+        ],
+      );
+
+      // Odoo authenticate returns:
+      // uid (integer) on success, or false (bool) on failure.
+      if (result == false || result == null) {
+        throw const AuthFailure('Invalid database, username, or password.');
+      }
+
+      final uid = result as int;
+
+      // Stateless verify/read call to fetch the user's name
+      String name = params.identifier;
+      try {
+        final userDataList = await _client.call(
+          service: 'object',
+          method: 'execute_kw',
+          args: [
+            AppConfig.db,
+            uid,
+            params.password, // Authenticating with user password
+            'res.users',
+            'read',
+            [[uid]],
+          ],
+          kwargs: const {
+            'fields': ['name'],
+          },
+        );
+
+        if (userDataList is List && userDataList.isNotEmpty) {
+          final userData = userDataList.first;
+          if (userData is Map && userData.containsKey('name')) {
+            name = userData['name'] as String;
+          }
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('Odoo read name failed: $e');
+        }
+      }
+
+      return AuthUser(
+        id: uid.toString(),
+        name: name,
+        token: params.password, // Store password as the token for subsequent stateless RPC calls
+      );
+    } on AuthFailure {
+      rethrow;
+    } on OdooException catch (e) {
+      throw ServerFailure(e.message);
+    } catch (e) {
+      throw const ServerFailure('Could not connect to Odoo server.');
+    }
+  }
+
+  @override
+  Future<void> requestOtp(String phoneNumber) async {
+    // Odoo authenticate uses db/login/password. We mock OTP success for validation.
+    await Future<void>.delayed(const Duration(milliseconds: 800));
+  }
+
+  @override
+  Future<AuthUser> verifyOtp({
+    required String phoneNumber,
+    required String code,
+  }) async {
+    await Future<void>.delayed(const Duration(milliseconds: 800));
+    return AuthUser(
+      id: '2',
+      name: 'Odoo OTP User',
+      token: 'otp-verified-dummy-pass',
+    );
+  }
 }
 
 /// In-memory fake used until the real API is wired. Demonstrates the
