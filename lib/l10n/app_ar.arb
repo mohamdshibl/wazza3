@@ -377,5 +377,7 @@
       }
     }
   },
-  "view": "عرض"
+  "view": "عرض",
+  "invalidCredentialsTitle": "بيانات الاعتماد غير صالحة",
+  "tryAgain": "حاول مرة أخرى"
 }

@@ -671,4 +671,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get view => 'View';
+
+  @override
+  String get invalidCredentialsTitle => 'Invalid Credentials';
+
+  @override
+  String get tryAgain => 'Try Again';
 }

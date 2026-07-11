@@ -84,9 +84,9 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.lg),
-                const Text(
-                  'Invalid Credentials',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.invalidCredentialsTitle,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
@@ -114,9 +114,9 @@ class _SignInFormState extends State<SignInForm> {
                       ),
                       elevation: 0,
                     ),
-                    child: const Text(
-                      'Try Again',
-                      style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(context)!.tryAgain,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),

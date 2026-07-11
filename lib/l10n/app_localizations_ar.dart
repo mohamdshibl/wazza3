@@ -672,4 +672,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get view => 'عرض';
+
+  @override
+  String get invalidCredentialsTitle => 'بيانات الاعتماد غير صالحة';
+
+  @override
+  String get tryAgain => 'حاول مرة أخرى';
 }

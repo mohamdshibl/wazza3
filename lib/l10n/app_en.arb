@@ -377,5 +377,7 @@
       }
     }
   },
-  "view": "View"
+  "view": "View",
+  "invalidCredentialsTitle": "Invalid Credentials",
+  "tryAgain": "Try Again"
 }

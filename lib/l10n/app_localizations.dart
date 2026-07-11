@@ -1315,6 +1315,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View'**
   String get view;
+
+  /// No description provided for @invalidCredentialsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Credentials'**
+  String get invalidCredentialsTitle;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
 }
 
 class _AppLocalizationsDelegate
