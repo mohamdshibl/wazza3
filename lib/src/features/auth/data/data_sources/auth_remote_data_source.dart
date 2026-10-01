@@ -45,34 +45,40 @@ class OdooAuthRemoteDataSource implements AuthRemoteDataSource {
 
       final uid = result as int;
 
-      // Stateless verify/read call to fetch the user's name
+      // Fetch user profile using nx.mobile.api get_profile
       String name = params.identifier;
+      String? employeeCode;
+      bool mustChangePassword = false;
+
       try {
-        final userDataList = await _client.call(
+        final profileResult = await _client.call(
           service: 'object',
           method: 'execute_kw',
           args: [
             AppConfig.db,
             uid,
-            params.password, // Authenticating with user password
-            'res.users',
-            'read',
-            [[uid]],
+            params.password,
+            'nx.mobile.api',
+            'get_profile',
+            const [],
           ],
-          kwargs: const {
-            'fields': ['name'],
-          },
         );
 
-        if (userDataList is List && userDataList.isNotEmpty) {
-          final userData = userDataList.first;
-          if (userData is Map && userData.containsKey('name')) {
-            name = userData['name'] as String;
+        if (profileResult is Map) {
+          final data = profileResult['data'] is Map ? profileResult['data'] as Map : profileResult;
+          if (data['name'] != null && data['name'].toString().isNotEmpty) {
+            name = data['name'].toString();
+          }
+          if (data['employee_code'] != null) {
+            employeeCode = data['employee_code'].toString();
+          }
+          if (data['must_change_password'] == true || data['must_change_password'] == 1) {
+            mustChangePassword = true;
           }
         }
       } catch (e) {
         if (kDebugMode) {
-          print('Odoo read name failed: $e');
+          print('Odoo get_profile failed: $e');
         }
       }
 
@@ -80,6 +86,8 @@ class OdooAuthRemoteDataSource implements AuthRemoteDataSource {
         id: uid.toString(),
         name: name,
         token: params.password, // Store password as the token for subsequent stateless RPC calls
+        employeeCode: employeeCode,
+        mustChangePassword: mustChangePassword,
       );
     } on AuthFailure {
       rethrow;
