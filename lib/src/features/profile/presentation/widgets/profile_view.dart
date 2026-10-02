@@ -120,75 +120,105 @@ class _ProfileViewContent extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(16, top + 28, 16, 28),
-                        child: Column(
-                          children: [
-                            // Avatar
-                            Container(
-                              width: 84,
-                              height: 84,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.25),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.6),
-                                  width: 3,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.18),
-                                    blurRadius: 12,
-                                    offset: const Offset(0, 4),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(16, top + 28, 16, 28),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // Avatar
+                              Container(
+                                width: 84,
+                                height: 84,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.25),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.6),
+                                    width: 3,
                                   ),
-                                ],
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.18),
+                                      blurRadius: 12,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  displayName.isNotEmpty ? displayName[0].toUpperCase() : 'D',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
                               ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                displayName.isNotEmpty ? displayName[0].toUpperCase() : 'D',
+                              const SizedBox(height: 12),
+                              // Name
+                              Text(
+                                displayName,
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w900,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: -0.3,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 8),
+                              // Primary Role Badge
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.22),
+                                  borderRadius: BorderRadius.circular(99),
+                                  border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.verified_user_outlined, size: 12, color: Colors.white),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      l10n?.salesRep ?? 'Sales Rep',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 12),
-                            // Name
-                            Text(
-                              displayName,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: -0.3,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 8),
-                            // Badges (Employee code, Username, Role)
-                            Wrap(
-                              alignment: WrapAlignment.center,
-                              spacing: 8,
-                              runSpacing: 6,
-                              children: [
-                                if (employeeCode.isNotEmpty)
-                                  _HeaderBadge(
-                                    icon: Icons.badge_outlined,
-                                    label: employeeCode,
-                                  ),
-                                if (username.isNotEmpty)
-                                  _HeaderBadge(
-                                    icon: Icons.alternate_email,
-                                    label: username,
-                                  ),
-                                _HeaderBadge(
-                                  icon: Icons.verified_user_outlined,
-                                  label: l10n?.salesRep ?? 'Sales Rep',
+                              if (employeeCode.isNotEmpty || username.isNotEmpty) ...[
+                                const SizedBox(height: 6),
+                                // Sub-badges (Employee code & Username)
+                                Wrap(
+                                  alignment: WrapAlignment.center,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  spacing: 8,
+                                  runSpacing: 6,
+                                  children: [
+                                    if (employeeCode.isNotEmpty)
+                                      _HeaderBadge(
+                                        icon: Icons.badge_outlined,
+                                        label: employeeCode,
+                                      ),
+                                    if (username.isNotEmpty)
+                                      _HeaderBadge(
+                                        icon: Icons.alternate_email,
+                                        label: username,
+                                      ),
+                                  ],
                                 ),
                               ],
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
