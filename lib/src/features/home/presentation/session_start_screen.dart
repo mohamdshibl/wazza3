@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_icons.dart';
@@ -29,6 +30,7 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
   Widget build(BuildContext context) {
     final authUser = context.watch<AuthCubit>().state;
     final driverName = authUser?.name.isNotEmpty == true ? authUser!.name : (AppLocalizations.of(context)?.driver ?? 'Driver');
+    final String currentDate = DateFormat('EEEE, MMMM d, y', Localizations.localeOf(context).languageCode).format(DateTime.now());
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAEC),
       body: Column(
@@ -86,8 +88,8 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                             ),
                             SizedBox(height: 2),
                             Text(
-                              'Wednesday, June 24, 2026',
-                              style: TextStyle(
+                              currentDate,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
