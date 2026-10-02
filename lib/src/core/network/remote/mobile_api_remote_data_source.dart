@@ -320,24 +320,43 @@ class OdooMobileApiRemoteDataSource implements MobileApiRemoteDataSource {
     int offset = 0,
     String? db,
   }) async {
-    final responseMap = await _executeKw(
-      uid: uid,
-      password: password,
-      method: 'get_history',
-      args: [limit, offset],
-      db: db,
-    );
+    Map<String, dynamic> responseMap;
+    try {
+      responseMap = await _executeKw(
+        uid: uid,
+        password: password,
+        method: 'get_history',
+        args: [limit, offset],
+        db: db,
+      );
+    } catch (_) {
+      responseMap = await _executeKw(
+        uid: uid,
+        password: password,
+        method: 'get_history',
+        args: const [],
+        db: db,
+      );
+    }
 
     return ApiResponse.fromJson(
       responseMap,
       (data) {
+        List? rawList;
         if (data is List) {
-          return data
-              .whereType<Map>()
-              .map((item) => DeliveryOrder.fromJson(Map<String, dynamic>.from(item)))
-              .toList();
-        } else if (data is Map && data['orders'] is List) {
-          return (data['orders'] as List)
+          rawList = data;
+        } else if (data is Map) {
+          if (data['history'] is List) {
+            rawList = data['history'] as List;
+          } else if (data['orders'] is List) {
+            rawList = data['orders'] as List;
+          } else if (data['data'] is List) {
+            rawList = data['data'] as List;
+          }
+        }
+
+        if (rawList != null) {
+          return rawList
               .whereType<Map>()
               .map((item) => DeliveryOrder.fromJson(Map<String, dynamic>.from(item)))
               .toList();

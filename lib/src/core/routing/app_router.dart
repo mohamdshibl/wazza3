@@ -13,6 +13,7 @@ import '../../features/home/presentation/do_details_screen.dart';
 import '../../features/home/presentation/widgets/home_view.dart';
 import '../../features/home/presentation/previous_orders_screen.dart';
 import '../../features/home/presentation/completed_do_details_screen.dart';
+import '../network/remote/models/delivery_order.dart';
 import 'app_routes.dart';
 
 /// Centralized route generation. Swap for go_router as the app grows.
@@ -75,8 +76,9 @@ class AppRouter {
           settings: settings,
         );
       case AppRoutes.previousOrders:
+        final initialOrders = settings.arguments as List<DeliveryOrder>?;
         return MaterialPageRoute(
-          builder: (_) => const PreviousOrdersScreen(),
+          builder: (_) => PreviousOrdersScreen(initialOrders: initialOrders),
           settings: settings,
         );
       case AppRoutes.completedDoDetails:

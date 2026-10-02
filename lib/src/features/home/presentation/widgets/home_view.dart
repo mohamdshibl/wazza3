@@ -8,6 +8,11 @@ import '../../../../core/routing/app_routes.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
 import '../completed_do_details_screen.dart';
 
+import '../../../../core/network/remote/models/models.dart';
+import '../../../auth/logic/controllers/auth_cubit.dart';
+import '../../logic/controllers/home_cubit.dart';
+import '../../logic/controllers/home_state.dart';
+
 // Color tokens
 const _teal = Color(0xFF0B6B54);
 const _tealDark = Color(0xFF063527);
@@ -21,7 +26,7 @@ const _cardBg = Color(0xFFFFFFFF);
 const _doneBadgeBg = Color(0xFFA9D7CD);
 const _doneBadgeFg = Color(0xFF0B4A38);
 
-class HomeView extends StatefulWidget {
+class HomeView extends StatelessWidget {
   const HomeView({
     super.key,
     required this.driverName,
@@ -36,39 +41,107 @@ class HomeView extends StatefulWidget {
   final VoidCallback? onNavigateToWallet;
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  Widget build(BuildContext context) {
+    final authUser = context.watch<AuthCubit>().state;
+    final uid = authUser?.uid ?? 0;
+    final password = authUser?.token ?? '';
+
+    return BlocProvider(
+      create: (context) {
+        final cubit = HomeCubit();
+        if (uid != 0 && password.isNotEmpty) {
+          cubit.fetchHome(uid: uid, password: password);
+        }
+        return cubit;
+      },
+      child: _HomeViewContent(
+        driverName: driverName,
+        uid: uid,
+        password: password,
+        onLogout: onLogout,
+        onNavigateToInventory: onNavigateToInventory,
+        onNavigateToWallet: onNavigateToWallet,
+      ),
+    );
+  }
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewContent extends StatefulWidget {
+  const _HomeViewContent({
+    required this.driverName,
+    required this.uid,
+    required this.password,
+    required this.onLogout,
+    this.onNavigateToInventory,
+    this.onNavigateToWallet,
+  });
+
+  final String driverName;
+  final int uid;
+  final String password;
+  final VoidCallback onLogout;
+  final VoidCallback? onNavigateToInventory;
+  final VoidCallback? onNavigateToWallet;
+
+  @override
+  State<_HomeViewContent> createState() => _HomeViewContentState();
+}
+
+class _HomeViewContentState extends State<_HomeViewContent> {
   int _routeTab = 0; // 0=Upcoming 1=Map 2=Completed
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _Header(driverName: widget.driverName, onLogout: widget.onLogout),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        final homeData = state.homeData;
+        final current = homeData?.current;
+        final historyOrders = homeData?.history ?? const <DeliveryOrder>[];
+
+        return RefreshIndicator(
+          color: _brandRed,
+          onRefresh: () async {
+            if (widget.uid != 0 && widget.password.isNotEmpty) {
+              await context.read<HomeCubit>().fetchHome(
+                    uid: widget.uid,
+                    password: widget.password,
+                    isRefresh: true,
+                  );
+            }
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _StatsRow(
-                  onNavigateToInventory: widget.onNavigateToInventory,
-                  onNavigateToWallet: widget.onNavigateToWallet,
+                _Header(driverName: widget.driverName, onLogout: widget.onLogout),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _StatsRow(
+                        current: current,
+                        onNavigateToInventory: widget.onNavigateToInventory,
+                        onNavigateToWallet: widget.onNavigateToWallet,
+                      ),
+                      const SizedBox(height: 12),
+                      _RouteSection(
+                        current: current,
+                        tabIndex: _routeTab,
+                        onTabChanged: (i) => setState(() => _routeTab = i),
+                      ),
+                      const SizedBox(height: 12),
+                      _PreviousOrdersSection(
+                        orders: historyOrders,
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 12),
-                _RouteSection(
-                  tabIndex: _routeTab,
-                  onTabChanged: (i) => setState(() => _routeTab = i),
-                ),
-                const SizedBox(height: 12),
-                const _PreviousOrdersSection(),
               ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -233,22 +306,35 @@ class _HeaderButton extends StatelessWidget {
 
 // ─── Stats Row ─────────────────────────────────────────────────────────────
 class _StatsRow extends StatelessWidget {
-  const _StatsRow({this.onNavigateToInventory, this.onNavigateToWallet});
+  const _StatsRow({
+    this.current,
+    this.onNavigateToInventory,
+    this.onNavigateToWallet,
+  });
+
+  final HomeCurrent? current;
   final VoidCallback? onNavigateToInventory;
   final VoidCallback? onNavigateToWallet;
 
   @override
   Widget build(BuildContext context) {
+    final hasOrder = current != null;
+    final totalUnits = hasOrder
+        ? current!.order.lines.fold<double>(0.0, (acc, l) => acc + l.quantity).toInt()
+        : 0;
+    final amountTotal = hasOrder ? (current!.order.amountTotal ?? 0.0) : 0.0;
+    final stops = hasOrder ? (current!.order.stopCount ?? current!.order.lines.length) : 0;
+
     return Row(
       children: [
         Expanded(
           child: _StatCard(
             icon: Icons.local_shipping_outlined,
             title: AppLocalizations.of(context)!.custody,
-            value: '857',
+            value: totalUnits.toString(),
             sub: AppLocalizations.of(context)!.itemsOnTruck,
             dot1Label: AppLocalizations.of(context)!.doneCount('0'),
-            dot2Label: AppLocalizations.of(context)!.leftCount('753'),
+            dot2Label: AppLocalizations.of(context)!.leftCount(totalUnits.toString()),
             progress: 0.0,
             bgSvgString: AppIcons.truck,
             onTap: onNavigateToInventory,
@@ -260,8 +346,8 @@ class _StatsRow extends StatelessWidget {
             icon: Icons.account_balance_wallet_outlined,
             title: AppLocalizations.of(context)!.collected,
             value: '\$0',
-            sub: AppLocalizations.of(context)!.ofAmount('\$1,658'),
-            dot1Label: AppLocalizations.of(context)!.cashAmount('\$1,915'),
+            sub: AppLocalizations.of(context)!.ofAmount('\$${amountTotal.toStringAsFixed(0)}'),
+            dot1Label: AppLocalizations.of(context)!.cashAmount('\$0'),
             dot2Label: AppLocalizations.of(context)!.chkAmount('\$0'),
             progress: 0.0,
             bgSvgString: AppIcons.wallet,
@@ -274,10 +360,10 @@ class _StatsRow extends StatelessWidget {
             icon: Icons.alt_route,
             title: AppLocalizations.of(context)!.stops,
             value: '0',
-            valueSuffix: '/4',
-            sub: AppLocalizations.of(context)!.ofStopsCount('4'),
+            valueSuffix: '/$stops',
+            sub: AppLocalizations.of(context)!.ofStopsCount(stops.toString()),
             dot1Label: AppLocalizations.of(context)!.doneCount('0'),
-            dot2Label: AppLocalizations.of(context)!.leftCount('4'),
+            dot2Label: AppLocalizations.of(context)!.leftCount(stops.toString()),
             progress: 0.0,
             bgSvgString: AppIcons.route,
             onTap: () {
@@ -420,9 +506,15 @@ class _DotRow extends StatelessWidget {
 
 // ─── Today's Route ─────────────────────────────────────────────────────────
 class _RouteSection extends StatefulWidget {
-  const _RouteSection({required this.tabIndex, required this.onTabChanged});
+  const _RouteSection({
+    required this.tabIndex,
+    required this.onTabChanged,
+    this.current,
+  });
+
   final int tabIndex;
   final ValueChanged<int> onTabChanged;
+  final HomeCurrent? current;
 
   @override
   State<_RouteSection> createState() => _RouteSectionState();
@@ -448,6 +540,58 @@ class _RouteSectionState extends State<_RouteSection> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.current == null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.todaysRoute,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFFEAEAE4)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF4F4EE),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(Icons.alt_route_rounded, color: Color(0xFF9CA3AF), size: 24),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'No Active Route Today',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'There are no delivery stops assigned to your route for today. Pull down to refresh.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1154,9 +1298,11 @@ class _StopCard extends StatelessWidget {
 
 // ─── Previous Orders ───────────────────────────────────────────────────────
 class _PreviousOrdersSection extends StatelessWidget {
-  const _PreviousOrdersSection();
+  const _PreviousOrdersSection({this.orders = const []});
 
-  static const _orders = [
+  final List<DeliveryOrder> orders;
+
+  static const _fallbackOrders = [
     _OrderData(id: 'DO-2024', date: 'Thu, Jun 25 · 3/3 stops · \$1315 collected'),
     _OrderData(id: 'DO-2023', date: 'Wed, Jun 24 · 2/2 stops · \$978 collected'),
     _OrderData(id: 'DO-2022', date: 'Tue, Jun 23 · 3/3 stops · \$1590 collected'),
@@ -1169,22 +1315,149 @@ class _PreviousOrdersSection extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(AppLocalizations.of(context)!.previousOrders, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1F2937))),
+            Text(
+              AppLocalizations.of(context)!.previousOrders,
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
+            ),
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.previousOrders);
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.previousOrders,
+                  arguments: orders,
+                );
               },
-              child: Row(children: [
-                Text(AppLocalizations.of(context)!.viewMore, style: const TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600)),
-                const Icon(Icons.chevron_right, color: _brandRed, size: 14),
-              ]),
+              child: Row(
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.viewMore,
+                    style: const TextStyle(color: _brandRed, fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                  const Icon(Icons.chevron_right, color: _brandRed, size: 14),
+                ],
+              ),
             ),
           ],
         ),
         const SizedBox(height: 12),
-        ...(_orders.map((o) => Padding(padding: const EdgeInsets.only(bottom: 8), child: _OrderCard(data: o)))),
+        if (orders.isNotEmpty)
+          ...orders.take(3).map((o) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: _LiveOrderCard(order: o),
+              ))
+        else
+          ..._fallbackOrders.map((o) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: _OrderCard(data: o),
+              )),
       ],
+    );
+  }
+}
+
+class _LiveOrderCard extends StatelessWidget {
+  const _LiveOrderCard({required this.order});
+  final DeliveryOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    final status = order.finalStatus ?? order.state ?? 'draft';
+    final dateStr = order.date ?? '';
+    final vehicleStr = order.vehicle?.isNotEmpty == true ? ' · ${order.vehicle}' : '';
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, AppRoutes.doDetails);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: _cardBg,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFF3F4F6)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 1),
+            )
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFE8E6),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.local_shipping_outlined,
+                color: _brandRed,
+                size: 17,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          order.displayReference,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Color(0xFF374151),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _navBg,
+                          borderRadius: BorderRadius.circular(99),
+                        ),
+                        child: Text(
+                          status.toUpperCase(),
+                          style: const TextStyle(
+                            color: Color(0xFF4B5563),
+                            fontSize: 9,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '$dateStr$vehicleStr',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: Color(0xFF9CA3AF),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.chevron_right,
+              color: Color(0xFFD1D5DB),
+              size: 16,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
