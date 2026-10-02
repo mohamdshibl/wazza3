@@ -12,15 +12,40 @@ class ApiResponse<T> {
   final String message;
   final T? data;
 
-  bool get isSuccess => success && code >= 200 && code < 300;
+  bool get isSuccess => success || (code >= 200 && code < 300);
 
   factory ApiResponse.fromJson(
-    Map<String, dynamic> json, [
+    dynamic json, [
     T Function(dynamic data)? fromData,
   ]) {
+    if (json is! Map) {
+      return ApiResponse<T>(
+        success: false,
+        code: 500,
+        message: 'Invalid response format',
+        data: null,
+      );
+    }
+
     final rawSuccess = json['success'];
-    final success = rawSuccess is bool ? rawSuccess : (rawSuccess == 1 || rawSuccess == 'true');
-    final code = (json['code'] as num?)?.toInt() ?? (success ? 200 : 400);
+    final success = rawSuccess is bool
+        ? rawSuccess
+        : (rawSuccess == 1 || rawSuccess == 'true' || rawSuccess == 'True');
+
+    final rawCode = json['code'];
+    int code = 200;
+    if (rawCode is num) {
+      code = rawCode.toInt();
+    } else if (rawCode is String) {
+      if (rawCode.toLowerCase() == 'ok' || rawCode.toLowerCase() == 'success') {
+        code = 200;
+      } else {
+        code = int.tryParse(rawCode) ?? (success ? 200 : 400);
+      }
+    } else {
+      code = success ? 200 : 400;
+    }
+
     final message = json['message']?.toString() ?? '';
     final rawData = json['data'];
 

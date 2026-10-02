@@ -156,7 +156,7 @@ class OdooMobileApiRemoteDataSource implements MobileApiRemoteDataSource {
 
     return ApiResponse.fromJson(
       responseMap,
-      (data) => UserProfile.fromJson(data is Map<String, dynamic> ? data : {}),
+      (data) => UserProfile.fromJson(data),
     );
   }
 
@@ -176,7 +176,7 @@ class OdooMobileApiRemoteDataSource implements MobileApiRemoteDataSource {
 
     return ApiResponse.fromJson(
       responseMap,
-      (data) => HomeData.fromJson(data is Map<String, dynamic> ? data : {}),
+      (data) => HomeData.fromJson(data is Map ? Map<String, dynamic>.from(data) : {}),
     );
   }
 
@@ -197,7 +197,7 @@ class OdooMobileApiRemoteDataSource implements MobileApiRemoteDataSource {
 
     return ApiResponse.fromJson(
       responseMap,
-      (data) => DeliveryOrder.fromJson(data is Map<String, dynamic> ? data : {}),
+      (data) => DeliveryOrder.fromJson(data is Map ? Map<String, dynamic>.from(data) : {}),
     );
   }
 
@@ -239,8 +239,8 @@ class OdooMobileApiRemoteDataSource implements MobileApiRemoteDataSource {
       (data) {
         if (data is List) {
           return data
-              .whereType<Map<String, dynamic>>()
-              .map((item) => MobileNotification.fromJson(item))
+              .whereType<Map>()
+              .map((item) => MobileNotification.fromJson(Map<String, dynamic>.from(item)))
               .toList();
         }
         return <MobileNotification>[];
@@ -266,8 +266,8 @@ class OdooMobileApiRemoteDataSource implements MobileApiRemoteDataSource {
     return ApiResponse.fromJson(
       responseMap,
       (data) {
-        if (data is Map<String, dynamic>) {
-          return LoadedGoods.fromJson(data);
+        if (data is Map) {
+          return LoadedGoods.fromJson(Map<String, dynamic>.from(data));
         } else if (data is List) {
           return LoadedGoods.fromJson({'goods': data, 'do_id': doId});
         }
@@ -333,13 +333,13 @@ class OdooMobileApiRemoteDataSource implements MobileApiRemoteDataSource {
       (data) {
         if (data is List) {
           return data
-              .whereType<Map<String, dynamic>>()
-              .map((item) => DeliveryOrder.fromJson(item))
+              .whereType<Map>()
+              .map((item) => DeliveryOrder.fromJson(Map<String, dynamic>.from(item)))
               .toList();
         } else if (data is Map && data['orders'] is List) {
           return (data['orders'] as List)
-              .whereType<Map<String, dynamic>>()
-              .map((item) => DeliveryOrder.fromJson(item))
+              .whereType<Map>()
+              .map((item) => DeliveryOrder.fromJson(Map<String, dynamic>.from(item)))
               .toList();
         }
         return <DeliveryOrder>[];

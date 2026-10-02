@@ -3,6 +3,7 @@ class UserProfile {
   const UserProfile({
     required this.name,
     this.employeeCode,
+    this.username,
     this.mustChangePassword = false,
     this.vehicles = const [],
     this.areas = const [],
@@ -11,36 +12,52 @@ class UserProfile {
 
   final String name;
   final String? employeeCode;
+  final String? username;
   final bool mustChangePassword;
   final List<VehicleInfo> vehicles;
   final List<AreaInfo> areas;
   final Map<String, dynamic> raw;
 
-  factory UserProfile.fromJson(Map<String, dynamic> json) {
+  factory UserProfile.fromJson(dynamic rawData) {
+    if (rawData is! Map) {
+      return const UserProfile(name: '');
+    }
+
+    final json = <String, dynamic>{};
+    for (final entry in rawData.entries) {
+      json[entry.key.toString()] = entry.value;
+    }
+
     List<VehicleInfo> parsedVehicles = [];
     if (json['vehicles'] is List) {
-      parsedVehicles = (json['vehicles'] as List)
-          .map((v) => v is Map<String, dynamic>
-              ? VehicleInfo.fromJson(v)
-              : VehicleInfo(name: v.toString()))
-          .toList();
+      for (final v in json['vehicles'] as List) {
+        if (v is Map) {
+          parsedVehicles.add(VehicleInfo.fromJson(v));
+        } else if (v != null) {
+          parsedVehicles.add(VehicleInfo(name: v.toString()));
+        }
+      }
     }
 
     List<AreaInfo> parsedAreas = [];
     if (json['areas'] is List) {
-      parsedAreas = (json['areas'] as List)
-          .map((a) => a is Map<String, dynamic>
-              ? AreaInfo.fromJson(a)
-              : AreaInfo(name: a.toString()))
-          .toList();
+      for (final a in json['areas'] as List) {
+        if (a is Map) {
+          parsedAreas.add(AreaInfo.fromJson(a));
+        } else if (a != null) {
+          parsedAreas.add(AreaInfo(name: a.toString()));
+        }
+      }
     }
 
     return UserProfile(
       name: json['name']?.toString() ?? '',
       employeeCode: json['employee_code']?.toString() ?? json['employeeCode']?.toString(),
+      username: json['username']?.toString(),
       mustChangePassword: json['must_change_password'] == true ||
           json['mustChangePassword'] == true ||
-          json['must_change_password'] == 1,
+          json['must_change_password'] == 1 ||
+          json['must_change_password']?.toString().toLowerCase() == 'true',
       vehicles: parsedVehicles,
       areas: parsedAreas,
       raw: json,
@@ -49,7 +66,8 @@ class UserProfile {
 
   Map<String, dynamic> toJson() => {
         'name': name,
-        'employee_code': employeeCode,
+        if (employeeCode != null) 'employee_code': employeeCode,
+        if (username != null) 'username': username,
         'must_change_password': mustChangePassword,
         'vehicles': vehicles.map((v) => v.toJson()).toList(),
         'areas': areas.map((a) => a.toJson()).toList(),
@@ -70,9 +88,25 @@ class VehicleInfo {
   final String? licensePlate;
   final String? model;
 
-  factory VehicleInfo.fromJson(Map<String, dynamic> json) {
+  factory VehicleInfo.fromJson(dynamic rawData) {
+    if (rawData is! Map) {
+      return VehicleInfo(name: rawData?.toString() ?? '');
+    }
+
+    final json = <String, dynamic>{};
+    for (final entry in rawData.entries) {
+      json[entry.key.toString()] = entry.value;
+    }
+
+    int? parsedId;
+    if (json['id'] is num) {
+      parsedId = (json['id'] as num).toInt();
+    } else if (json['id'] is String) {
+      parsedId = int.tryParse(json['id'] as String);
+    }
+
     return VehicleInfo(
-      id: json['id'] as int?,
+      id: parsedId,
       name: json['name']?.toString() ?? '',
       licensePlate: json['license_plate']?.toString() ?? json['plate']?.toString(),
       model: json['model']?.toString(),
@@ -98,9 +132,25 @@ class AreaInfo {
   final String name;
   final String? code;
 
-  factory AreaInfo.fromJson(Map<String, dynamic> json) {
+  factory AreaInfo.fromJson(dynamic rawData) {
+    if (rawData is! Map) {
+      return AreaInfo(name: rawData?.toString() ?? '');
+    }
+
+    final json = <String, dynamic>{};
+    for (final entry in rawData.entries) {
+      json[entry.key.toString()] = entry.value;
+    }
+
+    int? parsedId;
+    if (json['id'] is num) {
+      parsedId = (json['id'] as num).toInt();
+    } else if (json['id'] is String) {
+      parsedId = int.tryParse(json['id'] as String);
+    }
+
     return AreaInfo(
-      id: json['id'] as int?,
+      id: parsedId,
       name: json['name']?.toString() ?? '',
       code: json['code']?.toString(),
     );

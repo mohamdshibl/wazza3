@@ -1,110 +1,465 @@
-import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wazza3/l10n/app_localizations.dart';
+
+import '../../../../core/enums/request_status.dart';
 import '../../../../core/widgets/dot_grid_painter.dart';
+import '../../../auth/logic/controllers/auth_cubit.dart';
+import '../../logic/controllers/profile_cubit.dart';
+import '../../logic/controllers/profile_state.dart';
 
 const _brandRed = Color(0xFFE52B13);
+const _brandRedDark = Color(0xFFAF2409);
 
 class ProfileView extends StatelessWidget {
   const ProfileView({
     super.key,
-    required this.driverName,
+    required this.onLogout,
+    this.driverName,
+  });
+
+  final VoidCallback onLogout;
+  final String? driverName;
+
+  @override
+  Widget build(BuildContext context) {
+    final authUser = context.watch<AuthCubit>().state;
+    final uid = authUser?.uid ?? 0;
+    final password = authUser?.token ?? '';
+
+    return BlocProvider(
+      create: (context) {
+        final cubit = ProfileCubit();
+        if (uid != 0 && password.isNotEmpty) {
+          cubit.fetchProfile(uid: uid, password: password);
+        }
+        return cubit;
+      },
+      child: _ProfileViewContent(
+        fallbackName: driverName ?? authUser?.name ?? 'Driver',
+        uid: uid,
+        password: password,
+        onLogout: onLogout,
+      ),
+    );
+  }
+}
+
+class _ProfileViewContent extends StatelessWidget {
+  const _ProfileViewContent({
+    required this.fallbackName,
+    required this.uid,
+    required this.password,
     required this.onLogout,
   });
 
-  final String driverName;
+  final String fallbackName;
+  final int uid;
+  final String password;
   final VoidCallback onLogout;
 
   @override
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          // Profile Header Section (Red gradient with dot grid + avatar)
-          Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment(-0.7, -1),
-                end: Alignment(1, 1),
-                colors: [Color(0xFFAF2409), Color(0xFFE52B13)],
-              ),
-            ),
-            child: Stack(
+    final l10n = AppLocalizations.of(context);
+
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        final profile = state.profile;
+        final displayName = profile?.name.isNotEmpty == true ? profile!.name : fallbackName;
+        final employeeCode = profile?.employeeCode ?? '';
+        final username = profile?.username ?? '';
+        final mustChangePassword = profile?.mustChangePassword ?? false;
+        final vehicles = profile?.vehicles ?? const [];
+        final areas = profile?.areas ?? const [];
+
+        return RefreshIndicator(
+          color: _brandRed,
+          onRefresh: () async {
+            if (uid != 0 && password.isNotEmpty) {
+              await context.read<ProfileCubit>().fetchProfile(
+                    uid: uid,
+                    password: password,
+                    isRefresh: true,
+                  );
+            }
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
               children: [
-                // dot grid
-                const Positioned.fill(
-                  child: CustomPaint(painter: DotGridPainter()),
-                ),
-                // radial glow
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(
-                        center: const Alignment(0, -0.3),
-                        radius: 1.2,
-                        colors: [
-                          Colors.white.withValues(alpha: 0.15),
-                          Colors.transparent,
-                        ],
-                        stops: const [0, 0.65],
-                      ),
+                // ─── Profile Header Section (Red gradient with dot grid + avatar) ───
+                Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment(-0.7, -1),
+                      end: Alignment(1, 1),
+                      colors: [_brandRedDark, _brandRed],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16, top + 36, 16, 32),
-                  child: Column(
+                  child: Stack(
                     children: [
-                      // Avatar
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.25),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.5),
-                            width: 3,
+                      // Dot grid
+                      const Positioned.fill(
+                        child: CustomPaint(painter: DotGridPainter()),
+                      ),
+                      // Radial glow
+                      Positioned.fill(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: RadialGradient(
+                              center: const Alignment(0, -0.3),
+                              radius: 1.2,
+                              colors: [
+                                Colors.white.withValues(alpha: 0.15),
+                                Colors.transparent,
+                              ],
+                              stops: const [0, 0.65],
+                            ),
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(16, top + 28, 16, 28),
+                        child: Column(
+                          children: [
+                            // Avatar
+                            Container(
+                              width: 84,
+                              height: 84,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.25),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.6),
+                                  width: 3,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.18),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                displayName.isNotEmpty ? displayName[0].toUpperCase() : 'D',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            // Name
+                            Text(
+                              displayName,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: -0.3,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            // Badges (Employee code, Username, Role)
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              spacing: 8,
+                              runSpacing: 6,
+                              children: [
+                                if (employeeCode.isNotEmpty)
+                                  _HeaderBadge(
+                                    icon: Icons.badge_outlined,
+                                    label: employeeCode,
+                                  ),
+                                if (username.isNotEmpty)
+                                  _HeaderBadge(
+                                    icon: Icons.alternate_email,
+                                    label: username,
+                                  ),
+                                _HeaderBadge(
+                                  icon: Icons.verified_user_outlined,
+                                  label: l10n?.salesRep ?? 'Sales Rep',
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          driverName.isNotEmpty ? driverName[0].toUpperCase() : 'D',
-                          style: const TextStyle(
+                      ),
+                    ],
+                  ),
+                ),
+
+                // ─── Body Content ───
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Not signed in state
+                      if (uid == 0 || password.isEmpty) ...[
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
                             color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w900,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: const Color(0xFFEAEAE4)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.04),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: 48,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFE8E6),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: const Icon(Icons.lock_outline, color: _brandRed, size: 24),
+                              ),
+                              const SizedBox(height: 12),
+                              const Text(
+                                'Authentication Required',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1F2937),
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              const Text(
+                                'Please sign in with your credentials to view your live profile, vehicles, and assigned areas.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: _brandRed,
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  elevation: 0,
+                                ),
+                                onPressed: onLogout,
+                                icon: const Icon(Icons.login, size: 18, color: Colors.white),
+                                label: const Text(
+                                  'Sign In Again',
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      // Name
-                      Text(
-                        driverName,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(height: 16),
+                      ]
+                      // Loading State
+                      else if (state.status.isLoading && profile == null) ...[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 36),
+                          child: Center(
+                            child: CircularProgressIndicator(color: _brandRed),
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 6),
-                      // Badges
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _Badge(label: AppLocalizations.of(context)!.salesRep),
-                          const SizedBox(width: 8),
-                          _Badge(label: AppLocalizations.of(context)!.idRep042),
+                      ]
+                      // Error State
+                      else if (state.status.isFailure && profile == null) ...[
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.red.shade200),
+                          ),
+                          child: Column(
+                            children: [
+                              Icon(Icons.error_outline, color: Colors.red.shade400, size: 40),
+                              const SizedBox(height: 8),
+                              Text(
+                                state.errorMessage ?? 'Failed to load profile data',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 13, color: Color(0xFF374151)),
+                              ),
+                              const SizedBox(height: 12),
+                              ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: _brandRed,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                ),
+                                onPressed: () {
+                                  context.read<ProfileCubit>().fetchProfile(
+                                        uid: uid,
+                                        password: password,
+                                      );
+                                },
+                                icon: const Icon(Icons.refresh, size: 18, color: Colors.white),
+                                label: const Text('Retry', style: TextStyle(color: Colors.white)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ] else ...[
+                        // 1. Password change alert banner
+                        if (mustChangePassword) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFEF3C7),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: const Color(0xFFFCD34D)),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.warning_amber_rounded, color: Color(0xFFD97706), size: 24),
+                                const SizedBox(width: 10),
+                                const Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Password Change Required',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Color(0xFF92400E),
+                                        ),
+                                      ),
+                                      Text(
+                                        'Please update your password for security.',
+                                        style: TextStyle(fontSize: 11, color: Color(0xFFB45309)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 14),
                         ],
+
+                        // 2. Assigned Vehicles Card
+                        _SectionCard(
+                          title: 'Assigned Vehicles',
+                          icon: Icons.local_shipping_outlined,
+                          child: vehicles.isEmpty
+                              ? const _EmptyRow(text: 'No vehicles assigned')
+                              : Column(
+                                  children: List.generate(vehicles.length, (i) {
+                                    final v = vehicles[i];
+                                    return _ItemTile(
+                                      icon: Icons.local_shipping_outlined,
+                                      title: v.name,
+                                      badge: v.id != null ? '#${v.id}' : null,
+                                      isLast: i == vehicles.length - 1,
+                                    );
+                                  }),
+                                ),
+                        ),
+                        const SizedBox(height: 14),
+
+                        // 3. Assigned Service Areas Card
+                        _SectionCard(
+                          title: 'Assigned Service Areas',
+                          icon: Icons.map_outlined,
+                          child: areas.isEmpty
+                              ? const _EmptyRow(text: 'No service areas assigned')
+                              : Column(
+                                  children: List.generate(areas.length, (i) {
+                                    final a = areas[i];
+                                    return _ItemTile(
+                                      icon: Icons.location_on_outlined,
+                                      title: a.name,
+                                      badge: a.id != null ? 'Zone #${a.id}' : null,
+                                      isLast: i == areas.length - 1,
+                                    );
+                                  }),
+                                ),
+                        ),
+                        const SizedBox(height: 14),
+
+                        // 4. Account Details Card
+                        _SectionCard(
+                          title: 'Account Information',
+                          icon: Icons.person_outline,
+                          child: Column(
+                            children: [
+                              _ProfileRow(
+                                icon: Icons.badge_outlined,
+                                title: 'Employee Code',
+                                value: employeeCode.isNotEmpty ? employeeCode : 'N/A',
+                                isLast: false,
+                              ),
+                              _ProfileRow(
+                                icon: Icons.alternate_email,
+                                title: 'Username',
+                                value: username.isNotEmpty ? username : 'N/A',
+                                isLast: false,
+                              ),
+                              _ProfileRow(
+                                icon: Icons.shield_outlined,
+                                title: l10n?.role ?? 'Role',
+                                value: l10n?.salesRep ?? 'Sales Representative',
+                                isLast: true,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                      ],
+
+                      // ─── Actions Card ───
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: const Color(0xFFEAEAE4)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.04),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            // End Session & Logout
+                            _ActionRow(
+                              icon: Icons.logout,
+                              title: l10n?.endSessionLogout ?? 'End Session & Logout',
+                              iconBg: const Color(0xFFFFE8E6),
+                              iconColor: _brandRed,
+                              textColor: _brandRed,
+                              chevronColor: _brandRed.withValues(alpha: 0.35),
+                              onTap: onLogout,
+                              isLast: true,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 18),
+                      // Footer brand text
+                      Center(
+                        child: Text(
+                          l10n?.wazza3V10 ?? 'WAZZA3 · DISTRIBUTION SYSTEM',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Color(0xFF9CA3AF),
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 2.5,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -112,113 +467,37 @@ class ProfileView extends StatelessWidget {
               ],
             ),
           ),
-          
-          // Body content
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Info Card
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFFEAEAE4)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      _ProfileRow(
-                        icon: Icons.local_shipping_outlined,
-                        title: AppLocalizations.of(context)!.assignedTruck,
-                        value: AppLocalizations.of(context)!.truckA101,
-                        isLast: false,
-                      ),
-                      _ProfileRow(
-                        icon: Icons.location_on_outlined,
-                        title: AppLocalizations.of(context)!.territory,
-                        value: AppLocalizations.of(context)!.northDistrict,
-                        isLast: false,
-                      ),
-                      _ProfileRow(
-                        icon: Icons.phone_outlined,
-                        title: AppLocalizations.of(context)!.phone,
-                        value: '+1 555-0042',
-                        isLast: false,
-                      ),
-                      _ProfileRow(
-                        icon: Icons.shield_outlined,
-                        title: AppLocalizations.of(context)!.role,
-                        value: AppLocalizations.of(context)!.salesRep,
-                        isLast: true,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                
-                // Action Buttons Card
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFFEAEAE4)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      // App Settings
-                      _ActionRow(
-                        icon: Icons.settings_outlined,
-                        title: AppLocalizations.of(context)!.appSettings,
-                        iconBg: const Color(0xFFF4F4EE),
-                        iconColor: const Color(0xFF6B7280),
-                        textColor: const Color(0xFF374151),
-                        chevronColor: const Color(0xFFD1D5DB),
-                        onTap: () {},
-                        isLast: false,
-                      ),
-                      // End Session & Logout
-                      _ActionRow(
-                        icon: Icons.logout,
-                        title: AppLocalizations.of(context)!.endSessionLogout,
-                        iconBg: const Color(0xFFFFE8E6),
-                        iconColor: _brandRed,
-                        textColor: _brandRed,
-                        chevronColor: _brandRed.withValues(alpha: 0.35),
-                        onTap: onLogout,
-                        isLast: true,
-                      ),
-                    ],
-                  ),
-                ),
-                
-                const SizedBox(height: 16),
-                // Footer brand text
-                Center(
-                  child: Text(AppLocalizations.of(context)!.wazza3V10,
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Color(0xFF9CA3AF),
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 3.0,
-                    ),
-                  ),
-                ),
-              ],
+        );
+      },
+    );
+  }
+}
+
+class _HeaderBadge extends StatelessWidget {
+  const _HeaderBadge({required this.icon, required this.label});
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.20),
+        borderRadius: BorderRadius.circular(99),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: Colors.white.withValues(alpha: 0.95)),
+          const SizedBox(width: 5),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.95),
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -227,25 +506,137 @@ class ProfileView extends StatelessWidget {
   }
 }
 
-class _Badge extends StatelessWidget {
-  const _Badge({required this.label});
-  final String label;
+class _SectionCard extends StatelessWidget {
+  const _SectionCard({
+    required this.title,
+    required this.icon,
+    required this.child,
+  });
+
+  final String title;
+  final IconData icon;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.20),
-        borderRadius: BorderRadius.circular(99),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFEAEAE4)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Section Title
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+            child: Row(
+              children: [
+                Icon(icon, size: 16, color: _brandRed),
+                const SizedBox(width: 8),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1F2937),
+                    letterSpacing: -0.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1, color: Color(0xFFF3F4F6)),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+class _ItemTile extends StatelessWidget {
+  const _ItemTile({
+    required this.icon,
+    required this.title,
+    this.badge,
+    required this.isLast,
+  });
+
+  final IconData icon;
+  final String title;
+  final String? badge;
+  final bool isLast;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: isLast ? null : const Border(bottom: BorderSide(color: Color(0xFFF3F4F6))),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          Container(
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFE8E6),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: _brandRed, size: 16),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF1F2937),
+              ),
+            ),
+          ),
+          if (badge != null)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF3F4F6),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                badge!,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF6B7280),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EmptyRow extends StatelessWidget {
+  const _EmptyRow({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: Text(
-        label,
-        style: TextStyle(
-          color: Colors.white.withValues(alpha: 0.90),
-          fontSize: 11,
-          fontWeight: FontWeight.bold,
-        ),
+        text,
+        style: const TextStyle(fontSize: 12, color: Color(0xFF9CA3AF), fontStyle: FontStyle.italic),
       ),
     );
   }
@@ -270,21 +661,19 @@ class _ProfileRow extends StatelessWidget {
       decoration: BoxDecoration(
         border: isLast ? null : const Border(bottom: BorderSide(color: Color(0xFFF3F4F6))),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          // Icon Container
           Container(
-            width: 36,
-            height: 36,
+            width: 34,
+            height: 34,
             decoration: BoxDecoration(
-              color: const Color(0xFFFFE8E6),
-              borderRadius: BorderRadius.circular(12),
+              color: const Color(0xFFF4F4EE),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: _brandRed, size: 16),
+            child: Icon(icon, color: const Color(0xFF6B7280), size: 16),
           ),
-          const SizedBox(width: 16),
-          // Texts
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,10 +733,9 @@ class _ActionRow extends StatelessWidget {
         decoration: BoxDecoration(
           border: isLast ? null : const Border(bottom: BorderSide(color: Color(0xFFF3F4F6))),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(
           children: [
-            // Icon
             Container(
               width: 36,
               height: 36,
@@ -357,8 +745,7 @@ class _ActionRow extends StatelessWidget {
               ),
               child: Icon(icon, color: iconColor, size: 17),
             ),
-            const SizedBox(width: 16),
-            // Title
+            const SizedBox(width: 14),
             Expanded(
               child: Text(
                 title,
@@ -369,7 +756,6 @@ class _ActionRow extends StatelessWidget {
                 ),
               ),
             ),
-            // Chevron
             Icon(Icons.chevron_right, color: chevronColor, size: 16),
           ],
         ),

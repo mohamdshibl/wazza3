@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/enums/request_status.dart';
 import '../../data/models/auth_method.dart';
+import '../../data/models/auth_user.dart';
 import '../../data/models/country.dart';
 import '../../data/models/login_params.dart';
 import '../../data/repos/auth_repository.dart';
@@ -29,8 +30,8 @@ class SignInCubit extends Cubit<SignInState> {
     emit(state.copyWith(country: country, clearError: true));
   }
 
-  /// Submits credentials.
-  Future<void> signIn({
+  /// Submits credentials and returns the authenticated [AuthUser] on success.
+  Future<AuthUser?> signIn({
     required String identifier,
     required String password,
   }) async {
@@ -44,13 +45,21 @@ class SignInCubit extends Cubit<SignInState> {
       ),
     );
 
-    emit(switch (result) {
-      AuthSuccess() => state.copyWith(status: RequestStatus.success),
-      AuthError(:final failure) => state.copyWith(
+    switch (result) {
+      case AuthSuccess(:final user):
+        emit(state.copyWith(
+          status: RequestStatus.success,
+          user: user,
+          clearError: true,
+        ));
+        return user;
+      case AuthError(:final failure):
+        emit(state.copyWith(
           status: RequestStatus.failure,
           errorMessage: failure.message,
-        ),
-    });
+        ));
+        return null;
+    }
   }
 
   /// Requests an OTP for the current Country + local number.
@@ -61,13 +70,17 @@ class SignInCubit extends Cubit<SignInState> {
         '${state.country.dialCode}${number.replaceAll(RegExp(r'\s'), '')}';
     final result = await _repository.requestOtp(fullNumber);
 
-    emit(switch (result) {
-      OtpSent() => state.copyWith(status: RequestStatus.success),
-      OtpError(:final failure) => state.copyWith(
+    switch (result) {
+      case OtpSent():
+        emit(state.copyWith(status: RequestStatus.success, clearError: true));
+        break;
+      case OtpError(:final failure):
+        emit(state.copyWith(
           status: RequestStatus.failure,
           errorMessage: failure.message,
-        ),
-    });
+        ));
+        break;
+    }
   }
 
   /// Called after the UI has shown the failure so a retry starts clean.

@@ -11,6 +11,7 @@ import '../../../../core/widgets/app_text_field.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/routing/app_routes.dart';
 import '../../data/models/auth_method.dart';
+import '../../logic/controllers/auth_cubit.dart';
 import '../../logic/controllers/sign_in_cubit.dart';
 import '../../logic/controllers/sign_in_state.dart';
 import 'auth_method_toggle.dart';
@@ -38,7 +39,7 @@ class _SignInFormState extends State<SignInForm> {
     super.dispose();
   }
 
-  void _submit() {
+  void _submit() async {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
 
@@ -46,10 +47,13 @@ class _SignInFormState extends State<SignInForm> {
     final method = cubit.state.method;
 
     if (method == AuthMethod.email) {
-      cubit.signIn(
+      final user = await cubit.signIn(
         identifier: _emailController.text,
         password: _passwordController.text,
       );
+      if (mounted && user != null) {
+        context.read<AuthCubit>().setUser(user);
+      }
     } else {
       cubit.requestOtp(number: _phoneController.text);
     }
@@ -139,6 +143,9 @@ class _SignInFormState extends State<SignInForm> {
       );
       context.read<SignInCubit>().acknowledgeError();
     } else if (state.status.isSuccess) {
+      if (state.user != null) {
+        context.read<AuthCubit>().setUser(state.user);
+      }
       final messenger = ScaffoldMessenger.of(context);
       final isOtp = state.method == AuthMethod.phone;
       messenger.showSnackBar(

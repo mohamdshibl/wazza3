@@ -1,7 +1,9 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../../core/routing/app_routes.dart';
+import '../../auth/logic/controllers/auth_cubit.dart';
 
 class SessionStartScreen extends StatefulWidget {
   const SessionStartScreen({super.key});
@@ -25,6 +27,8 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authUser = context.watch<AuthCubit>().state;
+    final driverName = authUser?.name.isNotEmpty == true ? authUser!.name : (AppLocalizations.of(context)?.driver ?? 'Driver');
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAEC),
       body: Column(
@@ -104,17 +108,18 @@ class _SessionStartScreenState extends State<SessionStartScreen> {
                     const SizedBox(height: 2),
                     Row(
                       children: [
-                        Text(AppLocalizations.of(context)!.driver,
-                          style: TextStyle(
+                        Text(
+                          driverName,
+                          style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 32,
+                            fontSize: 28,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
-                        SizedBox(width: 6),
-                        Text(
+                        const SizedBox(width: 6),
+                        const Text(
                           '👋',
-                          style: TextStyle(fontSize: 28),
+                          style: TextStyle(fontSize: 26),
                         ),
                       ],
                     ),
