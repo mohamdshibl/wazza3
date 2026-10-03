@@ -24,6 +24,22 @@ class AuthUser {
         mustChangePassword: json['must_change_password'] == true,
       );
 
+  AuthUser copyWith({
+    String? id,
+    String? name,
+    String? token,
+    String? employeeCode,
+    bool? mustChangePassword,
+  }) {
+    return AuthUser(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      token: token ?? this.token,
+      employeeCode: employeeCode ?? this.employeeCode,
+      mustChangePassword: mustChangePassword ?? this.mustChangePassword,
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,

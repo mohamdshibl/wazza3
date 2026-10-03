@@ -7,6 +7,7 @@ import '../../../../core/widgets/dot_grid_painter.dart';
 import '../../../auth/logic/controllers/auth_cubit.dart';
 import '../../logic/controllers/profile_cubit.dart';
 import '../../logic/controllers/profile_state.dart';
+import 'change_password_sheet.dart';
 
 const _brandRed = Color(0xFFE52B13);
 const _brandRedDark = Color(0xFFAF2409);
@@ -341,37 +342,41 @@ class _ProfileViewContent extends StatelessWidget {
                       ] else ...[
                         // 1. Password change alert banner
                         if (mustChangePassword) ...[
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFEF3C7),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: const Color(0xFFFCD34D)),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.warning_amber_rounded, color: Color(0xFFD97706), size: 24),
-                                const SizedBox(width: 10),
-                                const Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Password Change Required',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                          color: Color(0xFF92400E),
+                          GestureDetector(
+                            onTap: () => ChangePasswordSheet.show(context),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFEF3C7),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: const Color(0xFFFCD34D)),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.warning_amber_rounded, color: Color(0xFFD97706), size: 24),
+                                  const SizedBox(width: 10),
+                                  const Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Password Change Required',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: Color(0xFF92400E),
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        'Please update your password for security.',
-                                        style: TextStyle(fontSize: 11, color: Color(0xFFB45309)),
-                                      ),
-                                    ],
+                                        Text(
+                                          'Tap here to update your password now →',
+                                          style: TextStyle(fontSize: 11, color: Color(0xFFB45309)),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  const Icon(Icons.chevron_right, color: Color(0xFFD97706), size: 18),
+                                ],
+                              ),
                             ),
                           ),
                           const SizedBox(height: 14),
@@ -463,6 +468,18 @@ class _ProfileViewContent extends StatelessWidget {
                         ),
                         child: Column(
                           children: [
+                            // Change Password
+                            _ActionRow(
+                              icon: Icons.lock_reset,
+                              title: 'Change Password',
+                              iconBg: const Color(0xFFEFF6FF),
+                              iconColor: const Color(0xFF2563EB),
+                              textColor: const Color(0xFF1F2937),
+                              chevronColor: const Color(0xFF9CA3AF),
+                              onTap: () => ChangePasswordSheet.show(context),
+                              isLast: false,
+                            ),
+                            const Divider(height: 1, color: Color(0xFFF3F4F6)),
                             // End Session & Logout
                             _ActionRow(
                               icon: Icons.logout,
