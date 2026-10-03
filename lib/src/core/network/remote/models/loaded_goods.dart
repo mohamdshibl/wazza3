@@ -12,24 +12,37 @@ class LoadedGoods {
   final List<LoadedGoodLine> lines;
   final Map<String, dynamic> raw;
 
-  factory LoadedGoods.fromJson(Map<String, dynamic> json) {
+  factory LoadedGoods.fromJson(dynamic rawData) {
+    if (rawData is! Map) {
+      if (rawData is List) {
+        return LoadedGoods(
+          lines: rawData
+              .whereType<Map>()
+              .map((l) => LoadedGoodLine.fromJson(l))
+              .toList(),
+        );
+      }
+      return const LoadedGoods();
+    }
+
+    final json = <String, dynamic>{};
+    for (final entry in rawData.entries) {
+      json[entry.key.toString()] = entry.value;
+    }
+
     List<LoadedGoodLine> parsedLines = [];
-    final rawLines = json['lines'] ?? json['goods'] ?? json['items'];
+    final rawLines = json['lines'] ?? json['goods'] ?? json['items'] ?? json['rows'] ?? json['data'];
     if (rawLines is List) {
-      parsedLines = rawLines
-          .whereType<Map<String, dynamic>>()
-          .map((l) => LoadedGoodLine.fromJson(l))
-          .toList();
-    } else if (json['data'] is List) {
-      parsedLines = (json['data'] as List)
-          .whereType<Map<String, dynamic>>()
-          .map((l) => LoadedGoodLine.fromJson(l))
-          .toList();
+      for (final l in rawLines) {
+        if (l is Map) {
+          parsedLines.add(LoadedGoodLine.fromJson(l));
+        }
+      }
     }
 
     return LoadedGoods(
       doId: (json['do_id'] as num?)?.toInt() ?? (json['id'] as num?)?.toInt(),
-      orderName: json['order_name']?.toString() ?? json['name']?.toString(),
+      orderName: json['order_name']?.toString() ?? json['name']?.toString() ?? json['reference']?.toString(),
       lines: parsedLines,
       raw: json,
     );
@@ -66,7 +79,16 @@ class LoadedGoodLine {
   final bool isConfirmed;
   final Map<String, dynamic> raw;
 
-  factory LoadedGoodLine.fromJson(Map<String, dynamic> json) {
+  factory LoadedGoodLine.fromJson(dynamic rawData) {
+    if (rawData is! Map) {
+      return const LoadedGoodLine(productName: '');
+    }
+
+    final json = <String, dynamic>{};
+    for (final entry in rawData.entries) {
+      json[entry.key.toString()] = entry.value;
+    }
+
     int? pId;
     String pName = '';
     if (json['product_id'] is List && (json['product_id'] as List).isNotEmpty) {

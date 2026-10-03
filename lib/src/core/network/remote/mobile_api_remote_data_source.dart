@@ -278,14 +278,7 @@ class OdooMobileApiRemoteDataSource implements MobileApiRemoteDataSource {
 
     return ApiResponse.fromJson(
       responseMap,
-      (data) {
-        if (data is Map) {
-          return LoadedGoods.fromJson(Map<String, dynamic>.from(data));
-        } else if (data is List) {
-          return LoadedGoods.fromJson({'goods': data, 'do_id': doId});
-        }
-        return const LoadedGoods();
-      },
+      (data) => LoadedGoods.fromJson(data),
     );
   }
 
