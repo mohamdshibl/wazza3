@@ -352,7 +352,9 @@ class OdooMobileApiRemoteDataSource implements MobileApiRemoteDataSource {
         if (data is List) {
           rawList = data;
         } else if (data is Map) {
-          if (data['history'] is List) {
+          if (data['rows'] is List) {
+            rawList = data['rows'] as List;
+          } else if (data['history'] is List) {
             rawList = data['history'] as List;
           } else if (data['orders'] is List) {
             rawList = data['orders'] as List;
