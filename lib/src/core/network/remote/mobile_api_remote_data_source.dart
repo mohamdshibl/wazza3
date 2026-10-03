@@ -237,8 +237,21 @@ class OdooMobileApiRemoteDataSource implements MobileApiRemoteDataSource {
     return ApiResponse.fromJson(
       responseMap,
       (data) {
+        List? rawList;
         if (data is List) {
-          return data
+          rawList = data;
+        } else if (data is Map) {
+          if (data['rows'] is List) {
+            rawList = data['rows'] as List;
+          } else if (data['notifications'] is List) {
+            rawList = data['notifications'] as List;
+          } else if (data['data'] is List) {
+            rawList = data['data'] as List;
+          }
+        }
+
+        if (rawList != null) {
+          return rawList
               .whereType<Map>()
               .map((item) => MobileNotification.fromJson(Map<String, dynamic>.from(item)))
               .toList();

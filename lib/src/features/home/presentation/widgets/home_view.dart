@@ -12,6 +12,7 @@ import '../../../../core/network/remote/models/models.dart';
 import '../../../auth/logic/controllers/auth_cubit.dart';
 import '../../logic/controllers/home_cubit.dart';
 import '../../logic/controllers/home_state.dart';
+import 'notifications_sheet.dart';
 
 // Color tokens
 const _teal = Color(0xFF0B6B54);
@@ -113,7 +114,11 @@ class _HomeViewContentState extends State<_HomeViewContent> {
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
-                _Header(driverName: widget.driverName, onLogout: widget.onLogout),
+                _Header(
+                  driverName: widget.driverName,
+                  unreadNotifications: homeData?.unreadNotifications ?? 0,
+                  onLogout: widget.onLogout,
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
                   child: Column(
@@ -148,8 +153,14 @@ class _HomeViewContentState extends State<_HomeViewContent> {
 
 // ─── Header ────────────────────────────────────────────────────────────────
 class _Header extends StatelessWidget {
-  const _Header({required this.driverName, required this.onLogout});
+  const _Header({
+    required this.driverName,
+    this.unreadNotifications = 0,
+    required this.onLogout,
+  });
+
   final String driverName;
+  final int unreadNotifications;
   final VoidCallback onLogout;
 
   @override
@@ -211,15 +222,57 @@ class _Header extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(AppLocalizations.of(context)!.goodEvening,
-                            style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontSize: 13, fontWeight: FontWeight.w500),
+                          Text(
+                            AppLocalizations.of(context)!.goodEvening,
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.75),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           Text(
                             driverName,
-                            style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold, letterSpacing: -0.3),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: -0.3,
+                            ),
                           ),
                         ],
                       ),
+                    ),
+                    // Notifications Bell Button with Unread Badge
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.notifications_outlined, color: Colors.white, size: 22),
+                          onPressed: () => NotificationsSheet.show(context),
+                        ),
+                        if (unreadNotifications > 0)
+                          Positioned(
+                            right: 6,
+                            top: 6,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                              child: Text(
+                                '$unreadNotifications',
+                                style: const TextStyle(
+                                  color: _brandRed,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                     IconButton(
                       icon: const Icon(Icons.language, color: Colors.white, size: 20),

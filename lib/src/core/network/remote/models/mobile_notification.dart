@@ -20,7 +20,14 @@ class MobileNotification {
   final String? createdAt;
   final Map<String, dynamic> raw;
 
-  factory MobileNotification.fromJson(Map<String, dynamic> json) {
+  factory MobileNotification.fromJson(dynamic rawData) {
+    if (rawData is! Map) {
+      return const MobileNotification(id: 0, event: '', title: '');
+    }
+    final json = <String, dynamic>{};
+    for (final entry in rawData.entries) {
+      json[entry.key.toString()] = entry.value;
+    }
     return MobileNotification(
       id: (json['id'] as num?)?.toInt() ?? 0,
       event: json['event']?.toString() ?? json['type']?.toString() ?? '',
@@ -30,6 +37,28 @@ class MobileNotification {
       doId: (json['do_id'] as num?)?.toInt() ?? (json['order_id'] as num?)?.toInt(),
       createdAt: json['create_date']?.toString() ?? json['created_at']?.toString() ?? json['date']?.toString(),
       raw: json,
+    );
+  }
+
+  MobileNotification copyWith({
+    int? id,
+    String? event,
+    String? title,
+    String? message,
+    bool? isRead,
+    int? doId,
+    String? createdAt,
+    Map<String, dynamic>? raw,
+  }) {
+    return MobileNotification(
+      id: id ?? this.id,
+      event: event ?? this.event,
+      title: title ?? this.title,
+      message: message ?? this.message,
+      isRead: isRead ?? this.isRead,
+      doId: doId ?? this.doId,
+      createdAt: createdAt ?? this.createdAt,
+      raw: raw ?? this.raw,
     );
   }
 
