@@ -1,561 +1,478 @@
-import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../core/constants/app_icons.dart';
-import '../../../core/routing/app_routes.dart';
-import 'widgets/home_view.dart'; // To access the StopData class
-import '../../../core/style/app_text_styles.dart';
+import 'package:wazza3/l10n/app_localizations.dart';
 
-class _StopItem {
-  final StopData data;
-  final String alert;
-  final int? soCount;
+import '../../../core/enums/request_status.dart';
+import '../../../core/network/remote/models/delivery_order.dart';
+import '../../auth/logic/controllers/auth_cubit.dart';
+import '../logic/controllers/order_details_cubit.dart';
+import '../logic/controllers/order_details_state.dart';
 
-  const _StopItem({required this.data, required this.alert, this.soCount});
-}
+const _brandRed = Color(0xFFE52B13);
+const _brandRedDark = Color(0xFFAF2409);
+const _teal = Color(0xFF0B6B54);
+const _cardBg = Color(0xFFFFFFFF);
+const _navBg = Color(0xFFEAEAE4);
 
-class DoDetailsScreen extends StatefulWidget {
-  const DoDetailsScreen({super.key});
+class DoDetailsScreen extends StatelessWidget {
+  const DoDetailsScreen({
+    super.key,
+    this.initialOrder,
+    this.orderId,
+  });
+
+  final DeliveryOrder? initialOrder;
+  final int? orderId;
 
   @override
-  State<DoDetailsScreen> createState() => _DoDetailsScreenState();
-}
+  Widget build(BuildContext context) {
+    final authUser = context.watch<AuthCubit>().state;
+    final uid = authUser?.uid ?? 0;
+    final password = authUser?.token ?? '';
+    final doId = initialOrder?.id ?? orderId ?? 0;
 
-class _DoDetailsScreenState extends State<DoDetailsScreen> {
-  bool _isLoaded = false;
-  int _activeTab = 0; // 0 = DO Lines / Stops, 1 = Finance
-
-  List<_StopItem> get _stops => [
-    _StopItem(
-      data: const StopData(num: 1, name: 'Downtown Mart', address: '123 Main St, Downtown', units: 116, time: '08:30', amount: '\$374.00'),
-      alert: AppLocalizations.of(context)!.stopAlert1,
-    ),
-    _StopItem(
-      data: const StopData(num: 2, name: 'Uptown Groceries', address: '456 High St, Uptown', units: 220, time: '09:15', amount: '\$480.00'),
-      alert: AppLocalizations.of(context)!.stopAlert2,
-    ),
-    _StopItem(
-      data: const StopData(num: 3, name: 'City Cafe & Diner', address: '78 Park Ave, Midtown', units: 210, time: '10:00', amount: '\$560.00'),
-      alert: AppLocalizations.of(context)!.stopAlert3,
-      soCount: 2,
-    ),
-    _StopItem(
-      data: const StopData(num: 4, name: 'North Star Wholesale', address: '900 Industrial Blvd, Northside', units: 207, time: '11:00', amount: '\$424.00'),
-      alert: AppLocalizations.of(context)!.stopAlert4,
-    ),
-  ];
-
-  void _confirmLoading() {
-    setState(() {
-      _isLoaded = true;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Color(0xFF0B6B54),
-        content: Text(AppLocalizations.of(context)!.quantitiesLoaded),
+    return BlocProvider(
+      create: (context) {
+        final cubit = OrderDetailsCubit(initialOrder: initialOrder);
+        if (uid != 0 && password.isNotEmpty && doId != 0) {
+          cubit.fetchOrder(
+            uid: uid,
+            password: password,
+            doId: doId,
+            isRefresh: initialOrder != null,
+          );
+        }
+        return cubit;
+      },
+      child: _DoDetailsContent(
+        uid: uid,
+        password: password,
+        doId: doId,
       ),
     );
+  }
+}
+
+class _DoDetailsContent extends StatefulWidget {
+  const _DoDetailsContent({
+    required this.uid,
+    required this.password,
+    required this.doId,
+  });
+
+  final int uid;
+  final String password;
+  final int doId;
+
+  @override
+  State<_DoDetailsContent> createState() => _DoDetailsContentState();
+}
+
+class _DoDetailsContentState extends State<_DoDetailsContent> {
+  int _activeTab = 0; // 0 = Stops, 1 = Goods, 2 = Finance
+
+  Future<void> _launchUrl(String urlString) async {
+    final uri = Uri.parse(urlString);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
+
+  Color _getStatusBg(String status) {
+    switch (status.toLowerCase()) {
+      case 'done':
+      case 'completed':
+        return const Color(0xFFC9F2E3);
+      case 'in_progress':
+      case 'trip_started':
+        return const Color(0xFFDBEAFE);
+      case 'loading':
+      case 'waiting_for_loading_order':
+        return const Color(0xFFFEF3C7);
+      default:
+        return const Color(0xFFF3F4F6);
+    }
+  }
+
+  Color _getStatusFg(String status) {
+    switch (status.toLowerCase()) {
+      case 'done':
+      case 'completed':
+        return const Color(0xFF0B4A38);
+      case 'in_progress':
+      case 'trip_started':
+        return const Color(0xFF1D4ED8);
+      case 'loading':
+      case 'waiting_for_loading_order':
+        return const Color(0xFFB45309);
+      default:
+        return const Color(0xFF4B5563);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAEC),
-      body: Column(
-        children: [
-          // ─── Header ────────────────────────────────────────────────────────
-          Container(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 12,
-              bottom: 12,
-              left: 16,
-              right: 16,
-            ),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFE52B13), Color(0xFFAF2409)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+      body: BlocConsumer<OrderDetailsCubit, OrderDetailsState>(
+        listener: (context, state) {
+          if (state.errorMessage != null && state.errorMessage!.isNotEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage!),
+                backgroundColor: _brandRedDark,
               ),
-            ),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    alignment: Alignment.center,
-                    child: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  ),
+            );
+          }
+        },
+        builder: (context, state) {
+          final order = state.order;
+
+          if (state.status.isLoading && order == null) {
+            return const Scaffold(
+              backgroundColor: Color(0xFFF9FAEC),
+              body: Center(
+                child: CircularProgressIndicator(color: _brandRed),
+              ),
+            );
+          }
+
+          if (state.status.isFailure && order == null) {
+            return Scaffold(
+              backgroundColor: const Color(0xFFF9FAEC),
+              appBar: AppBar(
+                backgroundColor: _brandRed,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.pop(context),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
+                title: const Text('Order Details', style: TextStyle(color: Colors.white)),
+              ),
+              body: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
-                        'DO-2025',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
+                      Icon(Icons.error_outline, color: Colors.red.shade400, size: 48),
+                      const SizedBox(height: 12),
                       Text(
-                        AppLocalizations.of(context)!.mockDateShort,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 11,
+                        state.errorMessage ?? 'Failed to load order details',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 14, color: Color(0xFF374151)),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _brandRed,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
+                        onPressed: () {
+                          if (widget.uid != 0 && widget.password.isNotEmpty && widget.doId != 0) {
+                            context.read<OrderDetailsCubit>().fetchOrder(
+                                  uid: widget.uid,
+                                  password: widget.password,
+                                  doId: widget.doId,
+                                );
+                          }
+                        },
+                        icon: const Icon(Icons.refresh, color: Colors.white, size: 18),
+                        label: const Text('Retry', style: TextStyle(color: Colors.white)),
                       ),
                     ],
                   ),
                 ),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: _isLoaded ? const Color(0xFFC9F2E3) : const Color(0xFFDBEAFE),
-                    borderRadius: BorderRadius.circular(99),
-                  ),
-                  child: Text(
-                    _isLoaded ? AppLocalizations.of(context)!.loaded : AppLocalizations.of(context)!.loading,
-                    style: TextStyle(
-                      color: _isLoaded ? const Color(0xFF0B4A38) : const Color(0xFF1D4ED8),
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              ),
+            );
+          }
+
+          final displayRef = order?.displayReference ?? 'DO-${widget.doId}';
+          final displayDate = order?.date ?? '';
+          final status = order?.displayStatus ?? 'draft';
+          final vehicle = order?.displayVehicle ?? '';
+          final salesRep = order?.salesRep ?? '';
+          final warehouse = order?.warehouse ?? '';
+          final stopsCount = order?.stopCount ?? order?.stops.length ?? 0;
+          final goodsCount = order?.itemsCount ?? order?.goods.length ?? 0;
+          final totalAmount = order?.amountTotal ?? 0.0;
+          final currency = order?.currency ?? 'USD';
+          final actions = order?.actions;
+
+          return Column(
+            children: [
+              // ─── Header Gradient ───
+              Container(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top + 12,
+                  bottom: 12,
+                  left: 16,
+                  right: 16,
                 ),
-              ],
-            ),
-          ),
-
-          // ─── Scrollable Contents ───────────────────────────────────────────
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // 3-Column Grid Cards
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                    child: IntrinsicHeight(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // Stops
-                          Expanded(
-                            child: _buildMetricCard(
-                              svgString: AppIcons.route,
-                              iconColor: const Color(0xFFE52B13),
-                              label: AppLocalizations.of(context)!.stopsLabel,
-                              valueWidget: RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1A1A1A),
-                                  ),
-                                  children: [
-                                    TextSpan(text: _isLoaded ? '0' : '0'),
-                                    const TextSpan(
-                                      text: '/4',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xFF9CA3AF),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              extraWidget: Container(
-                                width: double.infinity,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFE52B13).withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(99),
-                                ),
-                                child: FractionallySizedBox(
-                                  alignment: Alignment.centerLeft,
-                                  widthFactor: 0.0,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                        colors: [Color(0xFFE52B13), Color(0xFFAF2409)],
-                                      ),
-                                      borderRadius: BorderRadius.circular(99),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-
-                          // Collected
-                          Expanded(
-                            child: _buildMetricCard(
-                              svgString: AppIcons.banknote,
-                              iconColor: const Color(0xFF0B6B54),
-                              label: AppLocalizations.of(context)!.collected,
-                              valueWidget: Text.rich(
-                                buildCurrencyTextSpan(
-                                  '\$0.00',
-                                  const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0B6B54),
-                                  ),
-                                ),
-                              ),
-                              extraWidget: Text.rich(
-                                buildCurrencyTextSpan(
-                                  AppLocalizations.of(context)!.amountDue('\$1,838.00'),
-                                  const TextStyle(
-                                    fontSize: 10,
-                                    color: Color(0xFF9CA3AF),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-
-                          // Value
-                          Expanded(
-                            child: _buildMetricCard(
-                              svgString: AppIcons.dollarSign,
-                              iconColor: const Color(0xFFE52B13),
-                              label: AppLocalizations.of(context)!.valueLabel,
-                              valueWidget: Text.rich(
-                                buildCurrencyTextSpan(
-                                  '\$1,658.00',
-                                  const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1A1A1A),
-                                  ),
-                                ),
-                              ),
-                              extraWidget: Text(
-                                AppLocalizations.of(context)!.totalInvoiced,
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  color: Color(0xFF9CA3AF),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [_brandRed, _brandRedDark],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                       ),
                     ),
-                  ),
-
-                  // Vehicle & Driver Row Card
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: const Color(0xFFF3F4F6)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.03),
-                          blurRadius: 4,
-                          offset: const Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Row(
-                          children: [
-                            AppIcons.asset(
-                              AppIcons.truck,
-                              width: 15,
-                              height: 15,
-                              color: const Color(0xFFE52B13),
-                            ),
-                            const SizedBox(width: 8),
-                            const Text(
-                              'ABC-1234',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF374151),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 16),
-                        const Row(
-                          children: [
-                            Text(
-                              '👤',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              'Alex Driver',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFF6B7280),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Handle juice cartons alert box
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFFBEB),
-                      border: Border.all(color: const Color(0xFFFDE68A)),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AppIcons.asset(
-                          AppIcons.fileText,
-                          width: 14,
-                          height: 14,
-                          color: const Color(0xFFD97706),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(AppLocalizations.of(context)!.handleJuiceCartonsCarefullyFragileColdChainMaintained,
-                            style: TextStyle(
-                              color: Color(0xFF92400E),
-                              fontSize: 12,
-                              height: 1.4,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Warehouse loading progress banner
-                  if (!_isLoaded)
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFDBEAFE),
-                        border: Border.all(color: const Color(0xFFBFDBFE)),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                    const SizedBox(width: 12),
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Text(
+                            displayRef,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.3,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (displayDate.isNotEmpty) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              displayDate,
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: _getStatusBg(status),
+                        borderRadius: BorderRadius.circular(99),
+                      ),
+                      child: Text(
+                        status.toUpperCase(),
+                        style: TextStyle(
+                          color: _getStatusFg(status),
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // ─── Scrollable Body ───
+              Expanded(
+                child: RefreshIndicator(
+                  color: _brandRed,
+                  onRefresh: () async {
+                    if (widget.uid != 0 && widget.password.isNotEmpty && widget.doId != 0) {
+                      await context.read<OrderDetailsCubit>().fetchOrder(
+                            uid: widget.uid,
+                            password: widget.password,
+                            doId: widget.doId,
+                            isRefresh: true,
+                          );
+                    }
+                  },
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 3-Metric Summary Cards
+                        IntrinsicHeight(
+                          child: Row(
                             children: [
-                              Container(
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFBFDBFE),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                alignment: Alignment.center,
-                                child: AppIcons.asset(
-                                  AppIcons.truck,
-                                  width: 18,
-                                  height: 18,
-                                  color: const Color(0xFF1D4ED8),
+                              Expanded(
+                                child: _buildMetricCard(
+                                  icon: Icons.route_outlined,
+                                  iconColor: _brandRed,
+                                  label: l10n?.stopsLabel ?? 'Stops',
+                                  value: '$stopsCount',
+                                  subtitle: 'Total stops',
                                 ),
                               ),
-                              const SizedBox(width: 12),
+                              const SizedBox(width: 8),
                               Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(AppLocalizations.of(context)!.loadingInProgress,
-                                      style: TextStyle(
-                                        color: Color(0xFF1E3A8A),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    SizedBox(height: 2),
-                                    Text(AppLocalizations.of(context)!.warehouseIsLoadingYourTruckConfirmWhenDone,
-                                      style: TextStyle(
-                                        color: Color(0xFF1D4ED8),
-                                        fontSize: 12,
-                                        height: 1.4,
-                                      ),
-                                    ),
-                                  ],
+                                child: _buildMetricCard(
+                                  icon: Icons.inventory_2_outlined,
+                                  iconColor: _teal,
+                                  label: 'Items',
+                                  value: '$goodsCount',
+                                  subtitle: 'Total units',
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: _buildMetricCard(
+                                  icon: Icons.payments_outlined,
+                                  iconColor: const Color(0xFFD97706),
+                                  label: 'Amount',
+                                  value: '$currency ${totalAmount.toStringAsFixed(0)}',
+                                  subtitle: 'Order value',
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
-                          ElevatedButton(
-                            onPressed: _confirmLoading,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF2563EB),
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              minimumSize: const Size(double.infinity, 0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                 AppIcons.asset(
-                                   AppIcons.circleCheck,
-                                   width: 17,
-                                   height: 17,
-                                   color: Colors.white,
-                                 ),
-                                const SizedBox(width: 8),
-                                Text(AppLocalizations.of(context)!.confirmQuantitiesLoaded,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                        ),
+                        const SizedBox(height: 12),
 
-                  // Tab selector: DO Lines / Stops | Finance
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEAEAE4),
-                      borderRadius: BorderRadius.circular(99),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _activeTab = 0),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                color: _activeTab == 0 ? Colors.white : Colors.transparent,
-                                borderRadius: BorderRadius.circular(99),
-                                boxShadow: _activeTab == 0
-                                    ? [
-                                        BoxShadow(
-                                          color: Colors.black.withValues(alpha: 0.05),
-                                          blurRadius: 4,
-                                          offset: const Offset(0, 1),
-                                        )
-                                      ]
-                                    : null,
+                        // Vehicle & Sales Rep Info Card
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: _cardBg,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: const Color(0xFFF3F4F6)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.03),
+                                blurRadius: 4,
+                                offset: const Offset(0, 1),
                               ),
-                              alignment: Alignment.center,
-                              child: Text(AppLocalizations.of(context)!.doLinesStops,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: _activeTab == 0 ? const Color(0xFF0B6B54) : const Color(0xFF6B7280),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              if (vehicle.isNotEmpty)
+                                Row(
+                                  children: [
+                                    const Icon(Icons.local_shipping_outlined, color: _brandRed, size: 16),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        vehicle,
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xFF374151),
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
+                              if (vehicle.isNotEmpty && (salesRep.isNotEmpty || warehouse.isNotEmpty))
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: Divider(height: 1, color: Color(0xFFF3F4F6)),
+                                ),
+                              Row(
+                                children: [
+                                  if (salesRep.isNotEmpty) ...[
+                                    const Icon(Icons.person_outline, color: Color(0xFF6B7280), size: 15),
+                                    const SizedBox(width: 6),
+                                    Expanded(
+                                      child: Text(
+                                        salesRep,
+                                        style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                  if (warehouse.isNotEmpty) ...[
+                                    const Icon(Icons.warehouse_outlined, color: Color(0xFF6B7280), size: 15),
+                                    const SizedBox(width: 6),
+                                    Expanded(
+                                      child: Text(
+                                        warehouse,
+                                        style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
-                            ),
+                            ],
                           ),
                         ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _activeTab = 1),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                color: _activeTab == 1 ? Colors.white : Colors.transparent,
-                                borderRadius: BorderRadius.circular(99),
-                                boxShadow: _activeTab == 1
-                                    ? [
-                                        BoxShadow(
-                                          color: Colors.black.withValues(alpha: 0.05),
-                                          blurRadius: 4,
-                                          offset: const Offset(0, 1),
-                                        )
-                                      ]
-                                    : null,
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(AppLocalizations.of(context)!.finance,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: _activeTab == 1 ? const Color(0xFF0B6B54) : const Color(0xFF6B7280),
-                                ),
-                              ),
-                            ),
+
+                        // Action Banner / Buttons
+                        if (actions != null && (actions.startLoading || actions.confirmLoadedGoods || actions.startTrip))
+                          _buildActionsBanner(context, actions, state.isActionLoading),
+
+                        const SizedBox(height: 16),
+
+                        // Tabs Selector: Stops | Goods | Finance
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: _navBg,
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Row(
+                            children: [
+                              _buildTabItem(0, '${l10n?.stopsLabel ?? "Stops"} ($stopsCount)'),
+                              _buildTabItem(1, 'Goods ($goodsCount)'),
+                              _buildTabItem(2, 'Finance'),
+                            ],
                           ),
                         ),
+                        const SizedBox(height: 14),
+
+                        // Tab Content
+                        if (_activeTab == 0)
+                          _buildStopsTab(order?.stops ?? [])
+                        else if (_activeTab == 1)
+                          _buildGoodsTab(order?.goods ?? [])
+                        else
+                          _buildFinanceTab(order),
                       ],
                     ),
                   ),
-
-                  // Tab Contents (DO Lines or Finance)
-                  if (_activeTab == 0) ...[
-                    // DO Lines / Stops list
-                    ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-                      itemCount: _stops.length,
-                      separatorBuilder: (context, index) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final stop = _stops[index];
-                        return _buildStopCard(stop);
-                      },
-                    ),
-                  ] else ...[
-                    // Finance Tab Content
-                    _buildFinanceTab(),
-                  ],
-                ],
+                ),
               ),
-            ),
-          ),
-
-
-        ],
+            ],
+          );
+        },
       ),
     );
   }
 
   Widget _buildMetricCard({
-    required String svgString,
+    required IconData icon,
     required Color iconColor,
     required String label,
-    required Widget valueWidget,
-    required Widget extraWidget,
+    required String value,
+    required String subtitle,
   }) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: _cardBg,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFF3F4F6)),
         boxShadow: [
@@ -571,511 +488,406 @@ class _DoDetailsScreenState extends State<DoDetailsScreen> {
         children: [
           Row(
             children: [
-              AppIcons.asset(
-                svgString,
-                width: 13,
-                height: 13,
-                color: iconColor,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: Color(0xFF6B7280),
+              Icon(icon, color: iconColor, size: 15),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Color(0xFF6B7280)),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 4),
-          valueWidget,
-          const Spacer(),
-          extraWidget,
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStopCard(_StopItem stop) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          AppRoutes.stopDetails,
-          arguments: stop.data,
-        );
-      },
-      child: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFE2E8F0)),
-            ),
-            child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Left Gray Indicator Column
-                  Container(
-                    width: 48,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFEAEAE4),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AppIcons.asset(
-                          AppIcons.clock,
-                          width: 13,
-                          height: 13,
-                          color: const Color(0xFF6B7280),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '#${stop.data.num}',
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF374151),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Right Content Block
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      stop.data.name,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        color: Color(0xFF1F2937),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      AppLocalizations.of(context)!.doLineCount(stop.data.num.toString()),
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        color: Color(0xFF9CA3AF),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              AppIcons.asset(
-                                AppIcons.chevronRight,
-                                width: 15,
-                                height: 15,
-                                color: const Color(0xFFD1D5DB),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-
-                          // Map & Time Row
-                          Row(
-                            children: [
-                              AppIcons.asset(
-                                AppIcons.mapPin,
-                                width: 10,
-                                height: 10,
-                                color: const Color(0xFF9CA3AF),
-                              ),
-                              const SizedBox(width: 4),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    final Uri url = Uri.parse('https://maps.google.com/maps?q=${Uri.encodeComponent(stop.data.address)}');
-                                    try {
-                                      if (await canLaunchUrl(url)) {
-                                        await launchUrl(url, mode: LaunchMode.externalApplication);
-                                      }
-                                    } catch (_) {}
-                                  },
-                                  child: Text(
-                                    stop.data.address,
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                      color: Color(0xFF9CA3AF),
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              AppIcons.asset(
-                                AppIcons.clock,
-                                width: 10,
-                                height: 10,
-                                color: const Color(0xFF9CA3AF),
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                stop.data.time,
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xFF9CA3AF),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-
-                          // Package quantity & price row
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  AppIcons.asset(
-                                    AppIcons.package,
-                                    width: 11,
-                                    height: 11,
-                                    color: const Color(0xFF6B7280),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    AppLocalizations.of(context)!.unitsCount(stop.data.units.toString()),
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                      color: Color(0xFF6B7280),
-                                    ),
-                                  ),
-                                  if (stop.soCount != null) ...[
-                                    const SizedBox(width: 6),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFEAEAE4),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        AppLocalizations.of(context)!.sosCount(stop.soCount.toString()),
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          color: Color(0xFF6B7280),
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                   Text.rich(
-                                     buildCurrencyTextSpan(
-                                       stop.data.amount,
-                                       const TextStyle(
-                                         fontWeight: FontWeight.bold,
-                                         fontSize: 14,
-                                         color: Color(0xFF1F2937),
-                                       ),
-                                     ),
-                                   ),
-                                  const SizedBox(height: 2),
-                                   Text.rich(
-                                     buildCurrencyTextSpan(
-                                       AppLocalizations.of(context)!.dueAmount(stop.data.amount),
-                                       const TextStyle(
-                                         fontSize: 10,
-                                         fontWeight: FontWeight.bold,
-                                         color: Color(0xFFE52B13),
-                                       ),
-                                     ),
-                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
+            overflow: TextOverflow.ellipsis,
           ),
-
-          // Lower Amber Subcard for Alerts
-          Container(
-            margin: const EdgeInsets.only(top: 0.5),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: const BoxDecoration(
-              color: Color(0xFFFFFBEB),
-              border: Border(
-                left: BorderSide(color: Color(0xFFFDE68A)),
-                right: BorderSide(color: Color(0xFFFDE68A)),
-                bottom: BorderSide(color: Color(0xFFFDE68A)),
-              ),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                 AppIcons.asset(
-                   AppIcons.circleAlert,
-                   width: 11,
-                   height: 11,
-                   color: const Color(0xFFD97706),
-                 ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    stop.alert,
-                    style: const TextStyle(
-                      color: Color(0xFFB45309),
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          const SizedBox(height: 2),
+          Text(
+            subtitle,
+            style: const TextStyle(fontSize: 9, color: Color(0xFF9CA3AF)),
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildFinanceTab() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-      child: Column(
-        children: [
-          // ─── Financial Summary Card ──────────────────────────────────────────
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFFA9D7CD),
-              border: Border.all(color: const Color(0xFF0B6B54).withValues(alpha: 0.2)),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    AppIcons.asset(
-                      AppIcons.trendingUp,
-                      width: 12,
-                      height: 12,
-                      color: const Color(0xFF0B4A38),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(AppLocalizations.of(context)!.financialSummary,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.1,
-                        color: Color(0xFF0B4A38),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(AppLocalizations.of(context)!.totalInvoiced,
-                      style: TextStyle(fontSize: 14, color: Color(0xFF0B4A38)),
-                    ),
-                    Text(
-                      '\$1658.00',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(AppLocalizations.of(context)!.collected,
-                      style: TextStyle(fontSize: 14, color: Color(0xFF0B4A38)),
-                    ),
-                    Text(
-                      '\$0.00',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF063527)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.only(top: 8),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(color: const Color(0xFF0B6B54).withValues(alpha: 0.2)),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(AppLocalizations.of(context)!.outstanding,
-                        style: TextStyle(fontSize: 14, color: Color(0xFFAF2409)),
-                      ),
-                      Text(
-                        '\$1838.00',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFFAF2409)),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  width: double.infinity,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE52B13).withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(99),
-                  ),
-                  child: FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: 0.0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFE52B13), Color(0xFFAF2409)],
-                        ),
-                        borderRadius: BorderRadius.circular(99),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          // ─── Stops List ──────────────────────────────────────────────────────
-          ..._stops.map((stop) => _buildFinanceStopCard(stop)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFinanceStopCard(_StopItem stop) {
+  Widget _buildActionsBanner(BuildContext context, DeliveryOrderActions actions, bool isLoading) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      margin: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFF3F4F6)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 4,
-            offset: const Offset(0, 1),
-          ),
-        ],
+        color: const Color(0xFFEFF6FF),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFBFDBFE)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          const Row(
             children: [
+              Icon(Icons.info_outline, color: Color(0xFF1D4ED8), size: 16),
+              SizedBox(width: 6),
               Text(
-                stop.data.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: Color(0xFF1F2937),
-                ),
-              ),
-              Text(
-                '#${stop.data.num}',
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF6B7280),
-                ),
+                'Available Actions',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1E3A8A)),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.of(context)!.invoice,
-                style: TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+          const SizedBox(height: 10),
+          if (actions.startLoading)
+            ElevatedButton.icon(
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      context.read<OrderDetailsCubit>().startLoading(
+                            uid: widget.uid,
+                            password: widget.password,
+                            doId: widget.doId,
+                          );
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF2563EB),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                minimumSize: const Size(double.infinity, 42),
               ),
-              Text.rich(
-                buildCurrencyTextSpan(
-                  stop.data.amount,
-                  const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF374151),
-                  ),
-                ),
+              icon: const Icon(Icons.play_arrow, size: 16),
+              label: const Text('Start Loading'),
+            ),
+          if (actions.confirmLoadedGoods) ...[
+            if (actions.startLoading) const SizedBox(height: 8),
+            ElevatedButton.icon(
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      context.read<OrderDetailsCubit>().confirmLoadedGoods(
+                            uid: widget.uid,
+                            password: widget.password,
+                            doId: widget.doId,
+                          );
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _teal,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                minimumSize: const Size(double.infinity, 42),
               ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.of(context)!.collected,
-                style: TextStyle(fontSize: 12, color: Color(0xFF0B6B54)),
+              icon: const Icon(Icons.check_circle_outline, size: 16),
+              label: const Text('Confirm Loaded Goods'),
+            ),
+          ],
+          if (actions.startTrip) ...[
+            if (actions.startLoading || actions.confirmLoadedGoods) const SizedBox(height: 8),
+            ElevatedButton.icon(
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      context.read<OrderDetailsCubit>().startTrip(
+                            uid: widget.uid,
+                            password: widget.password,
+                            doId: widget.doId,
+                          );
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _brandRed,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                minimumSize: const Size(double.infinity, 42),
               ),
-              Text.rich(
-                buildCurrencyTextSpan(
-                  '\$0.00',
-                  const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF0B6B54),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.of(context)!.due,
-                style: TextStyle(fontSize: 12, color: Color(0xFFE52B13)),
-              ),
-              Text.rich(
-                buildCurrencyTextSpan(
-                  stop.data.amount,
-                  const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFFE52B13),
-                  ),
-                ),
-              ),
-            ],
-          ),
+              icon: const Icon(Icons.navigation_outlined, size: 16),
+              label: const Text('Start Trip'),
+            ),
+          ],
         ],
       ),
+    );
+  }
+
+  Widget _buildTabItem(int index, String title) {
+    final isSelected = _activeTab == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => _activeTab = index),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.06),
+                      blurRadius: 4,
+                      offset: const Offset(0, 1),
+                    ),
+                  ]
+                : null,
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+              color: isSelected ? const Color(0xFF1F2937) : const Color(0xFF6B7280),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStopsTab(List<DeliveryStop> stops) {
+    if (stops.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(32),
+        alignment: Alignment.center,
+        child: const Column(
+          children: [
+            Icon(Icons.route_outlined, size: 40, color: Color(0xFF9CA3AF)),
+            SizedBox(height: 10),
+            Text(
+              'No delivery stops assigned yet',
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF6B7280)),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      children: stops.map((stop) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: _cardBg,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFF3F4F6)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.03),
+                blurRadius: 4,
+                offset: const Offset(0, 1),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: _navBg,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      '${stop.sequence > 0 ? stop.sequence : stops.indexOf(stop) + 1}',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF374151)),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      stop.name.isNotEmpty ? stop.name : 'Customer Stop',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1F2937)),
+                    ),
+                  ),
+                  if (stop.time.isNotEmpty)
+                    Text(
+                      stop.time,
+                      style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF)),
+                    ),
+                ],
+              ),
+              if (stop.address.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                GestureDetector(
+                  onTap: () => _launchUrl('https://maps.google.com/?q=${Uri.encodeComponent(stop.address)}'),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.location_on_outlined, size: 14, color: _brandRed),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          stop.address,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Color(0xFF6B7280),
+                            decoration: TextDecoration.underline,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              if (stop.phone.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                GestureDetector(
+                  onTap: () => _launchUrl('tel:${stop.phone}'),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.phone_outlined, size: 14, color: _teal),
+                      const SizedBox(width: 4),
+                      Text(
+                        stop.phone,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: _teal,
+                          fontWeight: FontWeight.w500,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildGoodsTab(List<DeliveryGoodItem> goods) {
+    if (goods.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(32),
+        alignment: Alignment.center,
+        child: const Column(
+          children: [
+            Icon(Icons.inventory_2_outlined, size: 40, color: Color(0xFF9CA3AF)),
+            SizedBox(height: 10),
+            Text(
+              'No loaded goods for this order',
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF6B7280)),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      children: goods.map((g) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            color: _cardBg,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: const Color(0xFFF3F4F6)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFEF2F2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.shopping_bag_outlined, color: _brandRed, size: 16),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      g.productName,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1F2937)),
+                    ),
+                    if (g.productCode != null && g.productCode!.isNotEmpty)
+                      Text(
+                        g.productCode!,
+                        style: const TextStyle(fontSize: 10, color: Color(0xFF9CA3AF)),
+                      ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '${g.quantity} ${g.uom ?? "units"}',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF374151)),
+                  ),
+                  if (g.priceSubtotal != null)
+                    Text(
+                      '\$${g.priceSubtotal!.toStringAsFixed(2)}',
+                      style: const TextStyle(fontSize: 11, color: _teal, fontWeight: FontWeight.w600),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildFinanceTab(DeliveryOrder? order) {
+    final currency = order?.currency ?? 'USD';
+    final total = order?.amountTotal ?? 0.0;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: _cardBg,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFF3F4F6)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Order Financial Summary',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF1F2937)),
+          ),
+          const SizedBox(height: 12),
+          _buildFinanceRow('Total Invoiced', '$currency ${total.toStringAsFixed(2)}', isBold: true),
+          const SizedBox(height: 8),
+          _buildFinanceRow('Shift Reference', order?.shift?.reference ?? 'N/A'),
+          const SizedBox(height: 8),
+          _buildFinanceRow('Shift State', order?.shift?.state.toUpperCase() ?? 'N/A'),
+          const SizedBox(height: 8),
+          _buildFinanceRow('Warehouse', order?.warehouse ?? 'N/A'),
+          const SizedBox(height: 8),
+          _buildFinanceRow('Sales Rep', order?.salesRep ?? 'N/A'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFinanceRow(String label, String value, {bool isBold = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
+            color: isBold ? const Color(0xFF1F2937) : const Color(0xFF374151),
+          ),
+        ),
+      ],
     );
   }
 }

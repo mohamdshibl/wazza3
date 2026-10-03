@@ -308,12 +308,16 @@ class _HistoryOrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final status = order.finalStatus ?? order.state ?? 'draft';
     final dateStr = order.date ?? '';
-    final vehicleStr = order.vehicle?.isNotEmpty == true ? ' · ${order.vehicle}' : '';
+    final vehicleStr = order.displayVehicle.isNotEmpty ? ' · ${order.displayVehicle}' : '';
     final stopsCount = order.stopCount ?? 0;
 
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.doDetails);
+        Navigator.pushNamed(
+          context,
+          AppRoutes.doDetails,
+          arguments: order,
+        );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

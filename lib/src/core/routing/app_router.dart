@@ -71,8 +71,13 @@ class AppRouter {
           settings: settings,
         );
       case AppRoutes.doDetails:
+        final order = settings.arguments is DeliveryOrder ? settings.arguments as DeliveryOrder : null;
+        final orderId = settings.arguments is int ? settings.arguments as int : null;
         return MaterialPageRoute(
-          builder: (_) => const DoDetailsScreen(),
+          builder: (_) => DoDetailsScreen(
+            initialOrder: order,
+            orderId: orderId,
+          ),
           settings: settings,
         );
       case AppRoutes.previousOrders:
