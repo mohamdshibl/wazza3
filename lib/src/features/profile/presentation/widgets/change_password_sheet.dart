@@ -10,9 +10,14 @@ const _brandRedDark = Color(0xFFAF2409);
 const _teal = Color(0xFF0B6B54);
 
 class ChangePasswordSheet extends StatefulWidget {
-  const ChangePasswordSheet({super.key});
+  const ChangePasswordSheet({
+    super.key,
+    this.forceChange = false,
+  });
 
-  static Future<void> show(BuildContext context) {
+  final bool forceChange;
+
+  static Future<void> show(BuildContext context, {bool forceChange = false}) {
     ProfileCubit? profileCubit;
     try {
       profileCubit = context.read<ProfileCubit>();
@@ -21,13 +26,15 @@ class ChangePasswordSheet extends StatefulWidget {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      isDismissible: !forceChange,
+      enableDrag: !forceChange,
       backgroundColor: Colors.transparent,
       builder: (_) => profileCubit != null
           ? BlocProvider.value(
               value: profileCubit,
-              child: const ChangePasswordSheet(),
+              child: ChangePasswordSheet(forceChange: forceChange),
             )
-          : const ChangePasswordSheet(),
+          : ChangePasswordSheet(forceChange: forceChange),
     );
   }
 
@@ -78,8 +85,8 @@ class _ChangePasswordSheetState extends State<ChangePasswordSheet> {
       return;
     }
 
-    if (newPassword.length < 6) {
-      setState(() => _errorMessage = 'Password must be at least 6 characters.');
+    if (newPassword.length < 8) {
+      setState(() => _errorMessage = 'Password must be at least 8 characters.');
       return;
     }
 
@@ -124,68 +131,100 @@ class _ChangePasswordSheetState extends State<ChangePasswordSheet> {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      child: SafeArea(
-        top: false,
-        child: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
-          padding: EdgeInsets.fromLTRB(24, 20, 24, bottomInset + 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Drag handle
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD1D5DB),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Header
-              Row(
-                children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFE8E6),
-                      borderRadius: BorderRadius.circular(10),
+    return PopScope(
+      canPop: !widget.forceChange,
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            padding: EdgeInsets.fromLTRB(24, 20, 24, bottomInset + 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Drag handle (hidden when force change is mandatory)
+                if (!widget.forceChange) ...[
+                  Center(
+                    child: Container(
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFD1D5DB),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
-                    child: const Icon(Icons.lock_reset, color: _brandRed, size: 20),
                   ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Change Password',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF1F2937),
+                  const SizedBox(height: 16),
+                ] else
+                  const SizedBox(height: 8),
+
+                // Header
+                Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFE8E6),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(Icons.lock_reset, color: _brandRed, size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.forceChange ? 'Set New Password' : 'Change Password',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1F2937),
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Update your password for Odoo account security',
-                          style: TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
+                          Text(
+                            widget.forceChange
+                                ? 'You must change your default password before continuing'
+                                : 'Update your password for Odoo account security',
+                            style: const TextStyle(fontSize: 11, color: Color(0xFF6B7280)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // Mandatory notice banner
+                if (widget.forceChange) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFEF3C7),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: const Color(0xFFFCD34D)),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.security, color: Color(0xFFD97706), size: 18),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Password update is required by your administrator (min 8 characters).',
+                            style: TextStyle(color: Color(0xFF92400E), fontSize: 12, fontWeight: FontWeight.w500),
+                          ),
                         ),
                       ],
                     ),
                   ),
+                  const SizedBox(height: 16),
                 ],
-              ),
-              const SizedBox(height: 20),
 
               // Error banner
               if (_errorMessage != null) ...[
@@ -264,8 +303,9 @@ class _ChangePasswordSheetState extends State<ChangePasswordSheet> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildPasswordField({
     required TextEditingController controller,

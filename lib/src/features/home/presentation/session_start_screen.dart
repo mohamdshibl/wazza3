@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../../core/routing/app_routes.dart';
 import '../../auth/logic/controllers/auth_cubit.dart';
+import '../../profile/presentation/widgets/change_password_sheet.dart';
 
 class SessionStartScreen extends StatefulWidget {
   const SessionStartScreen({super.key});
@@ -16,6 +17,18 @@ class SessionStartScreen extends StatefulWidget {
 class _SessionStartScreenState extends State<SessionStartScreen> {
   // Checklist item checked states
   final List<bool> _checklist = [false, false, false, false];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final authUser = context.read<AuthCubit>().state;
+      if (authUser != null && authUser.mustChangePassword) {
+        ChangePasswordSheet.show(context, forceChange: true);
+      }
+    });
+  }
 
   int get _checkedCount => _checklist.where((x) => x).length;
   bool get _isComplete => _checkedCount == 4;

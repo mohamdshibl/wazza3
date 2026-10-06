@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:wazza3/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,6 +91,28 @@ class _HomeViewContent extends StatefulWidget {
 
 class _HomeViewContentState extends State<_HomeViewContent> {
   int _routeTab = 0; // 0=Upcoming 1=Map 2=Completed
+  Timer? _pollingTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Periodically refresh home and notifications every 30 seconds while Home is open
+    _pollingTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (mounted && widget.uid != 0 && widget.password.isNotEmpty) {
+        context.read<HomeCubit>().fetchHome(
+              uid: widget.uid,
+              password: widget.password,
+              isRefresh: true,
+            );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
